@@ -1,4 +1,4 @@
-import {FC} from 'react'
+import { FC } from 'react'
 
 import logo from '../../assets/logo.svg'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -6,12 +6,7 @@ import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import Connectwallet from '../connectwallet'
 import ChainList from '../chainList/index'
 
-
-
-
-
-
-export const Header:FC = () => {
+export const Header: FC = () => {
   return (
     <header className="text-gray-600 body-font">
       <div className="container mx-auto flex flex-wrap py-2 flex-row  justify-around  items-center ">
@@ -35,16 +30,13 @@ export const Header:FC = () => {
               <FontAwesomeIcon icon={icon({ name: 'bell', style: 'solid' })} />
             </div>
           </div>
-          <div  className="pr-2 pl-2 flex flex-row   hover:text-gray-900 border-r border-gray-400 last:border-r-0  items-center justify-center">
+          <div className="pr-2 pl-2 flex flex-row   hover:text-gray-900 border-r border-gray-400 last:border-r-0  items-center justify-center">
             <Connectwallet></Connectwallet>
           </div>
           <div className="flex pr-4 pl-4 items-center justify-center   hover:text-gray-900 border-r border-gray-400 last:border-r-0">
-            <ChainList>
-          
-            </ChainList>
+            <ChainList></ChainList>
           </div>
         </nav>
-        
       </div>
     </header>
   )

@@ -1,16 +1,12 @@
-
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, FC } from 'react'
-
 
 import connectors from '../../web3react/connectors'
 import { useToasts } from 'react-toast-notifications'
 import { useWeb3React } from '@web3-react/core'
 // import { accountDataType } from '../../web3react/types'
-import {  useEffect, useCallback } from 'react'
+import { useEffect, useCallback } from 'react'
 import EventEmitter from '../../EventEmitter/index'
-
-
 
 interface componentprops {
   isOpen: boolean
@@ -20,23 +16,21 @@ interface componentprops {
 const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
   ////
   const { addToast } = useToasts()
-  const {  activate} = useWeb3React()
-  
+  const { activate } = useWeb3React()
+
   // const [accountData, setAccountData] = useState<null | accountDataType>(null)
   // const noderef= useRef()
-  
-  
+
   const connectMetaMask = useCallback(async () => {
     let status = false
     await activate(connectors.metamask, (err: Error) => {
-      
       addToast(err.message, { appearance: 'error' })
-      if(err.message.indexOf("UnsupportedChainId")){
-        EventEmitter.emit("UnsupportedChainId",true)
-      }else{
-        EventEmitter.emit("UnsupportedChainId",false)
+      if (err.message.indexOf('UnsupportedChainId')) {
+        EventEmitter.emit('UnsupportedChainId', true)
+      } else {
+        EventEmitter.emit('UnsupportedChainId', false)
       }
-      
+
       status = true
     })
 
@@ -45,16 +39,15 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
       addToast('Connected to MetaMask', { appearance: 'success' })
       closeModal()
     }
-  }, [activate, addToast,closeModal])
+  }, [activate, addToast, closeModal])
   const connectWalletConnect = useCallback(async () => {
     let status = false
     await activate(connectors.walletConnect, (err: Error) => {
-      
       addToast(err.message, { appearance: 'error' })
-      if(err.message.indexOf("UnsupportedChainId")){
-        EventEmitter.emit("UnsupportedChainId",true)
-      }else{
-        EventEmitter.emit("UnsupportedChainId",false)
+      if (err.message.indexOf('UnsupportedChainId')) {
+        EventEmitter.emit('UnsupportedChainId', true)
+      } else {
+        EventEmitter.emit('UnsupportedChainId', false)
       }
       status = true
     })
@@ -64,7 +57,7 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
       addToast('Connected to Wallet Connect', { appearance: 'success' })
       closeModal()
     }
-  }, [activate, addToast,closeModal])
+  }, [activate, addToast, closeModal])
   // const disConnect = async () => {
   //   deactivate()
 
@@ -79,7 +72,6 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
   // connect on load
   useEffect(() => {
     const connectWalletOnPageLoad = async () => {
-      
       if (localStorage.getItem('walletIsConnectedTo') === 'metamask') {
         await connectMetaMask()
       }
@@ -92,8 +84,6 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     connectWalletOnPageLoad()
   }, [connectMetaMask, connectWalletConnect])
 
-  
-  
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -128,9 +118,16 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
                   <div className="mt-2">
                     <p className="text-sm text-gray-500 flex flex-col items-center">
                       {walletsToDisplay.map(el => (
-                      <div className="my-1 flex-1" key={el.id}>
-                        <button key={el.id} onClick={el.fn} type="button" className="px-8 py-3 font-semibold border rounded border-blue-800 text-blue-800  w-48">{el.title}</button>
-                      </div>
+                        <div className="my-1 flex-1" key={el.id}>
+                          <button
+                            key={el.id}
+                            onClick={el.fn}
+                            type="button"
+                            className="px-8 py-3 font-semibold border rounded border-blue-800 text-blue-800  w-48"
+                          >
+                            {el.title}
+                          </button>
+                        </div>
                       ))}
                     </p>
                   </div>
