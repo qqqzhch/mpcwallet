@@ -13,29 +13,28 @@ const CreatWallet: FC = props => {
         </div>
         <div className="mb-4 pb-4  border-b  px-4">
           <div className=" bg-white flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0">
-          <div className="relative mb-4">
+            <div className="relative mb-4">
               <label htmlFor="name" className="leading-7 text-sm text-gray-600">
-              Wallet Name
+                Wallet Name
               </label>
               <input
                 type="text"
                 id="name"
                 name="name"
-                value={"cxxxx"}
+                value={'cxxxx'}
                 className="w-full  rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
               ></input>
             </div>
-            
+
             <div className="relative mb-4">
               <label htmlFor="name" className="leading-7 text-sm text-gray-600">
-              MpcType
+                MpcType
               </label>
               <MpcType></MpcType>
-              
             </div>
             <div className="relative mb-4">
               <label htmlFor="name" className="leading-7 text-sm text-gray-600">
-              Admin1
+                Admin1
               </label>
               <input
                 type="text"
@@ -43,13 +42,13 @@ const CreatWallet: FC = props => {
                 disabled
                 id="name"
                 name="name"
-                value={"cxxxx"}
+                value={'cxxxx'}
                 className="w-full bg-gray-100 rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
               ></input>
             </div>
             <div className="relative mb-4">
               <label htmlFor="email" className="leading-7 text-sm text-gray-600">
-              Admin2
+                Admin2
               </label>
               <input
                 type="email"
@@ -57,71 +56,66 @@ const CreatWallet: FC = props => {
                 name="email"
                 className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
               ></input>
-              
             </div>
             <div className="relative mb-4 py-8">
-              
-              <span  className="bg-white hover:bg-gray-200 text-black font-semibold text-center py-2 px-4 rounded ">
-              + add new owner
-            </span>
-              
-              
+              <span className="bg-white hover:bg-gray-200 text-black font-semibold text-center py-2 px-4 rounded ">+ add new owner</span>
             </div>
             <div className="flex flex-col   lg:flex-row  mb-20">
-                <div className="w-2/3">
+              <div className="w-2/3">
                 <h2 className="font-semibold text-xl">Threshold</h2>
-                <p>Any transaction requires the confirmation </p> 
-                </div>
-                <div className="flex items-center">
+                <p>Any transaction requires the confirmation </p>
+              </div>
+              <div className="flex items-center">
                 <Threshold></Threshold>
-                    
-                </div>
-
+              </div>
             </div>
             <div className="flex flex-col   lg:flex-row  justify-around gap-8">
-                
-                
-                <button className="text-white mx-2 bg-indigo-500 border-0 py-2 px-2 lg:px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Create MPC</button>
-                <button className="mx-2 border-2 py-2 lg:px-6 focus:outline-none rounded text-lg  hover:bg-gray-300  border-gray-400  text-gray-600">Reset</button>
-                    
-                
-
+              <button className="text-white mx-2 bg-indigo-500 border-0 py-2 px-2 lg:px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
+                Create MPC
+              </button>
+              <button className="mx-2 border-2 py-2 lg:px-6 focus:outline-none rounded text-lg  hover:bg-gray-300  border-gray-400  text-gray-600">
+                Reset
+              </button>
             </div>
-            
-            
-            
           </div>
         </div>
       </div>
       <div className="flex-1 bg-gray-50 rounded-md">
-      <div className="max-w-6xl px-4 mx-auto sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold leading-tight text-black sm:text-4xl lg:text-5xl">Frequently Asked Questions</h2>
+        <div className="max-w-6xl px-4 mx-auto sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold leading-tight text-black sm:text-4xl lg:text-5xl">Frequently Asked Questions</h2>
 
-        <div className="flow-root mt-12 sm:mt-16">
+          <div className="flow-root mt-12 sm:mt-16">
             <div className="divide-y divide-gray--200 -my-9">
-                <div className="py-9">
-                    <p className="text-xl font-semibold text-black">How to create an account?</p>
-                    <p className="mt-3 text-base text-gray-600">Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud amet.</p>
-                    <p className="mt-3 text-base text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                </div>
+              <div className="py-9">
+                <p className="text-xl font-semibold text-black">How to create an account?</p>
+                <p className="mt-3 text-base text-gray-600">
+                  Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam
+                  consequat sunt nostrud amet.
+                </p>
+                <p className="mt-3 text-base text-gray-600">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+              </div>
 
-                <div className="py-9">
-                    <p className="text-xl font-semibold text-black">What payment method do you support?</p>
-                    <p className="mt-3 text-base text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam.</p>
-                </div>
+              <div className="py-9">
+                <p className="text-xl font-semibold text-black">What payment method do you support?</p>
+                <p className="mt-3 text-base text-gray-600">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. sed do eiusmod
+                  tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam.
+                </p>
+              </div>
 
-                <div className="py-9">
-                    <p className="text-xl font-semibold text-black">What payment method do you support?</p>
-                    <p className="mt-3 text-base text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                </div>
-
-                
+              <div className="py-9">
+                <p className="text-xl font-semibold text-black">What payment method do you support?</p>
+                <p className="mt-3 text-base text-gray-600">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </p>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-
-
-
       </div>
     </div>
   )

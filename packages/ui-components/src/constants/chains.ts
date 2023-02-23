@@ -18,7 +18,7 @@ export enum SupportedChainId {
   POLYGON_MUMBAI = 80001,
 
   CELO = 42220,
-  CELO_ALFAJORES = 44787,
+  CELO_ALFAJORES = 44787
 }
 
 export const CHAIN_IDS_TO_NAMES = {
@@ -34,14 +34,14 @@ export const CHAIN_IDS_TO_NAMES = {
   [SupportedChainId.ARBITRUM_ONE]: 'arbitrum',
   [SupportedChainId.ARBITRUM_RINKEBY]: 'arbitrum_rinkeby',
   [SupportedChainId.OPTIMISM]: 'optimism',
-  [SupportedChainId.OPTIMISM_GOERLI]: 'optimism_goerli',
+  [SupportedChainId.OPTIMISM_GOERLI]: 'optimism_goerli'
 }
 
 /**
  * Array of all the supported chain IDs
  */
 export const ALL_SUPPORTED_CHAIN_IDS: SupportedChainId[] = Object.values(SupportedChainId).filter(
-  (id) => typeof id === 'number'&&[1,5].indexOf(id)>-1
+  id => typeof id === 'number' && [1, 5].indexOf(id) > -1
 ) as SupportedChainId[]
 
 export function isSupportedChain(chainId: number | null | undefined): chainId is SupportedChainId {
@@ -53,17 +53,13 @@ export const SUPPORTED_GAS_ESTIMATE_CHAIN_IDS = [
   SupportedChainId.POLYGON,
   SupportedChainId.CELO,
   SupportedChainId.OPTIMISM,
-  SupportedChainId.ARBITRUM_ONE,
+  SupportedChainId.ARBITRUM_ONE
 ]
 
 /**
  * Unsupported networks for V2 pool behavior.
  */
-export const UNSUPPORTED_V2POOL_CHAIN_IDS = [
-  SupportedChainId.POLYGON,
-  SupportedChainId.OPTIMISM,
-  SupportedChainId.ARBITRUM_ONE,
-]
+export const UNSUPPORTED_V2POOL_CHAIN_IDS = [SupportedChainId.POLYGON, SupportedChainId.OPTIMISM, SupportedChainId.ARBITRUM_ONE]
 
 export const TESTNET_CHAIN_IDS = [
   SupportedChainId.ROPSTEN,
@@ -72,7 +68,7 @@ export const TESTNET_CHAIN_IDS = [
   SupportedChainId.KOVAN,
   SupportedChainId.POLYGON_MUMBAI,
   SupportedChainId.ARBITRUM_RINKEBY,
-  SupportedChainId.OPTIMISM_GOERLI,
+  SupportedChainId.OPTIMISM_GOERLI
 ] as const
 
 export type SupportedTestnetChainId = typeof TESTNET_CHAIN_IDS[number]
@@ -89,7 +85,7 @@ export const L1_CHAIN_IDS = [
   SupportedChainId.POLYGON,
   SupportedChainId.POLYGON_MUMBAI,
   SupportedChainId.CELO,
-  SupportedChainId.CELO_ALFAJORES,
+  SupportedChainId.CELO_ALFAJORES
 ] as const
 
 export type SupportedL1ChainId = typeof L1_CHAIN_IDS[number]
@@ -102,7 +98,7 @@ export const L2_CHAIN_IDS = [
   SupportedChainId.ARBITRUM_ONE,
   SupportedChainId.ARBITRUM_RINKEBY,
   SupportedChainId.OPTIMISM,
-  SupportedChainId.OPTIMISM_GOERLI,
+  SupportedChainId.OPTIMISM_GOERLI
 ] as const
 
 export type SupportedL2ChainId = typeof L2_CHAIN_IDS[number]

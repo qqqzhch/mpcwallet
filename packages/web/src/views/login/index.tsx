@@ -1,11 +1,8 @@
-import {FC} from 'react';
+import { FC } from 'react'
 import SelectNode from '@monorepo/ui-components/src/components/selectnode'
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 
-
-
-
-const Login:FC = () => {
+const Login: FC = () => {
   return (
     <>
       <div className=" xl:w-3/4 2xl:w-2/3 px-5 py-24 mx-auto flex flex-wrap items-center">
@@ -21,18 +18,15 @@ const Login:FC = () => {
             <label htmlFor="full-name" className="leading-7 text-sm text-gray-600">
               Set the node
             </label>
-            <SelectNode></SelectNode>  
+            <SelectNode></SelectNode>
           </div>
-          
-          
-          <Link to={"/creatwallet"}>
-          <button className="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Button</button>
+
+          <Link to={'/creatwallet'}>
+            <button className="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Button</button>
           </Link>
           <p className="text-xs text-gray-500 mt-3">more node info.</p>
         </div>
-        
       </div>
-      
     </>
   )
 }
