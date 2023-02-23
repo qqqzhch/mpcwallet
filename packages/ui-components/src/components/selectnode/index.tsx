@@ -1,32 +1,63 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useCallback, useEffect, useState } from 'react'
 import { Combobox, Transition } from '@headlessui/react'
 import { ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import Item from './item'
+// import api from '@monorepo/api/src/fetch'
+import { api } from '@monorepo/api'
+import { peopleType, nodeItem, nodeList } from './type'
 
-interface peopleType {
-  id: number
-  name: string
+const defaultNode: nodeItem = {
+  address: '',
+  name: 'please select',
+  createFailNum: 0,
+  createNum: 0,
+  groupNum: 0,
+  nodeType: '',
+  signFailNum: 0,
+  signNum: 0,
+  staking: 0,
+  status: 1,
+  version: '',
+  _id: ''
 }
 
-const people: Array<peopleType> = [
-  { id: 1, name: 'Wade Cooper' },
-  { id: 2, name: 'Arlene Mccoy' },
-  { id: 3, name: 'Devon Webb' },
-  { id: 4, name: 'Tom Cook' },
-  { id: 5, name: 'Tanya Fox' },
-  { id: 6, name: 'Hellen Schmidt' }
-]
-
 const SelectNode = () => {
-  const [selected, setSelected] = useState(people[0])
+  const [nodeItemList, setNodeList] = useState<Array<nodeItem>>([])
+  const [selected, setSelected] = useState<nodeItem>(defaultNode)
   const [query, setQuery] = useState('')
+  const [filteredPeople, setFilteredPeople] = useState<Array<nodeItem>>([])
 
-  const filteredPeople =
-    query === '' ? people : people.filter(person => person.name.toLowerCase().replace(/\s+/g, '').includes(query.toLowerCase().replace(/\s+/g, '')))
+  useEffect(() => {
+    const get = async () => {
+      const data = await api.get<nodeList>('https://testnetapi.multichain.tools/nodes/list')
+      if (data.msg === 'Success') {
+        setNodeList(data.info)
+        if (data.info.length > 0) {
+          setSelected(data.info[0])
+        }
+      }
+    }
+    get()
+  }, [])
+  useEffect(() => {
+    const filteredPeople =
+      query === ''
+        ? nodeItemList.slice(0, 50)
+        : nodeItemList.filter(item => item.name.toLowerCase().replace(/\s+/g, '').includes(query.toLowerCase().replace(/\s+/g, '')))
+    setFilteredPeople(filteredPeople)
+  }, [query, nodeItemList])
+  const nodeSelectCallback = useCallback((item: nodeItem) => {
+    setSelected(item)
+  }, [])
 
   return (
     <div className="w-full">
-      <Combobox value={selected} onChange={setSelected}>
+      <Combobox
+        value={selected}
+        onChange={item => {
+          nodeSelectCallback(item)
+        }}
+      >
         <div className="relative mt-1">
           <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
             <Combobox.Input
@@ -43,14 +74,14 @@ const SelectNode = () => {
               {filteredPeople.length === 0 && query !== '' ? (
                 <div className="relative cursor-default select-none py-2 px-4 text-gray-700">Nothing found.</div>
               ) : (
-                filteredPeople.map(person => (
+                filteredPeople.map(node => (
                   <Combobox.Option
-                    key={person.id}
+                    key={node._id}
                     className={({ active }) => `relative cursor-default select-none py-2 pl-1 pr-1 ${active ? 'bg-gray-100 text-white' : 'text-gray-900'}`}
-                    value={person}
+                    value={node}
                   >
                     {({ selected, active }) => (
-                      <Item></Item>
+                      <Item node={node}></Item>
                       // <>
                       //   <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>{person.name}</span>
                       //   {selected ? (
