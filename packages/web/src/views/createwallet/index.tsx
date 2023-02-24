@@ -1,8 +1,25 @@
 import { FC } from 'react'
 import MpcType from '@monorepo/ui-components/src/components/mpctype'
 import Threshold from '@monorepo/ui-components/src/components/threshold'
+import { useAppStore } from '@monorepo/ui-components'
+import InputeMinus from '@monorepo/ui-components/src/components/forms/index'
+import { useEffect } from 'react'
 
 const CreatWallet: FC = props => {
+  const loginAccount = useAppStore(state => state.loginAccount)
+  const createGroup = useAppStore(state => state.createGroup)
+  const setcreateGroupWalletName = useAppStore(state => state.setcreateGroupWalletName)
+  const addcreateGroupAdmin = useAppStore(state => state.addcreateGroupAdmin)
+  const editcreateGroupAdmin = useAppStore(state => state.editcreateGroupAdmin)
+
+
+  useEffect(()=>{
+    editcreateGroupAdmin(0,loginAccount.signEnode)
+
+  },[editcreateGroupAdmin,loginAccount.signEnode])
+  
+  
+
   return (
     <div className="flex flex-col lg:flex-row  xl:mx-40 2xl:mx-80 ">
       <div className="felx flex-col w-full xl:w-2/3 p-10">
@@ -14,50 +31,35 @@ const CreatWallet: FC = props => {
         <div className="mb-4 pb-4  border-b  px-4">
           <div className=" bg-white flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0">
             <div className="relative mb-4">
-              <label htmlFor="name" className="leading-7 text-sm text-gray-600">
+              <label htmlFor="walletname" className="leading-7 text-sm text-gray-600">
                 Wallet Name
               </label>
               <input
                 type="text"
-                id="name"
-                name="name"
-                value={'cxxxx'}
+                id="walletname"
+                name="walletname"
+                value={createGroup.walletname}
+                onChange={(e)=>{setcreateGroupWalletName(e.target.value)}}
                 className="w-full  rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
               ></input>
             </div>
 
             <div className="relative mb-4">
-              <label htmlFor="name" className="leading-7 text-sm text-gray-600">
+              <label className="leading-7 text-sm text-gray-600">
                 MpcType
               </label>
               <MpcType></MpcType>
             </div>
-            <div className="relative mb-4">
-              <label htmlFor="name" className="leading-7 text-sm text-gray-600">
-                Admin1
-              </label>
-              <input
-                type="text"
-                readOnly
-                disabled
-                id="name"
-                name="name"
-                value={'cxxxx'}
-                className="w-full bg-gray-100 rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-              ></input>
-            </div>
-            <div className="relative mb-4">
-              <label htmlFor="email" className="leading-7 text-sm text-gray-600">
-                Admin2
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                className="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-              ></input>
-            </div>
-            <div className="relative mb-4 py-8">
+            
+            {createGroup.admins.map((item,index)=>{
+              return (
+                <InputeMinus key={index.toString()} index={index} value={item}></InputeMinus>
+              )
+            })}
+            
+            
+
+            <div onClick={addcreateGroupAdmin} className="relative mb-4 py-8">
               <span className="bg-white hover:bg-gray-200 text-black font-semibold text-center py-2 px-4 rounded ">+ add new owner</span>
             </div>
             <div className="flex flex-col   lg:flex-row  mb-20">
