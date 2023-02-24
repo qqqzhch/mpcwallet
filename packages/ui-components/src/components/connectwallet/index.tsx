@@ -35,15 +35,14 @@ const Connectwallet: FC = () => {
     }
   }, [chainId])
 
-  useEffect(()=>{
-    EventBus.on("connectwallet",()=>{
+  useEffect(() => {
+    EventBus.on('connectwallet', () => {
       setIsOpen(true)
     })
-    return ()=>{
-      EventBus.off("connectwallet")
+    return () => {
+      EventBus.off('connectwallet')
     }
-
-  },[])
+  }, [])
 
   return (
     <>

@@ -4,23 +4,23 @@ import { immer } from 'zustand/middleware/immer'
 import React, { createContext, FC, useContext } from 'react'
 
 interface AppState {
-  counter: number,
+  counter: number
   loginAccount: {
-    rpc: string,
-    enode: string,
-    signEnode:string,
+    rpc: string
+    enode: string
+    signEnode: string
   }
-  increase: (by: number) => void,
-  setLoginAccount:(rpc:string,enode:string,signEnode?:string) => void
-  clearLoginAccount:() => void
+  increase: (by: number) => void
+  setLoginAccount: (rpc: string, enode: string, signEnode?: string) => void
+  clearLoginAccount: () => void
 }
 
 const intialState = {
   counter: 0,
   loginAccount: {
-    rpc: "",
-    enode: "",
-    signEnode:""
+    rpc: '',
+    enode: '',
+    signEnode: ''
   }
 }
 
@@ -31,24 +31,23 @@ const createMyStore = (state: typeof intialState = intialState) => {
         persist(
           set => ({
             ...state,
-            increase: () =>{
+            increase: () => {
               set(state => {
                 state.counter++
               })
             },
-            setLoginAccount:(rpc:string,enode:string,signEnode?:string)=>{
+            setLoginAccount: (rpc: string, enode: string, signEnode?: string) => {
               set(state => {
-                state.loginAccount.rpc=rpc;
-                state.loginAccount.enode=enode;
-                state.loginAccount.signEnode=signEnode||"";
+                state.loginAccount.rpc = rpc
+                state.loginAccount.enode = enode
+                state.loginAccount.signEnode = signEnode || ''
               })
-          
             },
-            clearLoginAccount:()=>{
+            clearLoginAccount: () => {
               set(state => {
-                state.loginAccount.rpc="";
-                state.loginAccount.enode="";
-                state.loginAccount.signEnode="";
+                state.loginAccount.rpc = ''
+                state.loginAccount.enode = ''
+                state.loginAccount.signEnode = ''
               })
             }
           }),

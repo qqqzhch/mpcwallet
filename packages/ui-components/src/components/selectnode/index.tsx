@@ -4,7 +4,7 @@ import { ChevronUpDownIcon } from '@heroicons/react/20/solid'
 // import Item from './item'
 
 import { web3 } from '@monorepo/api'
-import {getsmpc} from '@monorepo/api/src/web3'
+import { getsmpc } from '@monorepo/api/src/web3'
 import { useAppStore } from '../../state/index'
 // import { useSignEnode } from '../../hooks/useSigns'
 // import { peopleType, nodeItem, nodeList } from './type'
@@ -23,7 +23,7 @@ import { useAppStore } from '../../state/index'
 //   version: '',
 //   _id: ''
 // }
-const  rpclist=["http://43.153.80.95:5928","http://43.157.49.23:5928",'http://43.156.1.182:5928']
+const rpclist = ['http://43.153.80.95:5928', 'http://43.157.49.23:5928', 'http://43.156.1.182:5928']
 
 const SelectNode = () => {
   const [nodeItemList] = useState<Array<string>>(rpclist)
@@ -31,10 +31,6 @@ const SelectNode = () => {
   const [query, setQuery] = useState('')
   const [filteredPeople, setFilteredPeople] = useState<Array<string>>([])
   const setLoginAccount = useAppStore(state => state.setLoginAccount)
-  
-
-  
-
 
   // useEffect(() => {
   //   const get = async () => {
@@ -60,15 +56,14 @@ const SelectNode = () => {
     setSelected(item)
   }, [])
 
-  useEffect(()=>{
+  useEffect(() => {
     web3.setProvider(selected)
-    const run= async()=>{
-      
-      const res = await getsmpc().getEnode();
-      setLoginAccount(selected,res.Data.Enode)
+    const run = async () => {
+      const res = await getsmpc().getEnode()
+      setLoginAccount(selected, res.Data.Enode)
     }
     run()
-  },[selected,setLoginAccount])
+  }, [selected, setLoginAccount])
 
   return (
     <div className="w-full">
@@ -82,7 +77,7 @@ const SelectNode = () => {
           <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
             <Combobox.Input
               className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
-              displayValue={(person:string) => person}
+              displayValue={(person: string) => person}
               onChange={event => setQuery(event.target.value)}
             />
             <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
@@ -94,7 +89,7 @@ const SelectNode = () => {
               {filteredPeople.length === 0 && query !== '' ? (
                 <div className="relative cursor-default select-none py-2 px-4 text-gray-700">Nothing found.</div>
               ) : (
-                rpclist.map((node:string) => (
+                rpclist.map((node: string) => (
                   <Combobox.Option
                     key={node}
                     className={({ active }) => `relative cursor-default select-none py-2 pl-1 pr-1 ${active ? 'bg-blue-600 text-white' : 'text-gray-900'}`}

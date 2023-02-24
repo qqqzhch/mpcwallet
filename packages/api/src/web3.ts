@@ -247,7 +247,7 @@ export default web3;
 // module.exports = web3
 
 export  function getsmpc(){
-  console.log('web3.smpc',web3.smpc)
+  
   // @ts-ignore
   return  web3.smpc
 }

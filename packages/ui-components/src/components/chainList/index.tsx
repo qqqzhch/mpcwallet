@@ -56,8 +56,8 @@ const ChainList: FC<Props> = ({ children }) => {
     EventBus.on('UnsupportedChainId', Unsupported => {
       setUnsupported(Unsupported)
     })
-    return ()=>{
-      EventBus.off("UnsupportedChainId")
+    return () => {
+      EventBus.off('UnsupportedChainId')
     }
   }, [])
 
