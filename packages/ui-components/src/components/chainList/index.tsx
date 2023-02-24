@@ -8,7 +8,7 @@ import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import switchEthereumChain from '../../metamask/switchEthereumChain'
 import { RPC_URLS } from '../../constants/networks'
 import { SupportedChainId } from '../../constants/chains'
-import EventEmitter from '../../EventEmitter/index'
+import EventBus from '../../EventEmitter/index'
 import { When } from 'react-if'
 
 type Props = {
@@ -53,9 +53,12 @@ const ChainList: FC<Props> = ({ children }) => {
     [library, unsupported]
   )
   useEffect(() => {
-    EventEmitter.on('UnsupportedChainId', Unsupported => {
+    EventBus.on('UnsupportedChainId', Unsupported => {
       setUnsupported(Unsupported)
     })
+    return () => {
+      EventBus.off('UnsupportedChainId')
+    }
   }, [])
 
   return (

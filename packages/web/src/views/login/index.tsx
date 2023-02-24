@@ -1,6 +1,7 @@
 import { FC } from 'react'
 import SelectNode from '@monorepo/ui-components/src/components/selectnode'
-import { Link } from 'react-router-dom'
+
+import SelectButton from '@monorepo/ui-components/src/components/selectnode/button'
 
 const Login: FC = () => {
   return (
@@ -21,9 +22,7 @@ const Login: FC = () => {
             <SelectNode></SelectNode>
           </div>
 
-          <Link to={'/creatwallet'}>
-            <button className="text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg">Button</button>
-          </Link>
+          <SelectButton></SelectButton>
           <p className="text-xs text-gray-500 mt-3">more node info.</p>
         </div>
       </div>
