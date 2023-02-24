@@ -13,5 +13,7 @@ export * from './components/mpctype'
 export * from './components/threshold'
 export * from './state/index'
 export * from './state/teststate'
+export * from './components/selectnode/button'
+
 
 export { providers }

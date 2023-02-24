@@ -6,7 +6,7 @@ import { useToasts } from 'react-toast-notifications'
 import { useWeb3React } from '@web3-react/core'
 // import { accountDataType } from '../../web3react/types'
 import { useEffect, useCallback } from 'react'
-import EventEmitter from '../../EventEmitter/index'
+import EventBus from '../../EventEmitter/index'
 
 interface componentprops {
   isOpen: boolean
@@ -26,9 +26,9 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     await activate(connectors.metamask, (err: Error) => {
       addToast(err.message, { appearance: 'error' })
       if (err.message.indexOf('UnsupportedChainId')) {
-        EventEmitter.emit('UnsupportedChainId', true)
+        EventBus.emit('UnsupportedChainId', true)
       } else {
-        EventEmitter.emit('UnsupportedChainId', false)
+        EventBus.emit('UnsupportedChainId', false)
       }
 
       status = true
@@ -45,9 +45,9 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     await activate(connectors.walletConnect, (err: Error) => {
       addToast(err.message, { appearance: 'error' })
       if (err.message.indexOf('UnsupportedChainId')) {
-        EventEmitter.emit('UnsupportedChainId', true)
+        EventBus.emit('UnsupportedChainId', true)
       } else {
-        EventEmitter.emit('UnsupportedChainId', false)
+        EventBus.emit('UnsupportedChainId', false)
       }
       status = true
     })

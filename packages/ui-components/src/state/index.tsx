@@ -4,12 +4,24 @@ import { immer } from 'zustand/middleware/immer'
 import React, { createContext, FC, useContext } from 'react'
 
 interface AppState {
-  counter: number
-  increase: (by: number) => void
+  counter: number,
+  loginAccount: {
+    rpc: string,
+    enode: string,
+    signEnode:string,
+  }
+  increase: (by: number) => void,
+  setLoginAccount:(rpc:string,enode:string,signEnode?:string) => void
+  clearLoginAccount:() => void
 }
 
 const intialState = {
-  counter: 5
+  counter: 0,
+  loginAccount: {
+    rpc: "",
+    enode: "",
+    signEnode:""
+  }
 }
 
 const createMyStore = (state: typeof intialState = intialState) => {
@@ -19,10 +31,26 @@ const createMyStore = (state: typeof intialState = intialState) => {
         persist(
           set => ({
             ...state,
-            increase: () =>
+            increase: () =>{
               set(state => {
                 state.counter++
               })
+            },
+            setLoginAccount:(rpc:string,enode:string,signEnode?:string)=>{
+              set(state => {
+                state.loginAccount.rpc=rpc;
+                state.loginAccount.enode=enode;
+                state.loginAccount.signEnode=signEnode||"";
+              })
+          
+            },
+            clearLoginAccount:()=>{
+              set(state => {
+                state.loginAccount.rpc="";
+                state.loginAccount.enode="";
+                state.loginAccount.signEnode="";
+              })
+            }
           }),
           { name: 'app-storage' }
         )
@@ -34,7 +62,7 @@ const createMyStore = (state: typeof intialState = intialState) => {
 const MyStoreContext = createContext<ReturnType<typeof createMyStore> | null>(null)
 
 export const AppStoreProvider: FC<{ children: React.ReactNode }> = ({ children }) => {
-  const store = createMyStore({ counter: 0 })
+  const store = createMyStore(intialState)
 
   return <MyStoreContext.Provider value={store}>{children}</MyStoreContext.Provider>
 }
