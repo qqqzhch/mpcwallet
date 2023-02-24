@@ -21,7 +21,7 @@ const SelectButton: FC = () => {
       if (loginAccount.enode != '') {
         try {
           const signEnode = await execute()
-          setLoginAccount(loginAccount.rpc, loginAccount.enode, loginAccount.enode+signEnode)
+          setLoginAccount(loginAccount.rpc, loginAccount.enode, loginAccount.enode + signEnode)
           navigate('/creatwallet')
         } catch (error: unknown) {
           const err = error as Error

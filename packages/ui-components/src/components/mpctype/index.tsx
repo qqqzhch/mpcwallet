@@ -1,5 +1,5 @@
 // import React from 'react';
-import { useState, FC } from 'react'
+import { FC } from 'react'
 import { RadioGroup } from '@headlessui/react'
 import { CheckIcon } from '@heroicons/react/20/solid'
 import { useAppStore } from '../../state/index'
@@ -7,25 +7,27 @@ import { useAppStore } from '../../state/index'
 const plans = [
   {
     name: 'EC256k1',
-    brif:""
+    brif: ''
   },
   {
     name: 'ED25519',
-    brif:""
+    brif: ''
   }
 ]
 
 const MpcType: FC = () => {
   const createGroup = useAppStore(state => state.createGroup)
   const setcreateGroupKeytype = useAppStore(state => state.setcreateGroupKeytype)
-  
+
   return (
     <div className="w-full px-4 h-8 my-8 ">
       <div className="mx-auto w-full max-w-md ">
-        <RadioGroup value={createGroup.keytype} onChange={(e)=>{
-          console.log('--',e)
-          setcreateGroupKeytype(e)
-          }}>
+        <RadioGroup
+          value={createGroup.keytype}
+          onChange={e => {
+            setcreateGroupKeytype(e)
+          }}
+        >
           <RadioGroup.Label className="sr-only">Server size</RadioGroup.Label>
           <div className="space-y-2 flex flex-row gap-4 justify-around">
             {plans.map(plan => (
