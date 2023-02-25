@@ -4,7 +4,7 @@ import { useWeb3React } from '@web3-react/core'
 import { useMemo, useCallback } from 'react'
 // import {providers } from "ethers";
 import { web3 } from '@monorepo/api'
-
+import { getsmpc } from '@monorepo/api/src/web3'
 export function eNodeCut(enode: any) {
   const obj = {
     key: '',
@@ -21,6 +21,15 @@ export function eNodeCut(enode: any) {
     ip: ip,
     enode: enodeObj.input
   }
+}
+
+// let nonceLocal = 0;
+async function getNonce(account: any, rpc: any) {
+  web3.setProvider(rpc)
+  const nonceResult = await getsmpc().getReqAddrNonce(account)
+  // nonceLocal++;
+  // return nonceLocal;
+  return nonceResult.Data.result
 }
 
 export function useSign(): any {
@@ -104,4 +113,89 @@ export function useSignEnode(enode: string): {
       }
     }
   }, [enode, library])
+}
+
+export function useCreateGroup(
+  rpc: string,
+  mode: string,
+  nodeArr: Array<string>
+): {
+  execute: () => Promise<any>
+} {
+  return useMemo(() => {
+    return {
+      execute: async () => {
+        web3.setProvider(rpc)
+
+        const result = await getsmpc().createGroup(
+          mode,
+          nodeArr.map((item: string) => item.split('0x')[0])
+        )
+        let cbData = result
+        if (result && typeof result === 'string') {
+          cbData = JSON.parse(cbData)
+        }
+        let data = {}
+        if (cbData.Status !== 'Error') {
+          data = { msg: 'Success', info: cbData.Data }
+        } else {
+          data = { msg: 'Error', error: cbData.Tip }
+        }
+        return data
+      }
+    }
+  }, [mode, nodeArr, rpc])
+}
+
+export function useReqSmpcAddress(
+  rpc: string,
+  gID: string,
+  ThresHold: string,
+  Sigs: string,
+  keytype: string
+): {
+  execute?: () => Promise<any>
+} {
+  const { account, library } = useWeb3React()
+  // const { signMessage } = useSign();
+  return useMemo(() => {
+    return {
+      execute: async () => {
+        // const provider = new ethers.providers.Web3Provider(library.provider);
+        // const signer = provider.getSigner();
+        // web3.setProvider('http://47.114.115.33:5913/')
+        web3.setProvider(rpc)
+        const nonce = await getNonce(account, rpc)
+        const data = {
+          TxType: 'REQSMPCADDR',
+          Account: account,
+          Nonce: nonce,
+          keytype,
+          GroupId: gID,
+          ThresHold: ThresHold,
+          Mode: '2',
+          AcceptTimeOut: '604800', // AcceptTimeOut: "60", // 测试超时用
+          TimeStamp: Date.now().toString(),
+          Sigs
+        }
+        console.info('Sigs', Sigs)
+
+        const signer = library.getSigner()
+        let rsv = await signer.signMessage(JSON.stringify(data, null, 8))
+        // 如果v是1b换成00 如果v是1c换成01
+        rsv = rsv.slice(0, 130) + (rsv.slice(130) === '1b' ? '00' : '01')
+        let cbData = await getsmpc().reqKeyGen(rsv, JSON.stringify(data, null, 8))
+        let resultData: any = {}
+        if (cbData && typeof cbData === 'string') {
+          cbData = JSON.parse(cbData)
+        }
+        if (cbData.Status !== 'Error') {
+          resultData = { msg: 'Success', info: cbData.Data.result }
+        } else {
+          resultData = { msg: cbData.Error || 'Error', error: cbData.Tip }
+        }
+        return resultData
+      }
+    }
+  }, [account, library, gID, ThresHold, Sigs, keytype, rpc])
 }

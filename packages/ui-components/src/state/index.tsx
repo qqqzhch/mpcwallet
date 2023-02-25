@@ -3,6 +3,20 @@ import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import React, { createContext, FC, useContext } from 'react'
 
+export interface adminInfo {
+  address: string
+  name?: string
+  key: number
+}
+interface PollingPubKey {
+  fn: string
+  params: Array<string>
+  data: {
+    GroupID: string
+    ThresHold: string
+  }
+}
+
 interface AppState {
   counter: number
   loginAccount: {
@@ -10,9 +24,23 @@ interface AppState {
     enode: string
     signEnode: string
   }
+  createGroup: {
+    admins: Array<adminInfo>
+    keytype: string
+    threshold: number
+    walletname: string
+  }
+  pollingPubKey: Array<PollingPubKey>
   increase: (by: number) => void
   setLoginAccount: (rpc: string, enode: string, signEnode?: string) => void
   clearLoginAccount: () => void
+  setcreateGroupKeytype: (keytype: string) => void
+  setcreateGroupThreshold: (threshold: number) => void
+  addcreateGroupAdmin: () => void
+  removecreateGroupAdminByindex: (index: number) => void
+  setcreateGroupWalletName: (name: string) => void
+  editcreateGroupAdmin: (index: number, name: string) => void
+  setpollingPubKey: (pollingPubKey: PollingPubKey) => void
 }
 
 const intialState = {
@@ -21,7 +49,23 @@ const intialState = {
     rpc: '',
     enode: '',
     signEnode: ''
-  }
+  },
+  createGroup: {
+    admins: [
+      {
+        address: '',
+        key: 0
+      },
+      {
+        address: '',
+        key: 1
+      }
+    ],
+    keytype: 'EC256k1',
+    threshold: 1,
+    walletname: ''
+  },
+  pollingPubKey: []
 }
 
 const createMyStore = (state: typeof intialState = intialState) => {
@@ -48,6 +92,44 @@ const createMyStore = (state: typeof intialState = intialState) => {
                 state.loginAccount.rpc = ''
                 state.loginAccount.enode = ''
                 state.loginAccount.signEnode = ''
+              })
+            },
+            setcreateGroupKeytype: (typeName: string) => {
+              set(state => {
+                state.createGroup.keytype = typeName
+              })
+            },
+            setcreateGroupThreshold: (threshold: number) => {
+              set(state => {
+                state.createGroup.threshold = threshold
+              })
+            },
+            addcreateGroupAdmin: () => {
+              set(state => {
+                state.createGroup.admins.push({
+                  address: '',
+                  key: Date.now()
+                })
+              })
+            },
+            editcreateGroupAdmin: (index: number, address: string) => {
+              set(state => {
+                state.createGroup.admins[index].address = address
+              })
+            },
+            removecreateGroupAdminByindex: (index: number) => {
+              set(state => {
+                state.createGroup.admins.splice(index, 1)
+              })
+            },
+            setcreateGroupWalletName: (name: string) => {
+              set(state => {
+                state.createGroup.walletname = name
+              })
+            },
+            setpollingPubKey: (pollingPubKey: PollingPubKey) => {
+              set(state => {
+                state.pollingPubKey.unshift(pollingPubKey)
               })
             }
           }),

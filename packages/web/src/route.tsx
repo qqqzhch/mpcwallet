@@ -6,6 +6,7 @@ import Home from './views/Home'
 import NoMatch from './views/noMatch'
 import Login from './views/login'
 import CreatWallet from './views/createwallet'
+import Preview from './views/createwallet/preview'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -14,6 +15,7 @@ const router = createBrowserRouter(
       <Route path="login" element={<Login />} />
       <Route path="account" element={<Account />} />
       <Route path="creatwallet" element={<CreatWallet />} />
+      <Route path="preview" element={<Preview />} />
       <Route path="*" element={<NoMatch />} />
     </Route>
   )
