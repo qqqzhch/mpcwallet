@@ -4,6 +4,7 @@ import Threshold from '@monorepo/ui-components/src/components/threshold'
 import { useAppStore } from '@monorepo/ui-components'
 import InputeMinus from '@monorepo/ui-components/src/components/forms/index'
 import { useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const CreatWallet: FC = props => {
   const loginAccount = useAppStore(state => state.loginAccount)
@@ -11,6 +12,7 @@ const CreatWallet: FC = props => {
   const setcreateGroupWalletName = useAppStore(state => state.setcreateGroupWalletName)
   const addcreateGroupAdmin = useAppStore(state => state.addcreateGroupAdmin)
   const editcreateGroupAdmin = useAppStore(state => state.editcreateGroupAdmin)
+  const navigate = useNavigate()
 
   useEffect(() => {
     editcreateGroupAdmin(0, loginAccount.signEnode)
@@ -48,7 +50,7 @@ const CreatWallet: FC = props => {
             </div>
 
             {createGroup.admins.map((item, index) => {
-              return <InputeMinus key={index.toString()} index={index} value={item}></InputeMinus>
+              return <InputeMinus key={item.key} index={index} value={item}></InputeMinus>
             })}
 
             <div onClick={addcreateGroupAdmin} className="relative mb-4 py-8">
@@ -64,8 +66,13 @@ const CreatWallet: FC = props => {
               </div>
             </div>
             <div className="flex flex-col   lg:flex-row  justify-around gap-8">
-              <button className="text-white mx-2 bg-indigo-500 border-0 py-2 px-2 lg:px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
-                Create MPC
+              <button
+                onClick={() => {
+                  navigate('/preview')
+                }}
+                className="text-white mx-2 bg-indigo-500 border-0 py-2 px-2 lg:px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+              >
+                Next
               </button>
               <button className="mx-2 border-2 py-2 lg:px-6 focus:outline-none rounded text-lg  hover:bg-gray-300  border-gray-400  text-gray-600">
                 Reset
