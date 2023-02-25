@@ -40,12 +40,14 @@ const ChainList: FC<Props> = ({ children }) => {
             <When condition={loginAccount.signEnode !== ''}>
               <div className="-m-3 break-words flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
                 <CopyToClipboard text={loginAccount.signEnode} onCopy={() => onCopy()}>
-                  <span>
-                    {loginAccount.signEnode?.substring(0, 15)}...
-                    {loginAccount.signEnode?.substring(loginAccount.signEnode.length, loginAccount.signEnode.length - 15)}
-                  </span>
+                  <div className=" flex flex-row ">
+                    <span>
+                      {loginAccount.signEnode?.substring(0, 15)}...
+                      {loginAccount.signEnode?.substring(loginAccount.signEnode.length, loginAccount.signEnode.length - 15)}
+                    </span>
+                    <ClipboardDocumentListIcon className="h-6 w-6"></ClipboardDocumentListIcon>
+                  </div>
                 </CopyToClipboard>
-                <ClipboardDocumentListIcon className="h-6 w-6"></ClipboardDocumentListIcon>
               </div>
               <div className="-m-3 break-words flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
                 <button onClick={onLogout} className="text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded text-lg">

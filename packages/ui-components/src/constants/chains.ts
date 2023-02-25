@@ -21,6 +21,8 @@ export enum SupportedChainId {
   CELO_ALFAJORES = 44787
 }
 
+export const appSupportedChainId = [SupportedChainId.MAINNET, SupportedChainId.GOERLI]
+
 export const CHAIN_IDS_TO_NAMES = {
   [SupportedChainId.MAINNET]: 'mainnet',
   [SupportedChainId.ROPSTEN]: 'ropsten',
@@ -40,9 +42,7 @@ export const CHAIN_IDS_TO_NAMES = {
 /**
  * Array of all the supported chain IDs
  */
-export const ALL_SUPPORTED_CHAIN_IDS: SupportedChainId[] = Object.values(SupportedChainId).filter(
-  id => typeof id === 'number' && [1, 5].indexOf(id) > -1
-) as SupportedChainId[]
+export const ALL_SUPPORTED_CHAIN_IDS: SupportedChainId[] = Object.values(SupportedChainId).filter(id => typeof id === 'number') as SupportedChainId[]
 
 export function isSupportedChain(chainId: number | null | undefined): chainId is SupportedChainId {
   return !!chainId && !!SupportedChainId[chainId]

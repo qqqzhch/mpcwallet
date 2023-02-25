@@ -27,6 +27,8 @@ const SelectButton: FC = () => {
           const err = error as Error
           addToast(err.message, { appearance: 'error' })
         }
+      } else {
+        addToast('need select rpc', { appearance: 'error' })
       }
     }
     run()
