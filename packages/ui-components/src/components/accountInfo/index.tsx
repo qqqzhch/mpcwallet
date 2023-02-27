@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom'
 type Props = {
   children?: React.ReactNode
 }
-const ChainList: FC<Props> = ({ children }) => {
+const AccountInfo: FC<Props> = ({ children }) => {
   const { account } = useWeb3React()
   const loginAccount = useAppStore(state => state.loginAccount)
   const { addToast } = useToasts()
@@ -62,4 +62,4 @@ const ChainList: FC<Props> = ({ children }) => {
   )
 }
 
-export default ChainList
+export default AccountInfo

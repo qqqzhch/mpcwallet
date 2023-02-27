@@ -5,12 +5,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import Connectwallet from '../connectwallet'
 import ChainList from '../chainList/index'
-
+import NoticeInfo from '../noticeinfo'
+import { useNavigate } from 'react-router-dom'
 export const Header: FC = () => {
+  const Navigate = useNavigate()
   return (
     <header className="text-gray-600 body-font">
       <div className="container mx-auto flex flex-wrap py-2 flex-row  justify-around  items-center ">
-        <a className="hidden sm:flex title-font font-medium items-center text-gray-900 pl-4 ">
+        <a
+          onClick={() => {
+            Navigate('/')
+          }}
+          className="hidden sm:flex title-font font-medium items-center text-gray-900 pl-4  cursor-pointer"
+        >
           <img src={logo} className="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full " />
 
           <span className="ml-3 text-xl hidden lg:block">Multichain</span>
@@ -25,10 +32,8 @@ export const Header: FC = () => {
               Switch to bnb BNB Smart Chain
             </button>
           </div> */}
-          <div className="pr-4 pl-4   hover:text-gray-900 border-r border-gray-400 last:border-r-0 hidden md:block">
-            <div className="py-2">
-              <FontAwesomeIcon icon={icon({ name: 'bell', style: 'solid' })} />
-            </div>
+          <div className="pr-4 pl-4   hover:text-gray-900 border-r border-gray-400 last:border-r-0 ">
+            <NoticeInfo></NoticeInfo>
           </div>
           <div className="pr-2 pl-2 flex flex-row   hover:text-gray-900 border-r border-gray-400 last:border-r-0  items-center justify-center">
             <Connectwallet></Connectwallet>
