@@ -6,6 +6,8 @@ import { ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { web3 } from '@monorepo/api'
 import { getsmpc } from '@monorepo/api/src/web3'
 import { useAppStore } from '../../state/index'
+import { useToasts } from 'react-toast-notifications'
+import { rpclist } from '../../constants/rpcConfig'
 // import { useSignEnode } from '../../hooks/useSigns'
 // import { peopleType, nodeItem, nodeList } from './type'
 
@@ -23,7 +25,6 @@ import { useAppStore } from '../../state/index'
 //   version: '',
 //   _id: ''
 // }
-const rpclist = ['http://43.153.80.95:5928', 'http://43.157.49.23:5928', 'http://43.156.1.182:5928']
 
 const SelectNode = () => {
   const [nodeItemList] = useState<Array<string>>(rpclist)
@@ -31,6 +32,7 @@ const SelectNode = () => {
   const [query, setQuery] = useState('')
   const [filteredPeople, setFilteredPeople] = useState<Array<string>>([])
   const setLoginAccount = useAppStore(state => state.setLoginAccount)
+  const { addToast } = useToasts()
 
   // useEffect(() => {
   //   const get = async () => {
@@ -57,19 +59,25 @@ const SelectNode = () => {
   }, [])
 
   useEffect(() => {
-    web3.setProvider(selected)
     const run = async () => {
-      const res = await getsmpc().getEnode()
-      setLoginAccount(selected, res.Data.Enode)
+      web3.setProvider(selected)
+      try {
+        const res = await getsmpc().getEnode()
+        setLoginAccount(selected, res.Data.Enode)
+      } catch (error: unknown) {
+        const err = error as Error
+        addToast(err.message, { appearance: 'error' })
+      }
     }
-    run()
-  }, [selected, setLoginAccount])
+    if (selected) {
+      run()
+    }
+  }, [selected, setLoginAccount, addToast])
 
   return (
     <div className="w-full">
       <Combobox
-        value={selected}
-        onChange={item => {
+        onChange={(item: string) => {
           nodeSelectCallback(item)
         }}
       >

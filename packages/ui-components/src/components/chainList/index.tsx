@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState, useCallback } from 'react'
 import { Popover } from '@headlessui/react'
-import { ALL_SUPPORTED_CHAIN_IDS } from '../../constants/chains'
+import { appSupportedChainId } from '../../constants/chains'
 import { getChainInfo, L1ChainInfo, L2ChainInfo } from '../../constants/chainInfo'
 import { useWeb3React } from '@web3-react/core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -26,7 +26,7 @@ const ChainList: FC<Props> = ({ children }) => {
   const { chainId, library } = useWeb3React()
 
   useEffect(() => {
-    const data = ALL_SUPPORTED_CHAIN_IDS.map(item => {
+    const data = appSupportedChainId.map(item => {
       return { item: getChainInfo(item), chainId: item }
     })
     setChains(data)
