@@ -7,6 +7,8 @@ import { useWeb3React } from '@web3-react/core'
 // import { accountDataType } from '../../web3react/types'
 import { useEffect, useCallback } from 'react'
 import EventBus from '../../EventEmitter/index'
+import metamask from '../../assets/icon/metamask.svg'
+import walletconnect from '../../assets/icon/walletconnect.svg'
 
 interface componentprops {
   isOpen: boolean
@@ -25,7 +27,7 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     let status = false
     await activate(connectors.metamask, (err: Error) => {
       addToast(err.message, { appearance: 'error' })
-      if (err.message.indexOf('UnsupportedChainId')) {
+      if (err.message.indexOf('UnsupportedChainId') > -1) {
         EventBus.emit('UnsupportedChainId', true)
       } else {
         EventBus.emit('UnsupportedChainId', false)
@@ -44,7 +46,7 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     let status = false
     await activate(connectors.walletConnect, (err: Error) => {
       addToast(err.message, { appearance: 'error' })
-      if (err.message.indexOf('UnsupportedChainId')) {
+      if (err.message.indexOf('UnsupportedChainId') > -1) {
         EventBus.emit('UnsupportedChainId', true)
       } else {
         EventBus.emit('UnsupportedChainId', false)
@@ -66,8 +68,8 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
   //   // setAccountData(null)
   // }
   const walletsToDisplay = [
-    { id: 1, title: 'MetaMask', imgSrc: '', fn: connectMetaMask },
-    { id: 3, title: 'WalletConnect', imgSrc: '', fn: connectWalletConnect }
+    { id: 1, title: 'Connect with MetaMask', imgSrc: metamask, fn: connectMetaMask },
+    { id: 3, title: 'Connect with WalletConnect', imgSrc: walletconnect, fn: connectWalletConnect }
   ]
   // connect on load
   useEffect(() => {
@@ -116,15 +118,16 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
                     Select Wallet
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-sm text-gray-500 flex flex-col items-center">
+                    <p className="text-sm text-gray-500 flex flex-col  justify-start">
                       {walletsToDisplay.map(el => (
                         <div className="my-1 flex-1" key={el.id}>
                           <button
                             key={el.id}
                             onClick={el.fn}
                             type="button"
-                            className="px-8 py-3 font-semibold border rounded border-blue-800 text-blue-800  w-48"
+                            className="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 mr-2 mb-2 min-w-full"
                           >
+                            <img src={el.imgSrc} className="w-6 h-5 mr-2 -ml-1"></img>
                             {el.title}
                           </button>
                         </div>

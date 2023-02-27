@@ -71,7 +71,7 @@ const ChainList: FC<Props> = ({ children }) => {
           </div>
         </When>
         <When condition={unsupported !== true && chainId != undefined}>
-          <div className="px-6 py-1 mx-2 font-semibold  rounded  bg-yellow-300 font-thin text-sm">{chianName}</div>
+          <div className="px-8 py-1 mx-2 font-semibold  rounded  bg-yellow-300 font-thin text-sm">{chianName}</div>
           <div className="hidden lg:flex">
             <FontAwesomeIcon icon={icon({ name: 'chevron-down', style: 'solid' })} />
           </div>
@@ -84,7 +84,7 @@ const ChainList: FC<Props> = ({ children }) => {
         </When>
       </Popover.Button>
 
-      <Popover.Panel className="absolute left-1/3 z-10 mt-4   max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl">
+      <Popover.Panel className="absolute  z-10 mt-4   max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl left-1/2 ">
         <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
           <div className="relative grid gap-4 bg-white p-6 flex flex-col">
             {chains?.map(({ item, chainId }) => {
@@ -99,7 +99,7 @@ const ChainList: FC<Props> = ({ children }) => {
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center text-white sm:h-12 sm:w-12">
                     <img width={20} src={item.logoUrl}></img>
                   </div>
-                  <div className="ml-4">
+                  <div>
                     <p className="text-sm font-medium text-gray-900">{item.label}</p>
                   </div>
                 </a>

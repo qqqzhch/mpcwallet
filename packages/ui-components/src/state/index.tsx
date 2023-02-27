@@ -2,6 +2,7 @@ import { createStore, useStore } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import React, { createContext, FC, useContext } from 'react'
+import { walletApprove } from './approve'
 
 export interface adminInfo {
   address: string
@@ -30,6 +31,9 @@ interface AppState {
     threshold: number
     walletname: string
   }
+  approve: {
+    walletApproveList: Array<walletApprove>
+  }
   pollingPubKey: Array<PollingPubKey>
   increase: (by: number) => void
   setLoginAccount: (rpc: string, enode: string, signEnode?: string) => void
@@ -41,6 +45,7 @@ interface AppState {
   setcreateGroupWalletName: (name: string) => void
   editcreateGroupAdmin: (index: number, name: string) => void
   setpollingPubKey: (pollingPubKey: PollingPubKey) => void
+  setWalletApproveList: (list: Array<walletApprove>) => void
 }
 
 const intialState = {
@@ -65,7 +70,10 @@ const intialState = {
     threshold: 1,
     walletname: ''
   },
-  pollingPubKey: []
+  pollingPubKey: [],
+  approve: {
+    walletApproveList: []
+  }
 }
 
 const createMyStore = (state: typeof intialState = intialState) => {
@@ -130,6 +138,11 @@ const createMyStore = (state: typeof intialState = intialState) => {
             setpollingPubKey: (pollingPubKey: PollingPubKey) => {
               set(state => {
                 state.pollingPubKey.unshift(pollingPubKey)
+              })
+            },
+            setWalletApproveList: (list: Array<walletApprove>) => {
+              set(state => {
+                state.approve.walletApproveList = list
               })
             }
           }),
