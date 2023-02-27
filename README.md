@@ -1,4 +1,4 @@
-<h1 align="center">Monorepo frontend boilerplate</h1>
+<h1 align="center">Multichain - SMPC UI</h1>
 
 <p align="center">
   <a href="http://commitizen.github.io/cz-cli/">
@@ -17,6 +17,7 @@ This is a monorepo repository using [yarn workspaces](https://classic.yarnpkg.co
 
 - ⚡️ Vite 2.0 - (React 18)
 - 📖 Storybook 6
+- 📖 tailwindcss
 - 📦 Yarn Workspaces
 - ✨ Host Multiple CRA Apps, Vite apps, Component Libraries & Storybooks in one monorepo
 - 🔥 Hot Reload all Apps, Components & Storybooks
@@ -25,10 +26,10 @@ This is a monorepo repository using [yarn workspaces](https://classic.yarnpkg.co
 ## 🌐 Samples
 
 #### Spotifood
-Code: https://github.com/emunhoz/spotifood
+Code: https://mpcwallet-design-tokens.vercel.app
 
 #### Find movies
-Code: https://github.com/emunhoz/find-movies
+Code: https://mpcwallet-design-tokens.vercel.app
 
 ## 🌐 Links
 
