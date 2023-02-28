@@ -5,6 +5,9 @@ import { useMemo, useCallback } from 'react'
 // import {providers } from "ethers";
 import { web3 } from '@monorepo/api'
 import { getsmpc } from '@monorepo/api/src/web3'
+
+import { walletApprove } from '../state/approve'
+
 export function eNodeCut(enode: any) {
   const obj = {
     key: '',
@@ -198,4 +201,46 @@ export function useReqSmpcAddress(
       }
     }
   }, [account, library, gID, ThresHold, Sigs, keytype, rpc])
+}
+
+export function useApproveReqSmpcAddress(rpc: string): {
+  execute?: (r: walletApprove, type: string) => Promise<any>
+} {
+  const { account, library } = useWeb3React()
+
+  return useMemo(() => {
+    return {
+      execute: async (r: walletApprove, type: string) => {
+        const { Key } = r
+
+        web3.setProvider(rpc)
+        const Nonce = await getNonce(account, rpc)
+        const data = {
+          TxType: 'ACCEPTREQADDR',
+          Account: account,
+          Nonce,
+          Key,
+          Accept: type, // DISAGREE
+          TimeStamp: Date.now().toString()
+        }
+
+        const signer = library.getSigner()
+        let rsv = await signer.signMessage(JSON.stringify(data, null, 8))
+        // 如果v是1b换成00 如果v是1c换成01
+        rsv = rsv.slice(0, 130) + (rsv.slice(130) === '1b' ? '00' : '01')
+        let cbData = await getsmpc().acceptKeyGen(rsv, JSON.stringify(data, null, 8))
+
+        let resultData: any = {}
+        if (cbData && typeof cbData === 'string') {
+          cbData = JSON.parse(cbData)
+        }
+        if (cbData.Status !== 'Error') {
+          resultData = { msg: 'Success', info: cbData.Data.result }
+        } else {
+          resultData = { msg: 'Error', error: cbData.Tip }
+        }
+        return resultData
+      }
+    }
+  }, [account, library, rpc])
 }

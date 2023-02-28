@@ -17,5 +17,6 @@ export * from './components/selectnode/button'
 export * from './components/forms/index'
 export * from './components/forms/CreateWalletBtn'
 export * from './protectedRoutes/index'
+export * from './components/approveBtn/walletApprove'
 
 export { providers }

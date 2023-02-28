@@ -7,6 +7,7 @@ export interface walletApprove {
   Nonce: string
   ThresHold: string
   TimeStamp: string
+  show?: boolean
 }
 
 export const walletApproveListintial = []

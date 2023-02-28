@@ -15,6 +15,7 @@ interface PollingPubKey {
   data: {
     GroupID: string
     ThresHold: string
+    Key?: string
   }
 }
 
@@ -24,6 +25,7 @@ interface AppState {
     rpc: string
     enode: string
     signEnode: string
+    address: string
   }
   createGroup: {
     admins: Array<adminInfo>
@@ -36,7 +38,7 @@ interface AppState {
   }
   pollingPubKey: Array<PollingPubKey>
   increase: (by: number) => void
-  setLoginAccount: (rpc: string, enode: string, signEnode?: string) => void
+  setLoginAccount: (rpc: string, enode: string, adress: string, signEnode?: string) => void
   clearLoginAccount: () => void
   setcreateGroupKeytype: (keytype: string) => void
   setcreateGroupThreshold: (threshold: number) => void
@@ -46,6 +48,7 @@ interface AppState {
   editcreateGroupAdmin: (index: number, name: string) => void
   setpollingPubKey: (pollingPubKey: PollingPubKey) => void
   setWalletApproveList: (list: Array<walletApprove>) => void
+  hidenWalletApprove: (item: walletApprove) => void
 }
 
 const intialState = {
@@ -53,7 +56,8 @@ const intialState = {
   loginAccount: {
     rpc: '',
     enode: '',
-    signEnode: ''
+    signEnode: '',
+    address: ''
   },
   createGroup: {
     admins: [
@@ -67,7 +71,7 @@ const intialState = {
       }
     ],
     keytype: 'EC256k1',
-    threshold: 1,
+    threshold: 2,
     walletname: ''
   },
   pollingPubKey: [],
@@ -88,11 +92,12 @@ const createMyStore = (state: typeof intialState = intialState) => {
                 state.counter++
               })
             },
-            setLoginAccount: (rpc: string, enode: string, signEnode?: string) => {
+            setLoginAccount: (rpc: string, enode: string, address: string, signEnode?: string) => {
               set(state => {
                 state.loginAccount.rpc = rpc
                 state.loginAccount.enode = enode
                 state.loginAccount.signEnode = signEnode || ''
+                state.loginAccount.address = address
               })
             },
             clearLoginAccount: () => {
@@ -137,12 +142,22 @@ const createMyStore = (state: typeof intialState = intialState) => {
             },
             setpollingPubKey: (pollingPubKey: PollingPubKey) => {
               set(state => {
-                state.pollingPubKey.unshift(pollingPubKey)
+                const list = state.pollingPubKey.filter(item => item.data.Key !== pollingPubKey.data.Key)
+                state.pollingPubKey = list.concat(pollingPubKey)
               })
             },
             setWalletApproveList: (list: Array<walletApprove>) => {
               set(state => {
                 state.approve.walletApproveList = list
+              })
+            },
+            hidenWalletApprove: (item: walletApprove) => {
+              set(state => {
+                state.approve.walletApproveList.forEach(it => {
+                  if (it.GroupID == item.GroupID && it.Account == item.Account && it.TimeStamp == it.TimeStamp) {
+                    it.show = false
+                  }
+                })
               })
             }
           }),
