@@ -8,6 +8,8 @@ import { getsmpc } from '@monorepo/api/src/web3'
 import { useAppStore } from '../../state/index'
 import { useToasts } from 'react-toast-notifications'
 import { rpclist } from '../../constants/rpcConfig'
+import { useWeb3React } from '@web3-react/core'
+
 // import { useSignEnode } from '../../hooks/useSigns'
 // import { peopleType, nodeItem, nodeList } from './type'
 
@@ -28,10 +30,11 @@ import { rpclist } from '../../constants/rpcConfig'
 
 const SelectNode = () => {
   const [nodeItemList] = useState<Array<string>>(rpclist)
-  const [selected, setSelected] = useState<string>(rpclist[0])
+  const [selected, setSelected] = useState<string>()
   const [query, setQuery] = useState('')
   const [filteredPeople, setFilteredPeople] = useState<Array<string>>([])
   const setLoginAccount = useAppStore(state => state.setLoginAccount)
+  const { account } = useWeb3React()
   const { addToast } = useToasts()
 
   // useEffect(() => {
@@ -60,10 +63,13 @@ const SelectNode = () => {
 
   useEffect(() => {
     const run = async () => {
+      if (selected == undefined || account == undefined || account == null) {
+        return
+      }
       web3.setProvider(selected)
       try {
         const res = await getsmpc().getEnode()
-        setLoginAccount(selected, res.Data.Enode)
+        setLoginAccount(selected, res.Data.Enode, account)
       } catch (error: unknown) {
         const err = error as Error
         addToast(err.message, { appearance: 'error' })
@@ -72,7 +78,7 @@ const SelectNode = () => {
     if (selected) {
       run()
     }
-  }, [selected, setLoginAccount, addToast])
+  }, [selected, setLoginAccount, addToast, account])
 
   return (
     <div className="w-full">

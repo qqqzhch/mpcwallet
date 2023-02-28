@@ -18,10 +18,10 @@ const SelectButton: FC = () => {
 
   const btnClick = useCallback(() => {
     const run = async () => {
-      if (loginAccount.enode != '') {
+      if (loginAccount.enode != '' && account) {
         try {
           const signEnode = await execute()
-          setLoginAccount(loginAccount.rpc, loginAccount.enode, loginAccount.enode + signEnode)
+          setLoginAccount(loginAccount.rpc, loginAccount.enode, account, loginAccount.enode + signEnode)
           navigate('/creatwallet')
         } catch (error: unknown) {
           const err = error as Error
@@ -32,7 +32,7 @@ const SelectButton: FC = () => {
       }
     }
     run()
-  }, [execute, loginAccount, setLoginAccount, navigate, addToast])
+  }, [execute, loginAccount, setLoginAccount, navigate, addToast, account])
 
   const connectWallet = useCallback(() => {
     EventBus.emit('connectwallet')

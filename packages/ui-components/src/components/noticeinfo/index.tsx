@@ -22,11 +22,14 @@ const NoticeInfo: FC<Props> = ({ children }) => {
   const setWalletApproveList = useAppStore(state => state.setWalletApproveList)
 
   useEffect(() => {
-    if (data?.AddrInfo !== undefined) {
+    if (data?.AddrInfo) {
       setWalletApproveList(data?.AddrInfo)
       setWalletCount(data?.AddrInfo.length)
+    } else {
+      setWalletApproveList([])
+      setWalletCount(0)
     }
-  }, [setWalletApproveList, data])
+  }, [setWalletApproveList, data?.AddrInfo])
 
   return (
     <Popover className="relative">
@@ -46,14 +49,14 @@ const NoticeInfo: FC<Props> = ({ children }) => {
               onClick={() => {
                 Navigate('/walletApprove')
               }}
-              className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
+              className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 cursor-pointer"
             >
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-900">Account Approval: {walletCount}</p>
                 <p className="text-sm text-gray-500">Authorization to create a wallet</p>
               </div>
             </div>
-            <div className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+            <div className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 cursor-pointer">
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-900">Transactions Approval 5</p>
                 <p className="text-sm text-gray-500">Authorization to send transactions</p>
