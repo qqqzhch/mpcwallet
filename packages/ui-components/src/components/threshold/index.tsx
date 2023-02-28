@@ -24,7 +24,6 @@ const Threshold: FC = () => {
               {createGroup.admins.map((person, personIdx) => (
                 <Listbox.Option
                   key={personIdx}
-                  disabled={personIdx == 0}
                   className={({ active }) =>
                     `relative cursor-default  disabled:text-gray-300 select-none py-2 pl-10 pr-4 ${active ? 'bg-amber-100 text-amber-900' : 'text-gray-900'}`
                   }
