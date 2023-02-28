@@ -26,7 +26,7 @@ const Preview = () => {
             return (
               <>
                 <div className="relative mb-4">
-                  <div className="leading-7 text-sm text-gray-600  w-40">admin {index + 1}:</div>
+                  <div className="leading-7 text-sm text-gray-600  w-40">Admin Enodesig {index + 1}:</div>
                   <div className="break-all">{item.address}</div>
                 </div>
               </>
@@ -46,7 +46,7 @@ const Preview = () => {
               onClick={() => {
                 navigate('/creatwallet')
               }}
-              className="mx-2 border-2 py-2 lg:px-6 focus:outline-none rounded text-lg  hover:bg-gray-300  border-gray-400  text-gray-600"
+              className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
             >
               Previous
             </button>

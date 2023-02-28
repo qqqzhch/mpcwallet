@@ -50,11 +50,8 @@ const MpcType: FC = () => {
                           </RadioGroup.Label>
                         </div>
                       </div>
-                      {checked && (
-                        <div className="shrink-0 text-white">
-                          <CheckIcon className="h-6 w-6" />
-                        </div>
-                      )}
+
+                      <div className="shrink-0 text-white h-6 w-6">{checked && <CheckIcon className="h-6 w-6" />}</div>
                     </div>
                   </>
                 )}

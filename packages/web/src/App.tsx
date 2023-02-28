@@ -3,10 +3,10 @@ import { Outlet } from 'react-router-dom'
 
 function App() {
   return (
-    <div className="App">
+    <div className="App ">
       <Web3Provider>
         <Header></Header>
-        <section className="container mx-auto">
+        <section className="container mx-auto min-h-screen">
           <Outlet />
         </section>
         <Footer></Footer>
