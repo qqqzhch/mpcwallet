@@ -3,6 +3,7 @@ import { useAppStore } from '../../state/index'
 import { useCreateGroup, useReqSmpcAddress } from '../../hooks/useSigns'
 
 import { useToasts } from 'react-toast-notifications'
+import { useNavigate } from 'react-router-dom'
 
 const CreateWalletBtn: FC = () => {
   const createGroup = useAppStore(state => state.createGroup)
@@ -15,6 +16,7 @@ const CreateWalletBtn: FC = () => {
   )
   const [gid, setGid] = useState<string>('')
   const { addToast } = useToasts()
+  const navigate = useNavigate()
 
   const { execute: reqSmpcAddr } = useReqSmpcAddress(
     loginAccount.rpc,
@@ -48,6 +50,7 @@ const CreateWalletBtn: FC = () => {
           return
         }
         if (res.msg === 'Success') {
+          addToast('Created successfully', { appearance: 'success' })
           const newPollingPubKeyItem = {
             fn: 'getReqAddrStatus',
             params: [res.info],
@@ -57,11 +60,12 @@ const CreateWalletBtn: FC = () => {
             }
           }
           setpollingPubKey(newPollingPubKeyItem)
+          navigate('/walletApproveState')
         }
       }
     }
     run()
-  }, [gid, reqSmpcAddr, addToast, setpollingPubKey, createGroup])
+  }, [gid, reqSmpcAddr, addToast, setpollingPubKey, createGroup, navigate])
 
   return (
     <button

@@ -9,6 +9,7 @@ import CreatWallet from './views/createwallet'
 import Preview from './views/createwallet/preview'
 import WalletApprove from './views/approve/walletApprove'
 import { ProtectedRoute, HaveloginRoute } from '@monorepo/ui-components'
+import ApproveState from './views/createwallet/approveState'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -44,6 +45,14 @@ const router = createBrowserRouter(
         element={
           <ProtectedRoute>
             <WalletApprove />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="walletApproveState"
+        element={
+          <ProtectedRoute>
+            <ApproveState />
           </ProtectedRoute>
         }
       />

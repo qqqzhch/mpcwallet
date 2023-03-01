@@ -1,22 +1,25 @@
 import { useAppStore } from '@monorepo/ui-components'
-import { useNavigate } from 'react-router-dom'
-import CreateWalletBtn from '@monorepo/ui-components/src/components/forms/CreateWalletBtn'
+// import { useNavigate } from 'react-router-dom'
 
-const Preview = () => {
+const ApproveState = () => {
   const createGroup = useAppStore(state => state.createGroup)
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   return (
     <div className="flex flex-col lg:flex-row  xl:mx-40 2xl:mx-80 ">
       <div className="felx flex-col w-full xl:w-2/3 p-10">
-        <h1 className="font-semibold text-3xl mb-4 pb-4  border-b ">Create new Wallet</h1>
+        <h1 className="font-semibold text-3xl mb-4 pb-4  border-b ">Your wallet has been created successfully</h1>
         <div className="mb-4 pb-4  border-b  px-4">
-          <h3 className="font-semibold text-xl pb-4 ">Review</h3>
-          <p>You&apos;re about to create a new wallet and will have to confirm the transaction with your connected wallet.</p>
+          <h3 className="font-semibold text-xl pb-4 ">Status</h3>
+          <p>Your wallet needs approval from other participants</p>
         </div>
         <div className="mb-4 pb-4  border-b  px-4">
           <div className="relative mb-4">
             <span className="leading-7 text-sm text-gray-600 inline-block w-40 ">Wallet Name:</span>
             {createGroup.walletname}
+          </div>
+          <div className="relative mb-4">
+            <span className="leading-7 text-sm text-gray-600 inline-block w-40 ">Wallet Address:</span>
+            *******
           </div>
           <div className="relative mb-4">
             <span className="leading-7 text-sm text-gray-600 inline-block w-40">Mpc Type:</span>
@@ -31,7 +34,7 @@ const Preview = () => {
             )
           })}
 
-          <div className="flex flex-col   lg:flex-row  mb-20">
+          <div className="flex flex-col   lg:flex-row  mb-10">
             <div className="w-2/3">
               <h2 className="font-semibold text-xl">Threshold</h2>
             </div>
@@ -39,16 +42,17 @@ const Preview = () => {
               {createGroup.threshold} out of {createGroup.admins.length} owner(s)
             </div>
           </div>
+
+          <div className="flex flex-col   lg:flex-row  mb-20">
+            <div className="w-2/3">
+              <h2 className="font-semibold text-xl">Recharge</h2>
+              <p>After approval, you can recharge your wallet</p>
+            </div>
+          </div>
           <div className="flex flex-col   lg:flex-row  justify-around gap-8">
-            <button
-              onClick={() => {
-                navigate('/creatwallet')
-              }}
-              className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-            >
-              Previous
+            <button className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+              Open wallet
             </button>
-            <CreateWalletBtn></CreateWalletBtn>
           </div>
         </div>
       </div>
@@ -93,4 +97,4 @@ const Preview = () => {
   )
 }
 
-export default Preview
+export default ApproveState
