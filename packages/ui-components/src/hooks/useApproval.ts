@@ -5,6 +5,7 @@ import { getsmpc } from '@monorepo/api/src/web3'
 
 import { useWeb3React } from '@web3-react/core'
 import { walletApprove } from '../state/approve'
+import { useEffect } from 'react'
 
 async function fetcher(
   rpc: string,
@@ -22,6 +23,7 @@ async function fetcher(
   web3.setProvider(rpc)
   const AddrInfo = await getsmpc().getCurNodeReqAddrInfo(account)
   const SignInfo = await getsmpc().getCurNodeSignInfo(account)
+
   if (AddrInfo.Status != 'Success' || SignInfo.Status != 'Success') {
     throw new Error('get approve info error ')
   }
@@ -34,9 +36,19 @@ async function fetcher(
 export default function useApprove() {
   const loginAccount = useAppStore(state => state.loginAccount)
   const { account } = useWeb3React()
+  const setWalletApproveList = useAppStore(state => state.setWalletApproveList)
+
   const { data, error, isLoading } = useSWR(account != null && account != undefined ? '/smpc/Approve' : null, () => fetcher(loginAccount.rpc, account), {
     refreshInterval: 1000 * 15
   })
+  useEffect(() => {
+    if (data?.AddrInfo) {
+      setWalletApproveList(data?.AddrInfo)
+    } else {
+      setWalletApproveList([])
+    }
+  }, [setWalletApproveList, data?.AddrInfo])
+
   return {
     data,
     error,

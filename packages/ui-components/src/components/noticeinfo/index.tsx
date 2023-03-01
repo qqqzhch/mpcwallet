@@ -16,20 +16,13 @@ type Props = {
 }
 const NoticeInfo: FC<Props> = ({ children }) => {
   const [walletCount, setWalletCount] = useState<number>(0)
-  const { data } = useApprove()
+  useApprove()
   const Navigate = useNavigate()
-
-  const setWalletApproveList = useAppStore(state => state.setWalletApproveList)
+  const walletApproveList = useAppStore(state => state.approve.walletApproveList)
 
   useEffect(() => {
-    if (data?.AddrInfo) {
-      setWalletApproveList(data?.AddrInfo)
-      setWalletCount(data?.AddrInfo.length)
-    } else {
-      setWalletApproveList([])
-      setWalletCount(0)
-    }
-  }, [setWalletApproveList, data?.AddrInfo])
+    setWalletCount(walletApproveList.filter(item => item.show !== false).length)
+  }, [walletApproveList])
 
   return (
     <Popover className="relative">
