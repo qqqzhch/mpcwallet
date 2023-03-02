@@ -246,8 +246,10 @@ web3.extend({
 export default web3;
 // module.exports = web3
 
-export  function getsmpc(){
-  
+export  function getsmpc(rpc?:string){
+  if(rpc){
+    web3.setProvider(rpc)
+  }
   // @ts-ignore
   return  web3.smpc
 }
