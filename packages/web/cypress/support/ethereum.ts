@@ -55,13 +55,16 @@ export const injected = new (class extends Eip1193Bridge {
       }
     }
     if(method === 'personal_sign'){
-      const data = await signer.signMessage(params[0])
-      console.log('params',params[0])
-      console.log('personal_sign',data)
+      /**
+       * import { personalSign, decrypt } from '@metamask/eth-sig-util'
+       * const privateKey = Buffer.from(this.setup.privateKey, 'hex');
+
+        const signed: string = personalSign({ privateKey, data: params[0] })
+      */
       if (isCallbackForm) {
-        callback(null, { result: data })
+        callback(null, { result: {} })
       } else {
-        return Promise.resolve(data)
+        return Promise.resolve({})
       }
     }
     console.log('ethereum method',method)
