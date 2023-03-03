@@ -2,7 +2,7 @@ import React, { FC, useCallback } from 'react'
 import { Popover } from '@headlessui/react'
 import { useWeb3React } from '@web3-react/core'
 import { useAppStore } from '../../state/index'
-import { When } from 'react-if'
+
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { useToasts } from 'react-toast-notifications'
 import { ClipboardDocumentListIcon } from '@heroicons/react/20/solid'
@@ -12,7 +12,7 @@ type Props = {
   children?: React.ReactNode
 }
 const AccountInfo: FC<Props> = ({ children }) => {
-  const { account } = useWeb3React()
+  const { account, deactivate } = useWeb3React()
   const loginAccount = useAppStore(state => state.loginAccount)
   const { addToast } = useToasts()
   const clearLoginAccount = useAppStore(state => state.clearLoginAccount)
@@ -23,9 +23,11 @@ const AccountInfo: FC<Props> = ({ children }) => {
   }, [addToast])
 
   const onLogout = useCallback(() => {
+    localStorage.setItem('walletIsConnectedTo', '')
+    deactivate()
     clearLoginAccount()
-    navigate('/login')
-  }, [clearLoginAccount, navigate])
+    navigate('/')
+  }, [clearLoginAccount, navigate, deactivate])
 
   return (
     <Popover className="relative">
@@ -40,24 +42,23 @@ const AccountInfo: FC<Props> = ({ children }) => {
             <div className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
               {account?.substring(0, 15)}...{account?.substring(27, 42)}
             </div>
-            <When condition={loginAccount.signEnode !== ''}>
-              <div className="-m-3 break-words flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
-                <CopyToClipboard text={loginAccount.signEnode} onCopy={() => onCopy()}>
-                  <div className=" flex flex-row ">
-                    <span>
-                      {loginAccount.signEnode?.substring(0, 15)}...
-                      {loginAccount.signEnode?.substring(loginAccount.signEnode.length, loginAccount.signEnode.length - 15)}
-                    </span>
-                    <ClipboardDocumentListIcon className="h-6 w-6"></ClipboardDocumentListIcon>
-                  </div>
-                </CopyToClipboard>
-              </div>
-              <div className="-m-3 break-words flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
-                <button onClick={onLogout} className="text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded text-lg">
-                  log out
-                </button>
-              </div>
-            </When>
+
+            <div className="-m-3 break-words flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+              <CopyToClipboard text={loginAccount.signEnode} onCopy={() => onCopy()}>
+                <div className=" flex flex-row  cursor-pointer">
+                  <span>
+                    {loginAccount.signEnode?.substring(0, 15)}...
+                    {loginAccount.signEnode?.substring(loginAccount.signEnode.length, loginAccount.signEnode.length - 15)}
+                  </span>
+                  <ClipboardDocumentListIcon className="h-6 w-6 text-green-500"></ClipboardDocumentListIcon>
+                </div>
+              </CopyToClipboard>
+            </div>
+            <div className="-m-3 break-words flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+              <button onClick={onLogout} className="text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded text-lg">
+                log out
+              </button>
+            </div>
           </div>
         </div>
       </Popover.Panel>

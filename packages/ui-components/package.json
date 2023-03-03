@@ -39,6 +39,7 @@
     "@web3-react/walletconnect-connector": "^6.2.13",
     "@web3-react/walletlink-connector": "^6.2.14",
     "autoprefixer": "^10.4.13",
+    "avvvatars-react": "^0.4.2",
     "ethers": "5.7.2",
     "eventemitter3": "^5.0.0",
     "immer": "^9.0.19",

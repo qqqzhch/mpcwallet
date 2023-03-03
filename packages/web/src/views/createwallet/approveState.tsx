@@ -1,9 +1,25 @@
 import { useAppStore } from '@monorepo/ui-components'
 // import { useNavigate } from 'react-router-dom'
+import { useCreateWalletStatus } from '@monorepo/ui-components/src/hooks/useCreateWalletStatus'
+import { useCallback } from 'react'
+import { When } from 'react-if'
+import { CheckCircleIcon, EllipsisHorizontalIcon, XCircleIcon } from '@heroicons/react/20/solid'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
+import { useToasts } from 'react-toast-notifications'
+import { ClipboardDocumentListIcon } from '@heroicons/react/20/solid'
+import dayjs from 'dayjs'
 
 const ApproveState = () => {
   const createGroup = useAppStore(state => state.createGroup)
+  const { data } = useCreateWalletStatus()
+
   // const navigate = useNavigate()
+  const { addToast } = useToasts()
+
+  const onCopy = useCallback(() => {
+    addToast('Copy successful', { appearance: 'success' })
+  }, [addToast])
+
   return (
     <div className="flex flex-col lg:flex-row  xl:mx-40 2xl:mx-80 ">
       <div className="felx flex-col w-full xl:w-2/3 p-10">
@@ -17,19 +33,47 @@ const ApproveState = () => {
             <span className="leading-7 text-sm text-gray-600 inline-block w-40 ">Wallet Name:</span>
             {createGroup.walletname}
           </div>
+
           <div className="relative mb-4">
-            <span className="leading-7 text-sm text-gray-600 inline-block w-40 ">Wallet Address:</span>
-            *******
+            <span className="leading-7 text-sm text-gray-600 inline-block w-40 ">Wallet Status:</span>
+            <When condition={data?.status == 0}>
+              pending <EllipsisHorizontalIcon className="h-5 w-5 text-gray-400 inline-block" aria-hidden="true"></EllipsisHorizontalIcon>
+            </When>
+            <When condition={data?.status == 1}>
+              success <CheckCircleIcon className="h-5 w-5 text-gray-400 inline-block text-green-500" aria-hidden="true"></CheckCircleIcon>
+            </When>
+            <When condition={data?.status == 2}>
+              fail <XCircleIcon className="h-5 w-5 text-gray-400 inline-block text-red-500" aria-hidden="true"></XCircleIcon>
+            </When>
+            <When condition={data?.status == 3}>
+              timeout <XCircleIcon className="h-5 w-5 text-gray-400 inline-block text-red-500" aria-hidden="true"></XCircleIcon>
+            </When>
           </div>
           <div className="relative mb-4">
             <span className="leading-7 text-sm text-gray-600 inline-block w-40">Mpc Type:</span>
             {createGroup.keytype}
           </div>
-          {createGroup.admins.map((item, index) => {
+          <div className="relative mb-4 flex  flex-col">
+            <span className="leading-7 text-sm text-gray-600 inline-block w-40 ">Wallet Address:</span>
+
+            <When condition={data != undefined && data.mpcAddress != undefined}>
+              <CopyToClipboard text={data?.mpcAddress ? data?.mpcAddress : ''} onCopy={() => onCopy()}>
+                <div className="inline-block  cursor-pointer break-all">
+                  <span>{data?.mpcAddress}</span>
+                  <ClipboardDocumentListIcon className="h-6 w-6 inline-block text-green-500"></ClipboardDocumentListIcon>
+                </div>
+              </CopyToClipboard>
+            </When>
+          </div>
+          {data?.list.map((item, index) => {
             return (
-              <div className="relative mb-4" key={item.key}>
-                <div className="leading-7 text-sm text-gray-600  w-40">Admin Enodesig {index + 1}:</div>
-                <div className="break-all">{item.address}</div>
+              <div className="relative mb-4" key={item.User_account}>
+                <div className="leading-7 text-sm text-gray-600  w-40">User account {index + 1}:</div>
+                <div className="break-all ">{item.User_account}</div>
+                <div className="leading-7 text-sm text-gray-600  w-40">Reply status:</div>
+                <div className="break-all">{item.Reply_status}</div>
+                <div className="leading-7 text-sm text-gray-600  w-40">Reply time:</div>
+                <div className="break-all">{dayjs(Number(item.Reply_timestamp)).format('DD/MM/YYYY:HH:MM')}</div>
               </div>
             )
           })}

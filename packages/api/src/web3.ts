@@ -14,8 +14,8 @@ web3.extend({
   property: "smpc",
   methods: [
     {
-      name: "createGroup",
-      call: "smpc_createGroup",
+      name: "getGroupID",
+      call: "smw_getGroupID",
       params: 2,
       inputFormatter: [null, null],
       outputFormatter: undefined,
@@ -29,7 +29,7 @@ web3.extend({
     },
     {
       name: "reqKeyGen",
-      call: "smpc_reqKeyGen",
+      call: "smw_keygen",
       params: 2,
       inputFormatter: [null, null],
       outputFormatter: undefined,
@@ -150,9 +150,9 @@ web3.extend({
     },
     {
       name: "getAccounts",
-      call: "smpc_getAccounts",
-      params: 2,
-      inputFormatter: [null, null],
+      call: "smw_getAccountList",
+      params: 1,
+      inputFormatter: [null],
       outputFormatter: undefined,
     },
     {
@@ -171,7 +171,7 @@ web3.extend({
     },
     {
       name: "getReqAddrStatus",
-      call: "smpc_getReqAddrStatus",
+      call: "smw_getReqAddrStatus",
       params: 1,
       inputFormatter: [null],
       outputFormatter: undefined,
@@ -246,8 +246,10 @@ web3.extend({
 export default web3;
 // module.exports = web3
 
-export  function getsmpc(){
-  
+export  function getsmpc(rpc?:string){
+  if(rpc){
+    web3.setProvider(rpc)
+  }
   // @ts-ignore
   return  web3.smpc
 }

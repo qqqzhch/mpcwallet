@@ -8,9 +8,18 @@ import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfil
 
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
 import nodePolyfills from 'vite-plugin-node-stdlib-browser'
+import type * as http from 'node:http'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  server: {
+    proxy: {
+      "/api": {
+        target: "http://localhost:3004",
+        changeOrigin: true
+      },
+    },
+  },
   plugins: [react(),
   macrosPlugin(),
   nodePolyfills()

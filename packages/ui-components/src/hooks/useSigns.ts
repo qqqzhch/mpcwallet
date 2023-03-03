@@ -120,7 +120,7 @@ export function useSignEnode(enode: string): {
 
 export function useCreateGroup(
   rpc: string,
-  mode: string,
+  thresholdmode: string,
   nodeArr: Array<string>
 ): {
   execute: () => Promise<any>
@@ -130,8 +130,8 @@ export function useCreateGroup(
       execute: async () => {
         web3.setProvider(rpc)
 
-        const result = await getsmpc().createGroup(
-          mode,
+        const result = await getsmpc().getGroupID(
+          thresholdmode,
           nodeArr.map((item: string) => item.split('0x')[0])
         )
         let cbData = result
@@ -147,7 +147,7 @@ export function useCreateGroup(
         return data
       }
     }
-  }, [mode, nodeArr, rpc])
+  }, [thresholdmode, nodeArr, rpc])
 }
 
 export function useReqSmpcAddress(
@@ -155,7 +155,8 @@ export function useReqSmpcAddress(
   gID: string,
   ThresHold: string,
   Sigs: string,
-  keytype: string
+  keytype: string,
+  Uuid: string
 ): {
   execute?: () => Promise<any>
 } {
@@ -179,7 +180,9 @@ export function useReqSmpcAddress(
           Mode: '2',
           AcceptTimeOut: '604800', // AcceptTimeOut: "60", // 测试超时用
           TimeStamp: Date.now().toString(),
-          Sigs
+          Sigs,
+          Comment: '',
+          Uuid
         }
         console.info('Sigs', Sigs)
 
@@ -193,14 +196,14 @@ export function useReqSmpcAddress(
           cbData = JSON.parse(cbData)
         }
         if (cbData.Status !== 'Error') {
-          resultData = { msg: 'Success', info: cbData.Data.result }
+          resultData = { msg: 'Success', info: cbData.Data }
         } else {
           resultData = { msg: cbData.Error || 'Error', error: cbData.Tip }
         }
         return resultData
       }
     }
-  }, [account, library, gID, ThresHold, Sigs, keytype, rpc])
+  }, [account, library, gID, ThresHold, Sigs, keytype, rpc, Uuid])
 }
 
 export function useApproveReqSmpcAddress(rpc: string): {
