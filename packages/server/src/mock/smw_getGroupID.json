@@ -1,0 +1,14 @@
+{
+    "jsonrpc": "2.0",
+    "id":2807000121897758,
+    "result": {
+        "Data": {
+            "Gid": "3f5a8a3e647cd321bb944d96f575bd19fda59bcb578a895bf04545300c13888dcff519a19082f44a79c8f003f7c5ae7b35243b6b5b73c651640e1ce1efc2ebbb",
+            "Sigs": "748ba7475b0da18887480871eb6a41c0b207c2056bf9e0cbe2d25677fef9849e3ec82d038e3d820ba9586abd1a1327555c63c34b71d9b8bccd7a1e3bedeca47b:0x24affae9c683b7615d4130300288e348e4b5d091|08ba43b0715bb27e03911592d3fed49a22f49ecaf1628d44c4c7d4a8914b86d423716d7316d98a80f4d280b852a33ba7972f0a744e386375e6d58a12fab96752:0xe3ff6ebf6f0b76dc7b029d3ccb8c9eaf3f979cff|",
+            "Uuid": "bcc0d326-b767-4b11-87e4-1d91c75a5d51"
+        },
+        "Error": "",
+        "Status": "success",
+        "Tip": "x"
+    }
+}

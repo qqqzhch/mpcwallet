@@ -9,7 +9,7 @@ export const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   if (loginAccount.signEnode !== '') {
     return children
   } else {
-    return <Navigate to="/login" replace />
+    return <Navigate to="/" replace />
   }
 }
 

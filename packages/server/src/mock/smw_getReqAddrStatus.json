@@ -1,0 +1,37 @@
+{
+    "jsonrpc": "2.0",
+    "id": 67,
+    "result": {
+        "Data": [
+            {
+                "Status": "1",
+                "User_account": "0xac9526c5db81267804a32ec508db780402fd9fec",
+                "Key_id": "0x67e89919d2a4fe74201f0be824448c33183112852ece79f8c4dbb2948b5e5de0",
+                "Public_key": "",
+                "Mpc_address": "0xE3807bCC7C31564a19978350cFaa96B9Dc216436",
+                "Initializer": "",
+                "Reply_status": "AGREE ",
+                "Reply_timestamp": "1677813176014",
+                "Reply_enode": "",
+                "Gid": "3f5a8a3e647cd321bb944d96f575bd19fda59bcb578a895bf04545300c13888dcff519a19082f44a79c8f003f7c5ae7b35243b6b5b73c651640e1ce1efc2ebbb",
+                "Threshold": "2/2"
+            },
+            {
+                "Status": "0",
+                "User_account": "0xe3ff6ebf6f0b76dc7b029d3ccb8c9eaf3f979cff",
+                "Key_id": "0x67e89919d2a4fe74201f0be824448c33183112852ece79f8c4dbb2948b5e5de0",
+                "Public_key": "",
+                "Mpc_address": "0xE3807bCC7C31564a19978350cFaa96B9Dc216436",
+                "Initializer": "",
+                "Reply_status": "AGREE ",
+                "Reply_timestamp": "1677813176014",
+                "Reply_enode": "",
+                "Gid": "3f5a8a3e647cd321bb944d96f575bd19fda59bcb578a895bf04545300c13888dcff519a19082f44a79c8f003f7c5ae7b35243b6b5b73c651640e1ce1efc2ebbb",
+                "Threshold": "2/2"
+            }
+        ],
+        "Error": "",
+        "Status": "success",
+        "Tip": ""
+    }
+}

@@ -9,12 +9,16 @@ const CreateWalletBtn: FC = () => {
   const createGroup = useAppStore(state => state.createGroup)
   const loginAccount = useAppStore(state => state.loginAccount)
   const setpollingPubKey = useAppStore(state => state.setpollingPubKey)
+  const setcreateGroupWalletKeyID = useAppStore(state => state.setcreateGroupWalletKeyID)
+
   const { execute } = useCreateGroup(
     loginAccount.rpc,
     createGroup.threshold.toString() + '/' + createGroup.admins.length,
     createGroup.admins.map(item => item.address)
   )
   const [gid, setGid] = useState<string>('')
+  const [uuid, setUuid] = useState<string>('')
+  const [sigs, setSigs] = useState<string>('')
   const { addToast } = useToasts()
   const navigate = useNavigate()
 
@@ -22,8 +26,9 @@ const CreateWalletBtn: FC = () => {
     loginAccount.rpc,
     gid,
     createGroup.threshold.toString() + '/' + createGroup.admins.length,
-    createGroup.admins.map(item => item.address).join('|'),
-    createGroup.keytype
+    sigs,
+    createGroup.keytype,
+    uuid
   )
 
   const create = useCallback(() => {
@@ -36,6 +41,8 @@ const CreateWalletBtn: FC = () => {
       }
       if (res.msg === 'Success') {
         setGid(res.info.Gid)
+        setUuid(res.info.Uuid)
+        setSigs(res.info.Sigs)
       }
     }
     run()
@@ -43,17 +50,21 @@ const CreateWalletBtn: FC = () => {
 
   useEffect(() => {
     const run = async () => {
-      if (gid != '' && reqSmpcAddr) {
+      if (gid != '' && uuid !== '' && reqSmpcAddr) {
         const res = await reqSmpcAddr()
+
         if (res.msg == 'Error') {
           addToast(res.error, { appearance: 'error' })
           return
         }
         if (res.msg === 'Success') {
+          const keyid = res.info
+          setcreateGroupWalletKeyID(keyid)
           addToast('Created successfully', { appearance: 'success' })
+          //use res.info and getReqAddrStatus to get adress status
           const newPollingPubKeyItem = {
             fn: 'getReqAddrStatus',
-            params: [res.info],
+            params: [keyid],
             data: {
               GroupID: gid,
               ThresHold: createGroup.threshold.toString() + '/' + createGroup.admins.length
@@ -65,7 +76,7 @@ const CreateWalletBtn: FC = () => {
       }
     }
     run()
-  }, [gid, reqSmpcAddr, addToast, setpollingPubKey, createGroup, navigate])
+  }, [gid, reqSmpcAddr, addToast, setpollingPubKey, createGroup, navigate, uuid, sigs, setcreateGroupWalletKeyID])
 
   return (
     <button

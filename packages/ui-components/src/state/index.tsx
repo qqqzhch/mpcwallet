@@ -3,13 +3,14 @@ import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import React, { createContext, FC, useContext } from 'react'
 import { walletApprove } from './approve'
+import { walletaccount } from './walletaccount'
 
 export interface adminInfo {
   address: string
   name?: string
   key: number
 }
-interface PollingPubKey {
+export interface PollingPubKey {
   fn: string
   params: Array<string>
   data: {
@@ -19,7 +20,7 @@ interface PollingPubKey {
   }
 }
 
-interface AppState {
+export interface AppState {
   counter: number
   loginAccount: {
     rpc: string
@@ -32,10 +33,12 @@ interface AppState {
     keytype: string
     threshold: number
     walletname: string
+    keyid: string
   }
   approve: {
     walletApproveList: Array<walletApprove>
   }
+  walletAccounts: Array<walletaccount>
   pollingPubKey: Array<PollingPubKey>
   increase: (by: number) => void
   setLoginAccount: (rpc: string, enode: string, adress: string, signEnode?: string) => void
@@ -49,9 +52,11 @@ interface AppState {
   setpollingPubKey: (pollingPubKey: PollingPubKey) => void
   setWalletApproveList: (list: Array<walletApprove>) => void
   hidenWalletApprove: (item: walletApprove) => void
+  setwalletAccounts: (list: Array<walletaccount>) => void
+  setcreateGroupWalletKeyID: (keyid: string) => void
 }
 
-const intialState = {
+export const intialState = {
   counter: 0,
   loginAccount: {
     rpc: '',
@@ -72,12 +77,14 @@ const intialState = {
     ],
     keytype: 'EC256k1',
     threshold: 2,
-    walletname: ''
+    walletname: '',
+    keyid: ''
   },
   pollingPubKey: [],
   approve: {
     walletApproveList: []
-  }
+  },
+  walletAccounts: []
 }
 
 const createMyStore = (state: typeof intialState = intialState) => {
@@ -105,6 +112,7 @@ const createMyStore = (state: typeof intialState = intialState) => {
                 state.loginAccount.rpc = ''
                 state.loginAccount.enode = ''
                 state.loginAccount.signEnode = ''
+                state.loginAccount.address = ''
               })
             },
             setcreateGroupKeytype: (typeName: string) => {
@@ -123,21 +131,30 @@ const createMyStore = (state: typeof intialState = intialState) => {
                   address: '',
                   key: Date.now()
                 })
+                state.createGroup.keyid = ''
               })
             },
             editcreateGroupAdmin: (index: number, address: string) => {
               set(state => {
                 state.createGroup.admins[index].address = address
+                state.createGroup.keyid = ''
               })
             },
             removecreateGroupAdminByindex: (index: number) => {
               set(state => {
                 state.createGroup.admins.splice(index, 1)
+                state.createGroup.keyid = ''
               })
             },
             setcreateGroupWalletName: (name: string) => {
               set(state => {
                 state.createGroup.walletname = name
+                state.createGroup.keyid = ''
+              })
+            },
+            setcreateGroupWalletKeyID: (keyid: string) => {
+              set(state => {
+                state.createGroup.keyid = keyid
               })
             },
             setpollingPubKey: (pollingPubKey: PollingPubKey) => {
@@ -158,6 +175,11 @@ const createMyStore = (state: typeof intialState = intialState) => {
                     it.show = false
                   }
                 })
+              })
+            },
+            setwalletAccounts: (list: Array<walletaccount>) => {
+              set(state => {
+                state.walletAccounts = list
               })
             }
           }),
