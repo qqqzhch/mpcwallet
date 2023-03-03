@@ -29,19 +29,19 @@ declare global {
     }
   }
 
-  Cypress.Commands.overwrite(
-    'visit',
-    (original, url: string | Partial<Cypress.VisitOptions>, options?: Partial<Cypress.VisitOptions>) => {
-      assert(typeof url === 'string')
+  // Cypress.Commands.overwrite(
+  //   'visit',
+  //   (original, url: string | Partial<Cypress.VisitOptions>, options?: Partial<Cypress.VisitOptions>) => {
+  //     assert(typeof url === 'string')
       
-      original({
-        ...options,
-        url: url.toString(),
-        onBeforeLoad(win) {
-          console.log('win.ethereum')
-          options?.onBeforeLoad?.(win)
-          win.ethereum = injected
-        },
-      })
-    }
-  )
+  //     original({
+  //       ...options,
+  //       url: url.toString(),
+  //       onBeforeLoad(win) {
+  //         console.log('win.ethereum')
+  //         options?.onBeforeLoad?.(win)
+  //         win.ethereum = injected
+  //       },
+  //     })
+  //   }
+  // )

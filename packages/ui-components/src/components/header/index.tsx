@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom'
 export const Header: FC = () => {
   const Navigate = useNavigate()
   return (
-    <header className="text-gray-600 body-font">
+    <header className="text-gray-600 body-font fixed z-50 bg-white flex w-full ">
       <div className="container mx-auto flex flex-wrap py-2 flex-row  justify-around  items-center ">
         <a
           onClick={() => {

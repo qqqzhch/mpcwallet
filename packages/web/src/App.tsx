@@ -6,7 +6,7 @@ function App() {
     <div className="App ">
       <Web3Provider>
         <Header></Header>
-        <section className="container mx-auto min-h-screen">
+        <section className="container mx-auto min-h-screen  pt-16">
           <Outlet />
         </section>
         <Footer></Footer>
