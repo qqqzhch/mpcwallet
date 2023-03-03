@@ -58,7 +58,7 @@ const ApproveState = () => {
 
             <When condition={data != undefined && data.mpcAddress != undefined}>
               <CopyToClipboard text={data?.mpcAddress ? data?.mpcAddress : ''} onCopy={() => onCopy()}>
-                <div className="inline-block  cursor-pointer">
+                <div className="inline-block  cursor-pointer break-all">
                   <span>{data?.mpcAddress}</span>
                   <ClipboardDocumentListIcon className="h-6 w-6 inline-block text-green-500"></ClipboardDocumentListIcon>
                 </div>
@@ -69,7 +69,7 @@ const ApproveState = () => {
             return (
               <div className="relative mb-4" key={item.User_account}>
                 <div className="leading-7 text-sm text-gray-600  w-40">User account {index + 1}:</div>
-                <div className="break-all">{item.User_account}</div>
+                <div className="break-all ">{item.User_account}</div>
                 <div className="leading-7 text-sm text-gray-600  w-40">Reply status:</div>
                 <div className="break-all">{item.Reply_status}</div>
                 <div className="leading-7 text-sm text-gray-600  w-40">Reply time:</div>

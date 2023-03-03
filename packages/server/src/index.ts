@@ -33,8 +33,10 @@ app.post('/api', async (_req: any, res: any) => {
   let jsondata;
 
   console.log(method)
-  let list =["smw_keygen","smw_getGroupID",'smw_getReqAddrStatus']
-  if (list.includes(method)) {
+  let list =["smw_keygen","smw_getGroupID",'smw_getReqAddrStatus','smw_getAccountList']
+  const filestate = fs.existsSync(__dirname + `/mock/${method}.json`);
+  
+  if (filestate) {
     jsondata = await fs.readFileSync(__dirname + `/mock/${method}.json`, 'utf8')
     jsondata=JSON.parse(jsondata)
     jsondata.id=_req.body.id

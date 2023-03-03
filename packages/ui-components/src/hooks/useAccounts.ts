@@ -7,31 +7,19 @@ import { useWeb3React } from '@web3-react/core'
 import { walletaccount } from '../state/walletaccount'
 import { useEffect, useState } from 'react'
 
-async function fetcher(
-  rpc: string,
-  account: string | null | undefined
-): Promise<
-  | Array<{
-      GroupID: string
-      Accounts: Array<walletaccount>
-    }>
-  | undefined
-> {
+async function fetcher(rpc: string, account: string | null | undefined): Promise<Array<walletaccount> | undefined> {
   if (account == null || account == undefined) {
     return
   }
   web3.setProvider(rpc)
-  const res = await getsmpc().getAccounts(account, '0')
+
+  const res = await getsmpc().getAccounts(account)
 
   if (res.Status === 'Error') {
     throw new Error('get Accounts info error ')
   }
-  const {
-    Data: {
-      result: { Group: GroupData }
-    }
-  } = res
-  return GroupData
+
+  return res.Data
 }
 
 export default function useAccounts() {
@@ -40,7 +28,7 @@ export default function useAccounts() {
   const setwalletAccounts = useAppStore(state => state.setwalletAccounts)
   const [list, setList] = useState<Array<walletaccount>>([])
 
-  const { data, error, isLoading } = useSWR(account && loginAccount.rpc ? '/smpc/Accounts' : null, () => fetcher(loginAccount.rpc, account), {
+  const { data, error, isLoading } = useSWR(account && loginAccount.rpc ? '/smw/getAccountList' : null, () => fetcher(loginAccount.rpc, account), {
     refreshInterval: 1000 * 15
   })
 
@@ -48,27 +36,9 @@ export default function useAccounts() {
     if (data == undefined) {
       return
     }
-    const arrPubKey: Array<string> = [],
-      arrWalletaccount: Array<walletaccount> = []
-    for (const obj1 of data) {
-      for (const obj2 of obj1.Accounts) {
-        if (!arrPubKey.includes(obj2.publicKey)) {
-          // console.log(obj2)
-          const obj3 = {
-            publicKey: obj2.publicKey,
-            gID: obj1.GroupID,
-            mode: obj2.mode,
-            name: obj2.publicKey.substr(2),
-            timestamp: obj2.publicKey
-          }
-          arrWalletaccount.push(obj3)
-          arrPubKey.push(obj2.publicKey)
-        }
-      }
-    }
 
-    setwalletAccounts(arrWalletaccount)
-    setList(arrWalletaccount)
+    setwalletAccounts(data)
+    setList(data)
   }, [data, setwalletAccounts])
 
   return {

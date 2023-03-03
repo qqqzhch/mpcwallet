@@ -150,9 +150,9 @@ web3.extend({
     },
     {
       name: "getAccounts",
-      call: "smpc_getAccounts",
-      params: 2,
-      inputFormatter: [null, null],
+      call: "smw_getAccountList",
+      params: 1,
+      inputFormatter: [null],
       outputFormatter: undefined,
     },
     {
