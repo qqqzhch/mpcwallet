@@ -1,5 +1,5 @@
 import { walletApprove } from './approve'
-import { walletaccount } from './walletaccount'
+// import { walletaccount } from './walletaccount'
 import { StateCreator } from 'zustand'
 //https://github.com/pmndrs/zustand/blob/main/docs/guides/typescript.md
 export interface adminInfo {
@@ -77,14 +77,9 @@ export const intialState = {
     walletApproveList: []
   }
 }
-export const createPartSlice: StateCreator<
-  AppState,
-  [],
-  [],
-  AppState
-> = (set) => ({
+export const createPartSlice: StateCreator<AppState, [], [], AppState> = set => ({
   ...intialState,
-  increase: () => set((state) => ({ counter: state.counter + 1 })),
+  increase: () => set(state => ({ counter: state.counter + 1 })),
   setLoginAccount: (rpc: string, enode: string, address: string, signEnode?: string) => {
     set(state => ({
       loginAccount: {
@@ -107,45 +102,46 @@ export const createPartSlice: StateCreator<
   },
   setcreateGroupKeytype: (typeName: string) => {
     set(state => ({
-      createGroup:{
+      createGroup: {
         ...state.createGroup,
-        keytype : typeName
+        keytype: typeName
       }
     }))
   },
   setcreateGroupThreshold: (threshold: number) => {
     set(state => ({
-      createGroup:{
+      createGroup: {
         ...state.createGroup,
-        threshold : threshold
+        threshold: threshold
       }
     }))
   },
   addcreateGroupAdmin: () => {
     set(state => ({
-      createGroup:{
+      createGroup: {
         ...state.createGroup,
-        admins:[{
-          address: '',
-          key: Date.now()
-        }].concat(state.createGroup.admins)
+        admins: [
+          {
+            address: '',
+            key: Date.now()
+          }
+        ].concat(state.createGroup.admins)
       }
     }))
   },
   editcreateGroupAdmin: (index: number, address: string) => {
-    set(state =>{
+    set(state => {
       state.createGroup.admins[index].address = address
       return {
-        createGroup:state.createGroup
+        createGroup: state.createGroup
       }
-
     })
   },
   removecreateGroupAdminByindex: (index: number) => {
     set(state => {
       state.createGroup.admins.splice(index, 1)
       return {
-        createGroup:state.createGroup
+        createGroup: state.createGroup
       }
     })
   },
@@ -153,7 +149,7 @@ export const createPartSlice: StateCreator<
     set(state => {
       state.createGroup.walletname = name
       return {
-        createGroup:state.createGroup
+        createGroup: state.createGroup
       }
     })
   },
@@ -162,7 +158,7 @@ export const createPartSlice: StateCreator<
       const list = state.pollingPubKey.filter(item => item.data.Key !== pollingPubKey.data.Key)
       state.pollingPubKey = list.concat(pollingPubKey)
       return {
-        pollingPubKey:state.pollingPubKey
+        pollingPubKey: state.pollingPubKey
       }
     })
   },
@@ -170,7 +166,7 @@ export const createPartSlice: StateCreator<
     set(state => {
       state.approve.walletApproveList = list
       return {
-        approve:state.approve
+        approve: state.approve
       }
     })
   },
@@ -182,7 +178,7 @@ export const createPartSlice: StateCreator<
         }
       })
       return {
-        approve:state.approve
+        approve: state.approve
       }
     })
   }

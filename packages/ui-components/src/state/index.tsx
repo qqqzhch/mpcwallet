@@ -10,7 +10,7 @@ export interface adminInfo {
   name?: string
   key: number
 }
-export  interface PollingPubKey {
+export interface PollingPubKey {
   fn: string
   params: Array<string>
   data: {
@@ -20,7 +20,7 @@ export  interface PollingPubKey {
   }
 }
 
-export  interface AppState {
+export interface AppState {
   counter: number
   loginAccount: {
     rpc: string
@@ -33,11 +33,12 @@ export  interface AppState {
     keytype: string
     threshold: number
     walletname: string
+    keyid: string
   }
   approve: {
     walletApproveList: Array<walletApprove>
-  },
-  walletAccounts:Array<walletaccount>
+  }
+  walletAccounts: Array<walletaccount>
   pollingPubKey: Array<PollingPubKey>
   increase: (by: number) => void
   setLoginAccount: (rpc: string, enode: string, adress: string, signEnode?: string) => void
@@ -51,10 +52,11 @@ export  interface AppState {
   setpollingPubKey: (pollingPubKey: PollingPubKey) => void
   setWalletApproveList: (list: Array<walletApprove>) => void
   hidenWalletApprove: (item: walletApprove) => void
-  setwalletAccounts:(list:Array<walletaccount>)=>void
+  setwalletAccounts: (list: Array<walletaccount>) => void
+  setcreateGroupWalletKeyID: (keyid: string) => void
 }
 
-export  const intialState = {
+export const intialState = {
   counter: 0,
   loginAccount: {
     rpc: '',
@@ -75,13 +77,14 @@ export  const intialState = {
     ],
     keytype: 'EC256k1',
     threshold: 2,
-    walletname: ''
+    walletname: '',
+    keyid: ''
   },
   pollingPubKey: [],
   approve: {
     walletApproveList: []
   },
-  walletAccounts:[]
+  walletAccounts: []
 }
 
 const createMyStore = (state: typeof intialState = intialState) => {
@@ -128,21 +131,30 @@ const createMyStore = (state: typeof intialState = intialState) => {
                   address: '',
                   key: Date.now()
                 })
+                state.createGroup.keyid = ''
               })
             },
             editcreateGroupAdmin: (index: number, address: string) => {
               set(state => {
                 state.createGroup.admins[index].address = address
+                state.createGroup.keyid = ''
               })
             },
             removecreateGroupAdminByindex: (index: number) => {
               set(state => {
                 state.createGroup.admins.splice(index, 1)
+                state.createGroup.keyid = ''
               })
             },
             setcreateGroupWalletName: (name: string) => {
               set(state => {
                 state.createGroup.walletname = name
+                state.createGroup.keyid = ''
+              })
+            },
+            setcreateGroupWalletKeyID: (keyid: string) => {
+              set(state => {
+                state.createGroup.keyid = keyid
               })
             },
             setpollingPubKey: (pollingPubKey: PollingPubKey) => {
@@ -165,11 +177,10 @@ const createMyStore = (state: typeof intialState = intialState) => {
                 })
               })
             },
-            setwalletAccounts:(list:Array<walletaccount>)=>{
+            setwalletAccounts: (list: Array<walletaccount>) => {
               set(state => {
-                state.walletAccounts=list;
+                state.walletAccounts = list
               })
-
             }
           }),
           { name: 'app-storage' }

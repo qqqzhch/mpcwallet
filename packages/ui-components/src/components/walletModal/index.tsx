@@ -9,6 +9,7 @@ import { useEffect, useCallback } from 'react'
 import EventBus from '../../EventEmitter/index'
 import metamask from '../../assets/icon/metamask.svg'
 import walletconnect from '../../assets/icon/walletconnect.svg'
+import useUserLogin from '../../hooks/useUserLogin'
 
 interface componentprops {
   isOpen: boolean
@@ -19,6 +20,7 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
   ////
   const { addToast } = useToasts()
   const { activate } = useWeb3React()
+  useUserLogin()
 
   // const [accountData, setAccountData] = useState<null | accountDataType>(null)
   // const noderef= useRef()

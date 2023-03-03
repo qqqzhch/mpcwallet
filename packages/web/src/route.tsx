@@ -4,25 +4,25 @@ import App from './App'
 import ErrorPage from './views/errorpage'
 import Home from './views/Home'
 import NoMatch from './views/noMatch'
-import Login from './views/login'
+
 import CreatWallet from './views/createwallet'
 import Preview from './views/createwallet/preview'
 import WalletApprove from './views/approve/walletApprove'
-import { ProtectedRoute, HaveloginRoute } from '@monorepo/ui-components'
+import { ProtectedRoute } from '@monorepo/ui-components'
 import ApproveState from './views/createwallet/approveState'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />} errorElement={<ErrorPage />}>
       <Route path="" element={<Home />} />
-      <Route
+      {/* <Route
         path="login"
         element={
           <HaveloginRoute>
             <Login />
           </HaveloginRoute>
         }
-      />
+      /> */}
       <Route path="account" element={<Account />} />
       <Route
         path="creatwallet"

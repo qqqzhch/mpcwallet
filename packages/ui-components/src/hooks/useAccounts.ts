@@ -4,75 +4,78 @@ import { web3 } from '@monorepo/api'
 import { getsmpc } from '@monorepo/api/src/web3'
 
 import { useWeb3React } from '@web3-react/core'
-import { walletaccount } from '../state/approve'
+import { walletaccount } from '../state/walletaccount'
 import { useEffect, useState } from 'react'
 
 async function fetcher(
-    rpc: string,
-    account: string | null | undefined
-): Promise<Array<{
-    GroupID: string,
-    Accounts: Array<walletaccount>
+  rpc: string,
+  account: string | null | undefined
+): Promise<
+  | Array<{
+      GroupID: string
+      Accounts: Array<walletaccount>
+    }>
+  | undefined
+> {
+  if (account == null || account == undefined) {
+    return
+  }
+  web3.setProvider(rpc)
+  const res = await getsmpc().getAccounts(account, '0')
 
-}> | undefined> {
-    if (account == null || account == undefined) {
-        return
+  if (res.Status === 'Error') {
+    throw new Error('get Accounts info error ')
+  }
+  const {
+    Data: {
+      result: { Group: GroupData }
     }
-    web3.setProvider(rpc)
-    const res = await getsmpc().getAccounts(account, "0")
-    console.log('res', res)
-
-    if (res.Status === 'Error') {
-        throw new Error('get Accounts info error ')
-    }
-    const { Data: { result: {
-        Group: GroupData
-    } } } = res;
-    return GroupData
+  } = res
+  return GroupData
 }
 
 export default function useAccounts() {
-    const loginAccount = useAppStore(state => state.loginAccount)
-    const { account } = useWeb3React()
-    const setwalletAccounts = useAppStore(state => state.setwalletAccounts)
-    const [list,setList]= useState<Array<walletaccount>>([])
+  const loginAccount = useAppStore(state => state.loginAccount)
+  const { account } = useWeb3React()
+  const setwalletAccounts = useAppStore(state => state.setwalletAccounts)
+  const [list, setList] = useState<Array<walletaccount>>([])
 
-    const { data, error, isLoading } = useSWR(account && loginAccount.rpc ? '/smpc/Accounts' : null, () => fetcher(loginAccount.rpc, account), {
-        refreshInterval: 1000 * 15
-    })
+  const { data, error, isLoading } = useSWR(account && loginAccount.rpc ? '/smpc/Accounts' : null, () => fetcher(loginAccount.rpc, account), {
+    refreshInterval: 1000 * 15
+  })
 
-    useEffect(() => {
-        if (data == undefined) {
-            return;
-        }
-        const arrPubKey: Array<string> = [],
-            arrWalletaccount: Array<walletaccount> = [];
-        for (const obj1 of data) {
-            for (const obj2 of obj1.Accounts) {
-                if (!arrPubKey.includes(obj2.PubKey)) {
-                    // console.log(obj2)
-                    const obj3 = {
-                        publicKey: obj2.PubKey,
-                        gID: obj1.GroupID,
-                        mode: obj2.ThresHold,
-                        name: obj2.PubKey.substr(2),
-                        timestamp: obj2.TimeStamp,
-                    };
-                    arrWalletaccount.push(obj3);
-                    arrPubKey.push(obj2.PubKey);
-                }
-            }
-        }
-
-        setwalletAccounts(arrWalletaccount)
-        setList(arrWalletaccount)
-    }, [data, setwalletAccounts])
-
-    return {
-        data:list,
-        error,
-        isLoading
+  useEffect(() => {
+    if (data == undefined) {
+      return
     }
+    const arrPubKey: Array<string> = [],
+      arrWalletaccount: Array<walletaccount> = []
+    for (const obj1 of data) {
+      for (const obj2 of obj1.Accounts) {
+        if (!arrPubKey.includes(obj2.publicKey)) {
+          // console.log(obj2)
+          const obj3 = {
+            publicKey: obj2.publicKey,
+            gID: obj1.GroupID,
+            mode: obj2.mode,
+            name: obj2.publicKey.substr(2),
+            timestamp: obj2.publicKey
+          }
+          arrWalletaccount.push(obj3)
+          arrPubKey.push(obj2.publicKey)
+        }
+      }
+    }
+
+    setwalletAccounts(arrWalletaccount)
+    setList(arrWalletaccount)
+  }, [data, setwalletAccounts])
+
+  return {
+    data: list,
+    error,
+    isLoading
+  }
 }
 /**
  * const getAccountList = useCallback(() => {
