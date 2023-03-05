@@ -7,9 +7,15 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid'
 import { When } from 'react-if'
 // import { Transition } from '@headlessui/react'
 
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+import { useNavigate } from 'react-router-dom'
+
+
 const WalletList: FC = props => {
-  const { data: walletAccounts } = useAccounts()
+  const { data: walletAccounts,isLoading } = useAccounts()
   const [showwalletMobile, setshowwalletMobile] = useState<boolean>(false)
+  const navigate = useNavigate();
 
   const toggle = useCallback(() => {
     setshowwalletMobile(!showwalletMobile)
@@ -35,9 +41,14 @@ const WalletList: FC = props => {
       </div>
 
       <div className={showwalletMobile ? 'block sm:block' : 'hidden sm:block'}>
+        <When condition={isLoading}>
+        <Skeleton count={10} height={100} />
+        </When>
+        <When condition={isLoading==false}>
         {walletAccounts.map((item: walletaccount) => {
           return (
-            <div key={item.Mpc_address} className="flex flex-wrap -m-2 cursor-pointer">
+            <div onClick={()=>{navigate(`dashboard/${item.Mpc_address}`)}} key={item.Mpc_address} className="flex flex-wrap -m-2 cursor-pointer">
+              
               <div className="w-full p-4 ">
                 <div className="h-full flex items-center border-gray-200 border p-4 rounded-lg hover:bg-blue-200">
                   <div className="relative mr-4">
@@ -51,9 +62,14 @@ const WalletList: FC = props => {
                   </div>
                 </div>
               </div>
+              
             </div>
           )
         })}
+        
+        </When>
+        
+        
       </div>
     </>
   )

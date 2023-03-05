@@ -58,10 +58,12 @@ const router = createBrowserRouter(
         }
       />
       <Route
-        path="dashboard"
+        path="dashboard/:address"
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <Dashboard>
+              
+            </Dashboard>
           </ProtectedRoute>
         }
       />
