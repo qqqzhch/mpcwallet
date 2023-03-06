@@ -11,11 +11,10 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import { useNavigate } from 'react-router-dom'
 
-
 const WalletList: FC = props => {
-  const { data: walletAccounts,isLoading } = useAccounts()
+  const { data: walletAccounts, isLoading } = useAccounts()
   const [showwalletMobile, setshowwalletMobile] = useState<boolean>(false)
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const toggle = useCallback(() => {
     setshowwalletMobile(!showwalletMobile)
@@ -42,34 +41,35 @@ const WalletList: FC = props => {
 
       <div className={showwalletMobile ? 'block sm:block' : 'hidden sm:block'}>
         <When condition={isLoading}>
-        <Skeleton count={10} height={100} />
+          <Skeleton count={10} height={100} />
         </When>
-        <When condition={isLoading==false}>
-        {walletAccounts.map((item: walletaccount) => {
-          return (
-            <div onClick={()=>{navigate(`dashboard/${item.Mpc_address}`)}} key={item.Mpc_address} className="flex flex-wrap -m-2 cursor-pointer">
-              
-              <div className="w-full p-4 ">
-                <div className="h-full flex items-center border-gray-200 border p-4 rounded-lg hover:bg-blue-200">
-                  <div className="relative mr-4">
-                    <Avvvatars value={item.Mpc_address} style="shape" size={50} />
-                    <span className=" absolute  bg-green-200  text-[12px]  p-[3px]  rounded-xl  -top-2 left-6  ">{item.Threshold}</span>
-                  </div>
+        <When condition={isLoading == false}>
+          {walletAccounts.map((item: walletaccount) => {
+            return (
+              <div
+                onClick={() => {
+                  navigate(`dashboard/${item.Mpc_address}`)
+                }}
+                key={item.Mpc_address}
+                className="flex flex-wrap -m-2 cursor-pointer"
+              >
+                <div className="w-full p-4 ">
+                  <div className="h-full flex items-center border-gray-200 border p-4 rounded-lg hover:bg-blue-200">
+                    <div className="relative mr-4">
+                      <Avvvatars value={item.Mpc_address} style="shape" size={50} />
+                      <span className=" absolute  bg-green-200  text-[12px]  p-[3px]  rounded-xl  -top-2 left-6  ">{item.Threshold}</span>
+                    </div>
 
-                  <div className="flex-1 ">
-                    <h2 className="text-gray-900 title-font font-medium">anme</h2>
-                    <p className="text-gray-500  w-80 md:w-full text-ellipsis overflow-hidden">{item.Mpc_address}</p>
+                    <div className="flex-1 ">
+                      <h2 className="text-gray-900 title-font font-medium">anme</h2>
+                      <p className="text-gray-500  w-80 md:w-full text-ellipsis overflow-hidden">{item.Mpc_address}</p>
+                    </div>
                   </div>
                 </div>
               </div>
-              
-            </div>
-          )
-        })}
-        
+            )
+          })}
         </When>
-        
-        
       </div>
     </>
   )

@@ -61,9 +61,7 @@ const router = createBrowserRouter(
         path="dashboard/:address"
         element={
           <ProtectedRoute>
-            <Dashboard>
-              
-            </Dashboard>
+            <Dashboard></Dashboard>
           </ProtectedRoute>
         }
       />

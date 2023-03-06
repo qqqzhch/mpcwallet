@@ -9,12 +9,11 @@ import NoticeInfo from '../noticeinfo'
 import { useNavigate } from 'react-router-dom'
 import { useAppStore } from '../..'
 export const Header: FC = () => {
-  
-  const togglesideBar =useAppStore((state=>state.togglesideBar))
+  const togglesideBar = useAppStore(state => state.togglesideBar)
 
   const Navigate = useNavigate()
 
-  function onClick(){
+  function onClick() {
     togglesideBar()
   }
 
@@ -31,7 +30,12 @@ export const Header: FC = () => {
 
           <span className="ml-3 text-xl hidden lg:block">Multichain</span>
         </a>
-        <div onClick={()=>{onClick()}} className="flex  sm:hidden pl-2">
+        <div
+          onClick={() => {
+            onClick()
+          }}
+          className="flex  sm:hidden pl-2"
+        >
           <FontAwesomeIcon icon={icon({ name: 'bars', style: 'solid' })} />
         </div>
 
