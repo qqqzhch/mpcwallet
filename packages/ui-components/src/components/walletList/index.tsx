@@ -3,7 +3,7 @@ import useAccounts from '../../hooks/useAccounts'
 import { walletaccount } from '../../state/walletaccount'
 // import { Fragment } from 'react'
 import Avvvatars from 'avvvatars-react'
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/20/solid'
+import { ChevronDownIcon, ChevronUpIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
 import { When } from 'react-if'
 // import { Transition } from '@headlessui/react'
 
@@ -67,6 +67,14 @@ const WalletList: FC = props => {
               </div>
             )
           })}
+        </When>
+        <When condition={isLoading == false && walletAccounts.length == 0}>
+          <div className="flex flex-col  items-center text-center">
+            <span>
+              <Squares2X2Icon className="h-52 w-52 text-gray-200 mt-32"></Squares2X2Icon>
+            </span>
+            <span className="text-gray-400 my-10 ">Create a wallet or import a wallet</span>
+          </div>
         </When>
       </div>
     </>

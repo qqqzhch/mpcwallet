@@ -36,13 +36,15 @@ const AccountInfo: FC<Props> = ({ children }) => {
       <Popover.Panel className="absolute   left-2/3  md:left-1/2 z-10 mt-4    max-w-sm -translate-x-1/2 transform px-4     sm:px-0 lg:max-w-3xl">
         <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
           <div className="relative grid gap-8 bg-white p-6 flex flex-col">
+            <div className="-m-3 w-full">Endpoint</div>
             <div className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
               {loginAccount.rpc}
             </div>
-            <div className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
-              {account?.substring(0, 15)}...{account?.substring(27, 42)}
+            <div className="-m-3 w-full">Address</div>
+            <div className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50 break-all">
+              {account}
             </div>
-
+            <div className="-m-3 w-full">Enodesig</div>
             <div className="-m-3 break-words flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
               <CopyToClipboard text={loginAccount.signEnode} onCopy={() => onCopy()}>
                 <div className=" flex flex-row  cursor-pointer">
