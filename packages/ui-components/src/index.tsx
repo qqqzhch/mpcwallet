@@ -2,6 +2,7 @@
 // import createTheme from '@monorepo/design-tokens'
 import { providers } from 'ethers'
 import './index.css'
+import 'react-loading-skeleton/dist/skeleton.css'
 // const CustomThemeProvider = ({ theme = createTheme, children }: any) => <ThemeProvider theme={theme}>{children}</ThemeProvider>
 
 export * from './components/button/Button'
@@ -19,5 +20,7 @@ export * from './components/forms/CreateWalletBtn'
 export * from './protectedRoutes/index'
 export * from './components/approveBtn/walletApprove'
 export * from './components/walletList/index'
+export * from './components/siderBar/userPanel'
+export * from './components/siderBar/siderMenu'
 
 export { providers }

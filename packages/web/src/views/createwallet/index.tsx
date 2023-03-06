@@ -11,24 +11,31 @@ import { useState } from 'react'
 const CreatWallet: FC = props => {
   const loginAccount = useAppStore(state => state.loginAccount)
   const createGroup = useAppStore(state => state.createGroup)
-  const [walletnameerror, setwalletnameerror] = useState<string>('')
+  // const [walletnameerror, setwalletnameerror] = useState<string>('')
   const [keytypeerror, setkeytypeerror] = useState<string>('')
   const [adminserror, setadminserror] = useState<string>('')
 
-  const setcreateGroupWalletName = useAppStore(state => state.setcreateGroupWalletName)
+  // const setcreateGroupWalletName = useAppStore(state => state.setcreateGroupWalletName)
   const addcreateGroupAdmin = useAppStore(state => state.addcreateGroupAdmin)
   const editcreateGroupAdmin = useAppStore(state => state.editcreateGroupAdmin)
+  const resetCreateGroupAdmin = useAppStore(state => state.resetCreateGroupAdmin)
+
   const navigate = useNavigate()
 
   useEffect(() => {
     editcreateGroupAdmin(0, loginAccount.signEnode)
   }, [editcreateGroupAdmin, loginAccount.signEnode])
 
+  function reset() {
+    resetCreateGroupAdmin()
+    editcreateGroupAdmin(0, loginAccount.signEnode)
+  }
+
   const formvaValidation = useCallback(() => {
-    if (createGroup.walletname == '') {
-      setwalletnameerror('wallet name required')
-      return
-    }
+    // if (createGroup.walletname == '') {
+    //   setwalletnameerror('wallet name required')
+    //   return
+    // }
     if (createGroup.keytype == '') {
       setkeytypeerror('keytype required')
       return
@@ -57,12 +64,12 @@ const CreatWallet: FC = props => {
     }
 
     navigate('/preview')
-  }, [navigate, createGroup.admins, createGroup.walletname, createGroup.keytype])
+  }, [navigate, createGroup.admins, createGroup.keytype])
 
   useEffect(() => {
-    if (createGroup.walletname !== '') {
-      setwalletnameerror('')
-    }
+    // if (createGroup.walletname !== '') {
+    //   setwalletnameerror('')
+    // }
     if (createGroup.keytype != '') {
       setkeytypeerror('')
     }
@@ -88,7 +95,7 @@ const CreatWallet: FC = props => {
         </div>
         <div className="mb-4 pb-4  border-b  px-4">
           <div className=" bg-white flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0">
-            <div className="relative mb-4">
+            {/* <div className="relative mb-4">
               <label htmlFor="walletname" className="leading-7 text-sm text-gray-600">
                 Wallet Name
               </label>
@@ -103,7 +110,7 @@ const CreatWallet: FC = props => {
                 className="w-full  rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
               ></input>
               <div className="text-red-400">{walletnameerror ? walletnameerror : null}</div>
-            </div>
+            </div> */}
 
             <div className="relative mb-4">
               <label className="leading-7 text-sm text-gray-600">MpcType</label>
@@ -133,14 +140,19 @@ const CreatWallet: FC = props => {
             <div className="flex flex-col   lg:flex-row  justify-around gap-8">
               <button
                 onClick={() => {
+                  reset()
+                }}
+                className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+              >
+                Reset
+              </button>
+              <button
+                onClick={() => {
                   formvaValidation()
                 }}
                 className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
               >
                 Next
-              </button>
-              <button className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                Reset
               </button>
             </div>
           </div>

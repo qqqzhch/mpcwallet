@@ -56,6 +56,7 @@ export interface AppState {
   setwalletAccounts: (list: Array<walletaccount>) => void
   setcreateGroupWalletKeyID: (keyid: string) => void
   togglesideBar: () => void
+  resetCreateGroupAdmin: () => void
 }
 
 export const intialState = {
@@ -188,6 +189,11 @@ const createMyStore = (state: typeof intialState = intialState) => {
             togglesideBar: () => {
               set(state => {
                 state.sideBar = !state.sideBar
+              })
+            },
+            resetCreateGroupAdmin: () => {
+              set(state => {
+                state.createGroup = intialState.createGroup
               })
             }
           }),
