@@ -40,6 +40,7 @@ export interface AppState {
   }
   walletAccounts: Array<walletaccount>
   pollingPubKey: Array<PollingPubKey>
+  sideBar: boolean
   increase: (by: number) => void
   setLoginAccount: (rpc: string, enode: string, adress: string, signEnode?: string) => void
   clearLoginAccount: () => void
@@ -54,6 +55,7 @@ export interface AppState {
   hidenWalletApprove: (item: walletApprove) => void
   setwalletAccounts: (list: Array<walletaccount>) => void
   setcreateGroupWalletKeyID: (keyid: string) => void
+  togglesideBar: () => void
 }
 
 export const intialState = {
@@ -84,7 +86,8 @@ export const intialState = {
   approve: {
     walletApproveList: []
   },
-  walletAccounts: []
+  walletAccounts: [],
+  sideBar: false
 }
 
 const createMyStore = (state: typeof intialState = intialState) => {
@@ -180,6 +183,11 @@ const createMyStore = (state: typeof intialState = intialState) => {
             setwalletAccounts: (list: Array<walletaccount>) => {
               set(state => {
                 state.walletAccounts = list
+              })
+            },
+            togglesideBar: () => {
+              set(state => {
+                state.sideBar = !state.sideBar
               })
             }
           }),

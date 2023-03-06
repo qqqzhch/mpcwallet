@@ -6,6 +6,7 @@ import { Eip1193Bridge } from '@ethersproject/experimental/lib/eip1193-bridge'
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { Wallet } from '@ethersproject/wallet'
+import { personalSign, decrypt } from '@metamask/eth-sig-util'
 
 // todo: figure out how env vars actually work in CI
 // const TEST_PRIVATE_KEY = Cypress.env('INTEGRATION_TEST_PRIVATE_KEY')
@@ -55,16 +56,13 @@ export const injected = new (class extends Eip1193Bridge {
       }
     }
     if(method === 'personal_sign'){
-      /**
-       * import { personalSign, decrypt } from '@metamask/eth-sig-util'
-       * const privateKey = Buffer.from(this.setup.privateKey, 'hex');
-
+      
+        const privateKey = Buffer.from(TEST_PRIVATE_KEY, 'hex');
         const signed: string = personalSign({ privateKey, data: params[0] })
-      */
       if (isCallbackForm) {
-        callback(null, { result: {} })
+        callback(null, { result: "" })
       } else {
-        return Promise.resolve({})
+        return Promise.resolve("")
       }
     }
     console.log('ethereum method',method)

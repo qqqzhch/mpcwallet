@@ -4,16 +4,18 @@ describe('App First Test', () => {
   const privateKey = 'de926db3012af759b4f24b5a51ef6afa397f04670f634aa4f48d4480417007f3'
   beforeEach(() => {
     cy.on("window:before:load", (win) => {
-      win.ethereum = new MockProvider({
-        address,
-        privateKey,
-        networkVersion: 5,
-        debug: true
-      })
-    })
+      win.ethereum = new MockProvider({ address, privateKey, networkVersion: 5, debug:false })
+      win.ethereum.enable= async function () {
+       return  [address]
+      }
 
+      
+    })
+  })
+
+  it('Create new Wallet', () => {
     cy.visit('http://localhost:5173')
-    cy.contains('My Multichain Wallet')
+    cy.contains('My MPC Wallet')
     cy.contains('Welcome to the Multichain - SMPC')
     cy.contains('Create new Wallet')
     cy.contains('Support Network')
@@ -22,10 +24,6 @@ describe('App First Test', () => {
     cy.contains('Connect with MetaMask').click()
     cy.contains('metamask')
     cy.contains('Görli')
-    
-  })
-
-  it('Create new Wallet', () => {
     cy.contains('Create new Wallet').click()
     
     

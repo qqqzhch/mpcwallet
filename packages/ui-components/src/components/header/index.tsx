@@ -7,10 +7,18 @@ import Connectwallet from '../connectwallet'
 import ChainList from '../chainList/index'
 import NoticeInfo from '../noticeinfo'
 import { useNavigate } from 'react-router-dom'
+import { useAppStore } from '../..'
 export const Header: FC = () => {
+  const togglesideBar = useAppStore(state => state.togglesideBar)
+
   const Navigate = useNavigate()
+
+  function onClick() {
+    togglesideBar()
+  }
+
   return (
-    <header className="text-gray-600 body-font">
+    <header className="text-gray-600 body-font fixed z-50 bg-white flex w-full ">
       <div className="container mx-auto flex flex-wrap py-2 flex-row  justify-around  items-center ">
         <a
           onClick={() => {
@@ -22,7 +30,12 @@ export const Header: FC = () => {
 
           <span className="ml-3 text-xl hidden lg:block">Multichain</span>
         </a>
-        <div className="flex  sm:hidden pl-2">
+        <div
+          onClick={() => {
+            onClick()
+          }}
+          className="flex  sm:hidden pl-2"
+        >
           <FontAwesomeIcon icon={icon({ name: 'bars', style: 'solid' })} />
         </div>
 
