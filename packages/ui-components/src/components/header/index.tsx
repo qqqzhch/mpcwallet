@@ -19,7 +19,7 @@ export const Header: FC = () => {
 
   return (
     <header className="text-gray-600 body-font fixed z-50 bg-white flex w-full ">
-      <div className="container mx-auto flex flex-wrap py-2 flex-row  justify-around  items-center ">
+      <div className="container mx-auto flex flex-wrap py-2 flex-row  items-center ">
         <a
           onClick={() => {
             Navigate('/')
@@ -39,7 +39,7 @@ export const Header: FC = () => {
           <FontAwesomeIcon icon={icon({ name: 'bars', style: 'solid' })} />
         </div>
 
-        <nav className="md:ml-auto flex flex-wrap items-center text-base justify-center  ">
+        <nav className="  flex-1  flex flex-wrap items-center text-base justify-end ">
           {/* <div className="pr-4 pl-4    hover:text-gray-900 border-r border-gray-400 last:border-r-0 hidden lg:block">
             <button type="button" className="px-6 py-2 font-semibold border rounded border-gray-800 text-gray-800">
               Switch to bnb BNB Smart Chain

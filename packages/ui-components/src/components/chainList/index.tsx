@@ -77,7 +77,7 @@ const ChainList: FC<Props> = ({ children }) => {
           </div>
         </When>
         <When condition={unsupported !== true && chainId === undefined}>
-          <div className="px-6 py-1 mx-2 font-semibold  rounded  bg-yellow-300 font-thin text-sm">Support Network</div>
+          <div className="px-6 py-1 mx-2 font-semibold  rounded  bg-yellow-300 font-thin text-sm  max-w-[110px] sm:max-w-lg  truncate">Network</div>
           <div>
             <FontAwesomeIcon icon={icon({ name: 'chevron-down', style: 'solid' })} />
           </div>
