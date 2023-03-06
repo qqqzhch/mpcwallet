@@ -8,7 +8,6 @@ import { When } from 'react-if'
 // import { Transition } from '@headlessui/react'
 
 import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
 import { useNavigate } from 'react-router-dom'
 
 const WalletList: FC = props => {
@@ -48,7 +47,7 @@ const WalletList: FC = props => {
             return (
               <div
                 onClick={() => {
-                  navigate(`dashboard/${item.Mpc_address}`)
+                  navigate(`dashboard/evm/${item.Mpc_address}`)
                 }}
                 key={item.Mpc_address}
                 className="flex flex-wrap -m-2 cursor-pointer"
@@ -61,7 +60,6 @@ const WalletList: FC = props => {
                     </div>
 
                     <div className="flex-1 ">
-                      <h2 className="text-gray-900 title-font font-medium">anme</h2>
                       <p className="text-gray-500  w-80 md:w-full text-ellipsis overflow-hidden">{item.Mpc_address}</p>
                     </div>
                   </div>

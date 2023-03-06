@@ -5,7 +5,7 @@ import { useAppStore } from '../../state/index'
 
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { useToasts } from 'react-toast-notifications'
-import { ClipboardDocumentListIcon } from '@heroicons/react/20/solid'
+import { ClipboardDocumentIcon } from '@heroicons/react/20/solid'
 import { useNavigate } from 'react-router-dom'
 
 type Props = {
@@ -50,7 +50,7 @@ const AccountInfo: FC<Props> = ({ children }) => {
                     {loginAccount.signEnode?.substring(0, 15)}...
                     {loginAccount.signEnode?.substring(loginAccount.signEnode.length, loginAccount.signEnode.length - 15)}
                   </span>
-                  <ClipboardDocumentListIcon className="h-6 w-6 text-green-500"></ClipboardDocumentListIcon>
+                  <ClipboardDocumentIcon className="h-6 w-6 text-blue-700"></ClipboardDocumentIcon>
                 </div>
               </CopyToClipboard>
             </div>

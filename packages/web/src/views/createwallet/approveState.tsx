@@ -3,11 +3,12 @@ import { useAppStore } from '@monorepo/ui-components'
 import { useCreateWalletStatus } from '@monorepo/ui-components/src/hooks/useCreateWalletStatus'
 import { useCallback } from 'react'
 import { When } from 'react-if'
-import { CheckCircleIcon, EllipsisHorizontalIcon, XCircleIcon } from '@heroicons/react/20/solid'
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/20/solid'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { useToasts } from 'react-toast-notifications'
 import { ClipboardDocumentListIcon } from '@heroicons/react/20/solid'
 import dayjs from 'dayjs'
+import Avvvatars from 'avvvatars-react'
 
 const ApproveState = () => {
   const createGroup = useAppStore(state => state.createGroup)
@@ -26,18 +27,15 @@ const ApproveState = () => {
         <h1 className="font-semibold text-3xl mb-4 pb-4  border-b ">Your wallet has been created successfully</h1>
         <div className="mb-4 pb-4  border-b  px-4">
           <h3 className="font-semibold text-xl pb-4 ">Status</h3>
-          <p>Your wallet needs approval from other participants</p>
+          <p>View the creation status of wallet</p>
         </div>
         <div className="mb-4 pb-4  border-b  px-4">
           <div className="relative mb-4">
-            <span className="leading-7 text-sm text-gray-600 inline-block w-40 ">Wallet Name:</span>
-            {createGroup.walletname}
-          </div>
-
-          <div className="relative mb-4">
             <span className="leading-7 text-sm text-gray-600 inline-block w-40 ">Wallet Status:</span>
             <When condition={data?.status == 0}>
-              pending <EllipsisHorizontalIcon className="h-5 w-5 text-gray-400 inline-block" aria-hidden="true"></EllipsisHorizontalIcon>
+              <div className="px-3 py-1 w-20 inline-block text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">
+                pending...
+              </div>
             </When>
             <When condition={data?.status == 1}>
               success <CheckCircleIcon className="h-5 w-5 text-gray-400 inline-block text-green-500" aria-hidden="true"></CheckCircleIcon>
@@ -61,6 +59,9 @@ const ApproveState = () => {
                 <div className="inline-block  cursor-pointer break-all">
                   <span>{data?.mpcAddress}</span>
                   <ClipboardDocumentListIcon className="h-6 w-6 inline-block text-green-500"></ClipboardDocumentListIcon>
+                  <div className="inline-block">
+                    <Avvvatars value={data ? data.mpcAddress : ''} style="shape" size={20} />
+                  </div>
                 </div>
               </CopyToClipboard>
             </When>

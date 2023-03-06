@@ -11,6 +11,9 @@ import WalletApprove from './views/approve/walletApprove'
 import { ProtectedRoute } from '@monorepo/ui-components'
 import ApproveState from './views/createwallet/approveState'
 import Dashboard from './views/dashboard'
+import WalletHome from './views/dashboard/walletHome'
+import Asserts from './views/dashboard/asserts'
+import Transactions from './views/dashboard/transactions'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -58,13 +61,39 @@ const router = createBrowserRouter(
         }
       />
       <Route
-        path="dashboard/:address"
+        path="dashboard/:chainType/:address"
         element={
           <ProtectedRoute>
             <Dashboard></Dashboard>
           </ProtectedRoute>
         }
-      />
+      >
+        <Route
+          path=""
+          element={
+            <ProtectedRoute>
+              <WalletHome></WalletHome>
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="asserts"
+          element={
+            <ProtectedRoute>
+              <Asserts></Asserts>
+            </ProtectedRoute>
+          }
+        ></Route>
+        <Route
+          path="transactions"
+          element={
+            <ProtectedRoute>
+              <Transactions></Transactions>
+            </ProtectedRoute>
+          }
+        ></Route>
+      </Route>
+
       <Route path="*" element={<NoMatch />} />
     </Route>
   )
