@@ -33,7 +33,7 @@ const AccountInfo: FC<Props> = ({ children }) => {
     <Popover className="relative">
       <Popover.Button className="flex flex-row items-center justify-center focus:outline-none   ">{children}</Popover.Button>
 
-      <Popover.Panel className="absolute   left-2/3  md:left-1/2 z-10 mt-4    max-w-sm -translate-x-1/2 transform px-4     sm:px-0 lg:max-w-3xl">
+      <Popover.Panel className="absolute   left-2/3  md:left-1/2 z-10 mt-4   w-96   -translate-x-1/2 transform px-4     sm:px-0 lg:max-w-3xl">
         <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
           <div className="relative grid gap-8 bg-white p-6 flex flex-col">
             <div className="-m-3 w-full">Endpoint</div>
