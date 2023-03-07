@@ -79,12 +79,13 @@ export function useSign(): any {
   }
 }
 
-export function useSignEnode(enode: string): {
-  execute: () => Promise<any>
+export function useSignEnode(enode: string | undefined): {
+  execute?: () => Promise<any> | undefined
 } {
   const { library } = useWeb3React()
   // const { signMessage } = useSign();
   return useMemo(() => {
+    if (!enode || !library) return {}
     return {
       execute: async () => {
         const eNodeKey = eNodeCut(enode).key
@@ -119,13 +120,14 @@ export function useSignEnode(enode: string): {
 }
 
 export function useCreateGroup(
-  rpc: string,
+  rpc: string | undefined,
   thresholdmode: string,
   nodeArr: Array<string>
 ): {
-  execute: () => Promise<any>
+  execute?: () => Promise<any> | undefined
 } {
   return useMemo(() => {
+    if (!thresholdmode || nodeArr.length <= 0 || !rpc) return {}
     return {
       execute: async () => {
         web3.setProvider(rpc)
@@ -151,7 +153,7 @@ export function useCreateGroup(
 }
 
 export function useReqSmpcAddress(
-  rpc: string,
+  rpc: string | undefined,
   gID: string,
   ThresHold: string,
   Sigs: string,
@@ -163,11 +165,9 @@ export function useReqSmpcAddress(
   const { account, library } = useWeb3React()
   // const { signMessage } = useSign();
   return useMemo(() => {
+    if (!library || !account || !gID || !ThresHold || !Sigs || !keytype || !Uuid || !rpc) return {}
     return {
       execute: async () => {
-        // const provider = new ethers.providers.Web3Provider(library.provider);
-        // const signer = provider.getSigner();
-        // web3.setProvider('http://47.114.115.33:5913/')
         web3.setProvider(rpc)
         const nonce = await getNonce(account, rpc)
         const data = {
@@ -206,12 +206,13 @@ export function useReqSmpcAddress(
   }, [account, library, gID, ThresHold, Sigs, keytype, rpc, Uuid])
 }
 
-export function useApproveReqSmpcAddress(rpc: string): {
-  execute?: (r: walletApprove, type: string) => Promise<any>
+export function useApproveReqSmpcAddress(rpc: string | undefined): {
+  execute?: (r: walletApprove, type: string) => Promise<any> | undefined
 } {
   const { account, library } = useWeb3React()
 
   return useMemo(() => {
+    if (!account || !library || !rpc) return {}
     return {
       execute: async (r: walletApprove, type: string) => {
         const { Key } = r

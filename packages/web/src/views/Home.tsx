@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import WalletList from '@monorepo/ui-components/src/components/walletList'
+import { ProtectedButton } from '@monorepo/ui-components'
 const Home = () => {
   return (
     <div className="flex flex-col lg:flex-row gap-4">
@@ -21,9 +22,11 @@ const Home = () => {
               <p className="leading-relaxed mb-3">A new wallet that is controlled by one or multiple owners..</p>
 
               <div className="text-center mt-2 leading-none flex justify-center absolute bottom-0 left-0 w-full py-4">
-                <Link to={'/creatwallet'}>
-                  <button className="bg-sky-500 hover:bg-sky-700 px-5 py-2.5 text-sm leading-5 rounded-md font-semibold text-white">Create new Wallet</button>
-                </Link>
+                <ProtectedButton>
+                  <Link to={'/creatwallet'}>
+                    <button className="bg-sky-500 hover:bg-sky-700 px-5 py-2.5 text-sm leading-5 rounded-md font-semibold text-white">Create new Wallet</button>
+                  </Link>
+                </ProtectedButton>
               </div>
             </div>
           </div>

@@ -3,10 +3,10 @@ import { useAppStore } from '../state/index'
 import { useWeb3React } from '@web3-react/core'
 
 export const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
-  // const { account } = useWeb3React()
-  const loginAccount = useAppStore(state => state.loginAccount)
+  const { account } = useWeb3React()
+  const loginAccount = useAppStore(state => state.getLoginAccount(account))
 
-  if (loginAccount.signEnode !== '') {
+  if (loginAccount && loginAccount.signEnode !== '') {
     return children
   } else {
     return <Navigate to="/" replace />
@@ -15,8 +15,8 @@ export const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 
 export const HaveloginRoute = ({ children }: { children: JSX.Element }) => {
   const { account } = useWeb3React()
-  const loginAccount = useAppStore(state => state.loginAccount)
-  if (account != undefined && loginAccount.signEnode != '') {
+  const loginAccount = useAppStore(state => state.getLoginAccount(account))
+  if (account != undefined && loginAccount?.signEnode != '') {
     return <Navigate to="/creatwallet" replace />
   } else {
     return children

@@ -8,7 +8,7 @@ import { walletApprove } from '../state/approve'
 import { useEffect } from 'react'
 
 async function fetcher(
-  rpc: string,
+  rpc: string | undefined,
   account: string | null | undefined
 ): Promise<
   | {
@@ -17,7 +17,7 @@ async function fetcher(
     }
   | undefined
 > {
-  if (account == null || account == undefined) {
+  if (account == null || account == undefined || rpc == undefined) {
     return
   }
   web3.setProvider(rpc)
@@ -34,13 +34,17 @@ async function fetcher(
 }
 
 export default function useApprove() {
-  const loginAccount = useAppStore(state => state.loginAccount)
   const { account } = useWeb3React()
+  const loginAccount = useAppStore(state => state.getLoginAccount(account))
   const setWalletApproveList = useAppStore(state => state.setWalletApproveList)
 
-  const { data, error, isLoading } = useSWR(account != null && account != undefined ? '/smpc/Approve' : null, () => fetcher(loginAccount.rpc, account), {
-    refreshInterval: 1000 * 15
-  })
+  const { data, error, isLoading } = useSWR(
+    account != null && account != undefined && loginAccount?.rpc != undefined ? '/smpc/Approve' : null,
+    () => fetcher(loginAccount?.rpc, account),
+    {
+      refreshInterval: 1000 * 15
+    }
+  )
   useEffect(() => {
     if (data?.AddrInfo) {
       setWalletApproveList(data?.AddrInfo)

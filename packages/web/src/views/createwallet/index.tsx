@@ -7,9 +7,11 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useCallback } from 'react'
 import { useState } from 'react'
+import { useWeb3React } from '@web3-react/core'
 
 const CreatWallet: FC = props => {
-  const loginAccount = useAppStore(state => state.loginAccount)
+  const { account } = useWeb3React()
+  const loginAccount = useAppStore(state => state.getLoginAccount(account))
   const createGroup = useAppStore(state => state.createGroup)
   // const [walletnameerror, setwalletnameerror] = useState<string>('')
   const [keytypeerror, setkeytypeerror] = useState<string>('')
@@ -23,12 +25,14 @@ const CreatWallet: FC = props => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    editcreateGroupAdmin(0, loginAccount.signEnode)
-  }, [editcreateGroupAdmin, loginAccount.signEnode])
+    if (loginAccount) editcreateGroupAdmin(0, loginAccount.signEnode)
+  }, [editcreateGroupAdmin, loginAccount])
 
   function reset() {
-    resetCreateGroupAdmin()
-    editcreateGroupAdmin(0, loginAccount.signEnode)
+    if (loginAccount) {
+      resetCreateGroupAdmin()
+      editcreateGroupAdmin(0, loginAccount.signEnode)
+    }
   }
 
   const formvaValidation = useCallback(() => {

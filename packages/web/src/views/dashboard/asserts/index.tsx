@@ -67,7 +67,7 @@ const Asserts = () => {
                 <div className="flex w-32 px-2 py-3 sm:p-3 items-center">
                   <p>ETH</p>
                 </div>
-                <div className="flex-1 flex px-2 py-3 truncate sm:p-3 sm:w-auto items-center">1 111eth</div>
+                <div className="flex-1 flex px-2 py-3 truncate sm:p-3 sm:w-auto items-center">222eth</div>
 
                 <div className="flex w-48 px-2 py-3 text-right sm:p-3 sm:block text-gray-600 items-center ">
                   <button

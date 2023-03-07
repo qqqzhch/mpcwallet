@@ -8,13 +8,14 @@ import { useToasts } from 'react-toast-notifications'
 import { useNavigate } from 'react-router-dom'
 
 const SelectButton: FC = () => {
-  const loginAccount = useAppStore(state => state.loginAccount)
+  
   const setLoginAccount = useAppStore(state => state.setLoginAccount)
   const { account } = useWeb3React()
+  const loginAccount = useAppStore(state => state.getLoginAccount(account))
   const { addToast } = useToasts()
   const navigate = useNavigate()
 
-  const { execute } = useSignEnode(loginAccount.enode)
+  const { execute } = useSignEnode(loginAccount?.enode)
 
   const btnClick = useCallback(() => {
     const run = async () => {

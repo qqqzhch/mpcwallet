@@ -120,7 +120,7 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
                     Select Wallet
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-sm text-gray-500 flex flex-col  justify-start">
+                    <div className="text-sm text-gray-500 flex flex-col  justify-start">
                       {walletsToDisplay.map(el => (
                         <div className="my-1 flex-1" key={el.id}>
                           <button
@@ -134,7 +134,7 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
                           </button>
                         </div>
                       ))}
-                    </p>
+                    </div>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

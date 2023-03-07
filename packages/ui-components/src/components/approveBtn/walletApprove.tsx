@@ -11,9 +11,9 @@ type Props = {
 }
 
 export const WalletApproveBtn: FC<Props> = ({ item }) => {
-  const loginAccount = useAppStore(state => state.loginAccount)
-  const { execute } = useApproveReqSmpcAddress(loginAccount.rpc)
+  const loginAccount = useAppStore(state => state.getLoginAccount)
   const { account } = useWeb3React()
+  const { execute } = useApproveReqSmpcAddress(loginAccount(account)?.rpc)
   const setpollingPubKey = useAppStore(state => state.setpollingPubKey)
   const hidenWalletApprove = useAppStore(state => state.hidenWalletApprove)
   const { addToast } = useToasts()
