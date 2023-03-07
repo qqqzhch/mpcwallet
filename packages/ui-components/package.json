@@ -33,6 +33,7 @@
     "@heroicons/react": "^2.0.16",
     "@monorepo/api": "^0.1.14",
     "@monorepo/design-tokens": "^0.1.14",
+    "@tailwindcss/forms": "^0.5.3",
     "@types/react-copy-to-clipboard": "^5.0.4",
     "@web3-react/core": "6.1.9",
     "@web3-react/injected-connector": "^6.0.7",
