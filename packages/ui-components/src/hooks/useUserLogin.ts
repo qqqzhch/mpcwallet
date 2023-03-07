@@ -6,21 +6,23 @@ import { getsmpc } from '@monorepo/api/src/web3'
 import { useAppStore } from '../state/index'
 import { useToasts } from 'react-toast-notifications'
 import { useSignEnode } from './useSigns'
+import EventBus from '../EventEmitter/index'
 
 export default function useUserLogin() {
   const { account } = useWeb3React()
   const [selected] = useState<string>(rpclist[0])
   const setLoginAccount = useAppStore(state => state.setLoginAccount)
   const { addToast } = useToasts()
-  const loginAccount = useAppStore(state => state.loginAccount)
-  const { execute } = useSignEnode(loginAccount.enode)
+  const loginAccount = useAppStore(state => state.getLoginAccount(account))
+  const { execute } = useSignEnode(loginAccount?.enode)
   const clearLoginAccount = useAppStore(state => state.clearLoginAccount)
+
   useEffect(() => {
     const run = async () => {
-      if (selected == undefined || account == undefined || account == null || loginAccount.enode !== '') {
+      if (selected == undefined || account == undefined || account == null || (loginAccount !== undefined && loginAccount?.enode !== '')) {
         return
       }
-      clearLoginAccount()
+      clearLoginAccount(account)
       web3.setProvider(selected)
       try {
         const res = await getsmpc().getEnode()
@@ -33,22 +35,29 @@ export default function useUserLogin() {
     if (selected) {
       run()
     }
-  }, [selected, setLoginAccount, addToast, account, clearLoginAccount, loginAccount.enode])
+  }, [selected, setLoginAccount, addToast, account, clearLoginAccount, loginAccount])
   useEffect(() => {
     const run = async () => {
-      if (loginAccount.signEnode) {
+      if (loginAccount?.signEnode) {
         return
       }
-      if (loginAccount.enode != '' && loginAccount.rpc != '' && account) {
+      if (execute && account && loginAccount) {
         try {
           const signEnode = await execute()
-          setLoginAccount(loginAccount.rpc, loginAccount.enode, account, loginAccount.enode + signEnode)
+          setLoginAccount(selected, loginAccount.enode, account, loginAccount.enode + signEnode)
         } catch (error: unknown) {
           const err = error as Error
           addToast(err.message, { appearance: 'error' })
         }
       }
     }
+
+    EventBus.on('runLogin', () => {
+      run()
+    })
     run()
-  }, [execute, loginAccount.rpc, loginAccount.enode, account, addToast, setLoginAccount, loginAccount.signEnode])
+    return () => {
+      EventBus.off('runLogin')
+    }
+  }, [execute, loginAccount, account, addToast, setLoginAccount, selected])
 }

@@ -14,7 +14,7 @@ export * from './components/mpctype'
 export * from './components/threshold'
 export * from './state/index'
 export * from './state/teststate'
-export * from './components/selectnode/button'
+
 export * from './components/forms/index'
 export * from './components/forms/CreateWalletBtn'
 export * from './protectedRoutes/index'
@@ -22,5 +22,6 @@ export * from './components/approveBtn/walletApprove'
 export * from './components/walletList/index'
 export * from './components/siderBar/userPanel'
 export * from './components/siderBar/siderMenu'
+export * from './protectedRoutes/protectedButton'
 
 export { providers }

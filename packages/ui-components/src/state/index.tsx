@@ -20,14 +20,16 @@ export interface PollingPubKey {
   }
 }
 
+export interface loginAccount {
+  rpc: string
+  enode: string
+  signEnode: string
+  address: string
+}
+
 export interface AppState {
   counter: number
-  loginAccount: {
-    rpc: string
-    enode: string
-    signEnode: string
-    address: string
-  }
+  loginAccounts: Array<loginAccount>
   createGroup: {
     admins: Array<adminInfo>
     keytype: string
@@ -43,7 +45,8 @@ export interface AppState {
   sideBar: boolean
   increase: (by: number) => void
   setLoginAccount: (rpc: string, enode: string, adress: string, signEnode?: string) => void
-  clearLoginAccount: () => void
+  clearLoginAccount: (adress: string | null | undefined) => void
+  getLoginAccount: (address: string | null | undefined) => loginAccount | undefined
   setcreateGroupKeytype: (keytype: string) => void
   setcreateGroupThreshold: (threshold: number) => void
   addcreateGroupAdmin: () => void
@@ -61,12 +64,7 @@ export interface AppState {
 
 export const intialState = {
   counter: 0,
-  loginAccount: {
-    rpc: '',
-    enode: '',
-    signEnode: '',
-    address: ''
-  },
+  loginAccounts: [],
   createGroup: {
     admins: [
       {
@@ -96,7 +94,7 @@ const createMyStore = (state: typeof intialState = intialState) => {
     devtools(
       immer(
         persist(
-          set => ({
+          (set, get) => ({
             ...state,
             increase: () => {
               set(state => {
@@ -105,19 +103,42 @@ const createMyStore = (state: typeof intialState = intialState) => {
             },
             setLoginAccount: (rpc: string, enode: string, address: string, signEnode?: string) => {
               set(state => {
-                state.loginAccount.rpc = rpc
-                state.loginAccount.enode = enode
-                state.loginAccount.signEnode = signEnode || ''
-                state.loginAccount.address = address
+                const Account = state.loginAccounts.find(item => {
+                  return item.address == address
+                })
+                if (Account == null || Account == undefined) {
+                  state.loginAccounts.push({
+                    rpc: rpc,
+                    enode: enode,
+                    signEnode: signEnode || '',
+                    address: address
+                  })
+                } else {
+                  Account.rpc = rpc
+                  Account.enode = enode
+                  Account.signEnode = signEnode || ''
+                  Account.address = address
+                }
               })
             },
-            clearLoginAccount: () => {
+            clearLoginAccount: (address: string | null | undefined) => {
               set(state => {
-                state.loginAccount.rpc = ''
-                state.loginAccount.enode = ''
-                state.loginAccount.signEnode = ''
-                state.loginAccount.address = ''
+                const Account = state.loginAccounts.find(item => {
+                  return item.address == address
+                })
+                if (Account != undefined) {
+                  const index = state.loginAccounts.indexOf(Account)
+                  if (index > -1) {
+                    state.loginAccounts.splice(index, 1)
+                  }
+                }
               })
+            },
+            getLoginAccount: (address: string | null | undefined) => {
+              const Account = get().loginAccounts.find(item => {
+                return item.address == address
+              })
+              return Account
             },
             setcreateGroupKeytype: (typeName: string) => {
               set(state => {

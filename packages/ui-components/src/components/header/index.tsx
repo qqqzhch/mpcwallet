@@ -18,7 +18,7 @@ export const Header: FC = () => {
   }
 
   return (
-    <header className="text-gray-600 body-font fixed z-50 bg-white flex w-full ">
+    <header className="text-gray-600 body-font fixed z-50 bg-white flex w-full shadow-sm ">
       <div className="container mx-auto flex flex-wrap py-2 flex-row  items-center ">
         <a
           onClick={() => {

@@ -1,18 +1,19 @@
 import { useCallback, useEffect, useState, FC } from 'react'
 import { useAppStore } from '../../state/index'
 import { useCreateGroup, useReqSmpcAddress } from '../../hooks/useSigns'
-
+import { useWeb3React } from '@web3-react/core'
 import { useToasts } from 'react-toast-notifications'
 import { useNavigate } from 'react-router-dom'
 
 const CreateWalletBtn: FC = () => {
   const createGroup = useAppStore(state => state.createGroup)
-  const loginAccount = useAppStore(state => state.loginAccount)
+  const { account } = useWeb3React()
+  const loginAccount = useAppStore(state => state.getLoginAccount(account))
   const setpollingPubKey = useAppStore(state => state.setpollingPubKey)
   const setcreateGroupWalletKeyID = useAppStore(state => state.setcreateGroupWalletKeyID)
 
   const { execute } = useCreateGroup(
-    loginAccount.rpc,
+    loginAccount?.rpc,
     createGroup.threshold.toString() + '/' + createGroup.admins.length,
     createGroup.admins.map(item => item.address)
   )
@@ -23,7 +24,7 @@ const CreateWalletBtn: FC = () => {
   const navigate = useNavigate()
 
   const { execute: reqSmpcAddr } = useReqSmpcAddress(
-    loginAccount.rpc,
+    loginAccount?.rpc,
     gid,
     createGroup.threshold.toString() + '/' + createGroup.admins.length,
     sigs,
@@ -33,16 +34,18 @@ const CreateWalletBtn: FC = () => {
 
   const create = useCallback(() => {
     const run = async () => {
-      const res = await execute()
+      if (execute) {
+        const res = await execute()
 
-      if (res.msg == 'Error') {
-        addToast(res.error, { appearance: 'error' })
-        return
-      }
-      if (res.msg === 'Success') {
-        setGid(res.info.Gid)
-        setUuid(res.info.Uuid)
-        setSigs(res.info.Sigs)
+        if (res.msg == 'Error') {
+          addToast(res.error, { appearance: 'error' })
+          return
+        }
+        if (res.msg === 'Success') {
+          setGid(res.info.Gid)
+          setUuid(res.info.Uuid)
+          setSigs(res.info.Sigs)
+        }
       }
     }
     run()
