@@ -3,7 +3,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import Avvvatars from 'avvvatars-react'
 
-const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBack }) => {
+const SendNft: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBack }) => {
   const [isTokenOpen, setIsTokenOpen] = useState(open || false)
 
   function closeTokenModal() {
@@ -46,7 +46,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
               >
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
-                    Send Tokens
+                    Send NFT
                   </Dialog.Title>
                   <div className="mt-4 flex flex-col  gap-1 ">
                     <div className="mb-6">
@@ -58,18 +58,24 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                         <div className="break-all pl-2">0x12CF5132064Ee45AcD4843E8C9D7Ae5e3852Aaab</div>
                       </div>
                     </div>
-                    <div className="mb-6">
+                    <div className="mb-2">
                       <label htmlFor="assert" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                        Assert{' '}
+                        Token Name: artblock
                       </label>
-                      <select
-                        id="assert"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      >
-                        <option selected>eth</option>
-                        <option value="bnb">bnb</option>
-                        <option value="btc">btc</option>
-                      </select>
+                    </div>
+                    <div className="mb-2">
+                      <label htmlFor="assert" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                        Token ID: 123
+                      </label>
+                    </div>
+                    <div className="mb-2">
+                      <label htmlFor="assert" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                        Token Image{' '}
+                      </label>
+                      <img
+                        width={100}
+                        src="https://i.seadn.io/gae/GQYM6Cy8UjIdrd9K_ZOlN1nAmdl7T7s-BxTSrOetVwOBZlh0OS9ZH_3cq-RbPj9ogq3-srOkrb-kuebNDQmYLeuh-cb_Nt-f1MxAfg?auto=format&w=256"
+                      ></img>
                     </div>
 
                     <div className="mb-6">
@@ -82,22 +88,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                       />
                     </div>
-                    <div className="mb-6">
-                      <div className="flex flex-row justify-between">
-                        <label htmlFor="Amount" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                          Amount{' '}
-                        </label>
-                        <label htmlFor="Amount" className="block mb-2 text-sm font-medium text-gray-600 dark:text-white">
-                          Balance:111eth{' '}
-                        </label>
-                      </div>
 
-                      <input
-                        type="text"
-                        id="Amount"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      />
-                    </div>
                     <div className="mb-6 flex flex-col sm:flex-row justify-between gap-8">
                       <button className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                         Cancel
@@ -120,4 +111,4 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
   )
 }
 
-export default SendToken
+export default SendNft
