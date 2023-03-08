@@ -1,0 +1,32 @@
+{
+    "jsonrpc": "2.0",
+    "id": 67,
+    "result": {
+        "Data": [
+            {
+                "User_account": "0xac9526c5db81267804a32ec508db780402fd9fec",
+                "Group_id": "2bc9ac6c25f2e47fa1f0d2f6968d19b13c261179f4b783414ac86e9a2db6501f71eb20114c759dfb58a2708dc2b180afe4d44d4a2d88b53e312d97cbc3134b73",
+                "Key_id": "0xcdc1f5ffeadd177bd2db0e14520d17288ce6a72c11990da7629f2e9760e46427",
+                "Key_type": "EC256K1",
+                "Mode": "2",
+                "Msg_context": [
+                    "{\"from\":\"0xd6a643ECE3E3d21Af05D7DA3875860B2EFcA164c\",\"to\":\"0xa3eDE283D61d5f100a95099D78fd07566bB6c7F0\",\"chainId\":\"0x5\",\"value\":\"0xb5e620f48000\",\"nonce\":0,\"gas\":47984,\"gasPrice\":5338199,\"data\":\"\",\"originValue\":\"0.0002\",\"name\":\"ETH Goerli\"}"
+                    
+                ],
+                "Msg_hash": [
+                    "0x57f42fb3b0f419e6ef0c9805ec7987d955c837814cbd16e11ef1fec12777050d"
+                    
+                ],
+                "Nonce": "4",
+                "Public_key": "0457404abfd62efff9bfcf1ee0aaa74ffc1355b494e8294f2f3309f52f8376a92d778b5f7b7c14cf696284f1d565a6b7bae031fc25c00b3dfca1d65e4c8da4af0b",
+                "Mpc_address": "0x1166239261e699d8cA06dFB0031645c63e5AB528",
+                "Threshold": "2/2",
+                "TimeStamp": "",
+                "Status": 0
+            }
+        ],
+        "Error": "",
+        "Status": "success",
+        "Tip": ""
+    }
+}

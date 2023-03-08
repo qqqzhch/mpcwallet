@@ -1,19 +1,23 @@
-import { FC } from 'react'
+import { FC, useCallback } from 'react'
 import { useParams } from 'react-router-dom'
 import { cutOut } from '../../utils'
 // import { When } from 'react-if'
 import Avvvatars from 'avvvatars-react'
 import NewTransaction from './newTransaction'
-
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { SquaresPlusIcon, ClipboardDocumentIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid'
+import { useToasts } from 'react-toast-notifications'
 
-//squares-plus
 const UserPanel: FC = () => {
   const { address } = useParams<{ address: string; chainType: string }>()
+  const { addToast } = useToasts()
+  const onCopy = useCallback(() => {
+    addToast('Copy successful', { appearance: 'success' })
+  }, [addToast])
 
   return (
     <>
-      <div className="flex items-center pl-2.5 mb-5 flex-row">
+      <div className="flex items-center pl-2.5 mb-5 flex-row" title={address}>
         <div className=" w-12 ">
           <Avvvatars value={address ? address : ''} style="shape" size={40} />
         </div>
@@ -37,8 +41,11 @@ const UserPanel: FC = () => {
       hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 
       font-medium rounded-lg text-sm   p-1.5 text-center inline-flex items-center mr-2"
         >
-          <ClipboardDocumentIcon className=" h-4 w-4 "></ClipboardDocumentIcon>
+          <CopyToClipboard text={address ? address : ''} onCopy={() => onCopy()}>
+            <ClipboardDocumentIcon className=" h-4 w-4 "></ClipboardDocumentIcon>
+          </CopyToClipboard>
         </button>
+
         <button
           type="button"
           className="text-blue-700  bg-gray-200
