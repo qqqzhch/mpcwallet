@@ -132,10 +132,7 @@ export function useCreateGroup(
       execute: async () => {
         web3.setProvider(rpc)
 
-        const result = await getsmpc().getGroupID(
-          thresholdmode,
-          nodeArr.map((item: string) => item.split('0x')[0])
-        )
+        const result = await getsmpc().getGroupID(thresholdmode, nodeArr)
         let cbData = result
         if (result && typeof result === 'string') {
           cbData = JSON.parse(cbData)

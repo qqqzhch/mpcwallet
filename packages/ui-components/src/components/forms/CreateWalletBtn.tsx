@@ -1,19 +1,19 @@
 import { useCallback, useEffect, useState, FC } from 'react'
 import { useAppStore } from '../../state/index'
 import { useCreateGroup, useReqSmpcAddress } from '../../hooks/useSigns'
-import { useWeb3React } from '@web3-react/core'
+
 import { useToasts } from 'react-toast-notifications'
 import { useNavigate } from 'react-router-dom'
+import { rpclist } from '../../constants/rpcConfig'
 
 const CreateWalletBtn: FC = () => {
   const createGroup = useAppStore(state => state.createGroup)
-  const { account } = useWeb3React()
-  const loginAccount = useAppStore(state => state.getLoginAccount(account))
+
   const setpollingPubKey = useAppStore(state => state.setpollingPubKey)
   const setcreateGroupWalletKeyID = useAppStore(state => state.setcreateGroupWalletKeyID)
 
   const { execute } = useCreateGroup(
-    loginAccount?.rpc,
+    rpclist[0],
     createGroup.threshold.toString() + '/' + createGroup.admins.length,
     createGroup.admins.map(item => item.address)
   )
@@ -24,7 +24,7 @@ const CreateWalletBtn: FC = () => {
   const navigate = useNavigate()
 
   const { execute: reqSmpcAddr } = useReqSmpcAddress(
-    loginAccount?.rpc,
+    rpclist[0],
     gid,
     createGroup.threshold.toString() + '/' + createGroup.admins.length,
     sigs,
@@ -35,6 +35,9 @@ const CreateWalletBtn: FC = () => {
   const create = useCallback(() => {
     const run = async () => {
       if (execute) {
+        setGid('')
+        setUuid('')
+        setSigs('')
         const res = await execute()
 
         if (res.msg == 'Error') {
@@ -65,15 +68,15 @@ const CreateWalletBtn: FC = () => {
           setcreateGroupWalletKeyID(keyid)
           addToast('Created successfully', { appearance: 'success' })
           //use res.info and getReqAddrStatus to get adress status
-          const newPollingPubKeyItem = {
-            fn: 'getReqAddrStatus',
-            params: [keyid],
-            data: {
-              GroupID: gid,
-              ThresHold: createGroup.threshold.toString() + '/' + createGroup.admins.length
-            }
-          }
-          setpollingPubKey(newPollingPubKeyItem)
+          // const newPollingPubKeyItem = {
+          //   fn: 'getReqAddrStatus',
+          //   params: [keyid],
+          //   data: {
+          //     GroupID: gid,
+          //     ThresHold: createGroup.threshold.toString() + '/' + createGroup.admins.length
+          //   }
+          // }
+          // setpollingPubKey(newPollingPubKeyItem)
           navigate('/walletApproveState')
         }
       }

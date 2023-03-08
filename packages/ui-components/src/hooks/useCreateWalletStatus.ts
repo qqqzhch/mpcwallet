@@ -2,7 +2,8 @@ import useSWR from 'swr'
 import { useAppStore } from '../state/index'
 import { web3 } from '@monorepo/api'
 import { getsmpc } from '@monorepo/api/src/web3'
-import { useWeb3React } from '@web3-react/core'
+
+import { rpclist } from '../constants/rpcConfig'
 
 interface walletItemStatus {
   Status: number
@@ -18,10 +19,7 @@ interface walletItemStatus {
   Threshold: string
 }
 
-async function fetcher(
-  rpc: string | undefined,
-  keyid: string | null | undefined
-): Promise<
+async function fetcher(keyid: string | null | undefined): Promise<
   | {
       status: number
       mpcAddress: string
@@ -29,10 +27,10 @@ async function fetcher(
     }
   | undefined
 > {
-  if (keyid == null || keyid == undefined || rpc == undefined) {
+  if (keyid == null || keyid == undefined) {
     return
   }
-  web3.setProvider(rpc)
+  web3.setProvider(rpclist[0])
   const res = await getsmpc().getReqAddrStatus(keyid)
 
   if (res.Status === 'Error') {
@@ -54,13 +52,11 @@ async function fetcher(
 }
 
 export function useCreateWalletStatus() {
-  const { account } = useWeb3React()
-  const loginAccount = useAppStore(state => state.getLoginAccount(account))
   const keyid = useAppStore(state => state.createGroup.keyid)
 
   // const [list,setList]= useState<Array<walletaccount>>([])
 
-  const { data, error, isLoading } = useSWR(keyid && loginAccount?.rpc ? '/smw/walletstatus' : null, () => fetcher(loginAccount?.rpc, keyid), {
+  const { data, error, isLoading } = useSWR(keyid ? '/smw/walletstatus' : null, () => fetcher(keyid), {
     refreshInterval: 1000 * 15
   })
 
