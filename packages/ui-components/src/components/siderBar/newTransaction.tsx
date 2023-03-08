@@ -19,9 +19,6 @@ const NewTransaction: FC = () => {
     setIsOpen(false)
     setIsTokenOpen(true)
   }
-  function closeTokenModal() {
-    setIsTokenOpen(false)
-  }
 
   return (
     <>
@@ -88,11 +85,12 @@ const NewTransaction: FC = () => {
           </div>
         </Dialog>
       </Transition>
-      <Transition appear show={isTokenOpen} as={Fragment}>
-        <Dialog as="div" className="relative   z-40" onClose={closeTokenModal}>
-          <SendToken></SendToken>
-        </Dialog>
-      </Transition>
+      <SendToken
+        open={isTokenOpen}
+        callBack={() => {
+          setIsTokenOpen(false)
+        }}
+      ></SendToken>
     </>
   )
 }
