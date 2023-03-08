@@ -2,6 +2,7 @@ import { useAppStore } from '@monorepo/ui-components'
 import { When } from 'react-if'
 import UserPanel from '@monorepo/ui-components/src/components/siderBar/userPanel'
 import SiderMenu from '@monorepo/ui-components/src/components/siderBar/siderMenu'
+import ChainName from '@monorepo/ui-components/src/components/chainList/chainName'
 
 const SideBar = () => {
   const showsideBar = useAppStore(state => state.sideBar)
@@ -19,6 +20,7 @@ const SideBar = () => {
         className={`fixed rounded-xl top-14 left-0 z-40 w-64 h-screen transition-transform ${showsideBar ? '' : '-translate-x-full sm:translate-x-0'}  `}
         aria-label="Sidebar"
       >
+        <ChainName></ChainName>
         <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50   dark:bg-gray-800">
           <UserPanel></UserPanel>
           <SiderMenu></SiderMenu>

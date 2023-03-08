@@ -23,5 +23,8 @@ export * from './components/walletList/index'
 export * from './components/siderBar/userPanel'
 export * from './components/siderBar/siderMenu'
 export * from './protectedRoutes/protectedButton'
+export * from './components/chainList/chainName'
+export * from './components/walletHomePanels/overview'
+export * from './components/walletHomePanels/transactionQueue'
 
 export { providers }

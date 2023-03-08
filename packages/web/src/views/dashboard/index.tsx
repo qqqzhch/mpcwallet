@@ -14,7 +14,7 @@ const Dashboard: FC<Props> = props => {
         <SideBar></SideBar>
       </div>
 
-      <div className="p-0 sm:ml-64">
+      <div className="p-0 sm:ml-64 ">
         <Outlet></Outlet>
       </div>
     </div>
