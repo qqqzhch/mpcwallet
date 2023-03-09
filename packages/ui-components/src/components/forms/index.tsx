@@ -32,7 +32,7 @@ const InputeMinus: FC<Props> = ({ index, value }) => {
   return (
     <div className="relative mb-4">
       <label htmlFor="walletname" className="leading-7 text-sm text-gray-600">
-        Admin Enodesig {index + 1}
+        Admin address {index + 1}
       </label>
       <div className=" flex flex-row items-center justify-start">
         <When condition={index == 0}>

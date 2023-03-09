@@ -25,7 +25,7 @@ const Preview = () => {
           {createGroup.admins.map((item, index) => {
             return (
               <div className="relative mb-4" key={item.key}>
-                <div className="leading-7 text-sm text-gray-600  w-40">Admin Enodesig {index + 1}:</div>
+                <div className="leading-7 text-sm text-gray-600  w-40">Admin address {index + 1}:</div>
                 <div className="break-all">{item.address}</div>
               </div>
             )

@@ -8,10 +8,11 @@ import { useNavigate } from 'react-router-dom'
 import { useCallback } from 'react'
 import { useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
+import { ethers } from 'ethers'
 
 const CreatWallet: FC = props => {
   const { account } = useWeb3React()
-  const loginAccount = useAppStore(state => state.getLoginAccount(account))
+
   const createGroup = useAppStore(state => state.createGroup)
   // const [walletnameerror, setwalletnameerror] = useState<string>('')
   const [keytypeerror, setkeytypeerror] = useState<string>('')
@@ -25,13 +26,13 @@ const CreatWallet: FC = props => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (loginAccount) editcreateGroupAdmin(0, loginAccount.signEnode)
-  }, [editcreateGroupAdmin, loginAccount])
+    if (account) editcreateGroupAdmin(0, account)
+  }, [editcreateGroupAdmin, account])
 
   function reset() {
-    if (loginAccount) {
+    if (account) {
       resetCreateGroupAdmin()
-      editcreateGroupAdmin(0, loginAccount.signEnode)
+      editcreateGroupAdmin(0, account)
     }
   }
 
@@ -48,22 +49,22 @@ const CreatWallet: FC = props => {
       return item.address !== ''
     })
     if (isempty == false) {
-      setadminserror('admin Enodesig cannot be isempty')
+      setadminserror('admin address cannot be isempty')
       return
     }
     const repeat = createGroup.admins.every(item => {
       return createGroup.admins.filter(it => item.address == it.address).length == 1
     })
     if (repeat == false) {
-      setadminserror('admin Enodesig cannot be repeated')
+      setadminserror('admin address cannot be repeated')
       return
     }
     const formatcheck = createGroup.admins.every(item => {
-      return item.address.startsWith('enode://') && item.address.length > 260
+      return ethers.utils.isAddress(item.address)
     })
 
     if (formatcheck == false) {
-      setadminserror('admin Enodesig Incorrect format')
+      setadminserror('admin address Incorrect format')
       return
     }
 
@@ -81,7 +82,7 @@ const CreatWallet: FC = props => {
       return createGroup.admins.filter(it => item.address == it.address).length == 1
     })
     const formatcheck = createGroup.admins.every(item => {
-      return item.address.startsWith('enode://') && item.address.length > 260
+      return ethers.utils.isAddress(item.address)
     })
 
     if (repeat == true || formatcheck) {
