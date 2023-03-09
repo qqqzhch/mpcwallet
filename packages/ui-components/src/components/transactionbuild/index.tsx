@@ -6,6 +6,7 @@ import { When } from 'react-if'
 import { AbiItem } from 'web3-utils';
 import { cutOut } from '../../utils'
 import useChainName from '../../hooks/useChainName'
+import { useToasts } from 'react-toast-notifications'
 
 
 const TransactionBuild: FC = () => {
@@ -13,20 +14,21 @@ const TransactionBuild: FC = () => {
   const services = useServices(ChainName)
 
   const [addressOrAbi, setAddressOrAbi] = useState('')
-  const [loadAbiError, setLoadAbiError] = useState(false)
-  const [showExamples, setShowExamples] = useState(false)
+  
+  
   const [toAddress, setToAddress] = useState('')
   const [contract, setContract] = useState<ContractInterface | undefined>(undefined)
-  const [reviewing, setReviewing] = useState(false)
+  
   const [selectedMethodIndex, setSelectedMethodIndex] = useState(0)
   const [inputCache, setInputCache] = useState<string[]>([])
   const [addTxError, setAddTxError] = useState<string | undefined>()
   const [transactions, setTransactions] = useState<ProposedTransaction[]>([])
   const [value, setValue] = useState('')
+  const { addToast } = useToasts()
 
   const handleAddressOrABI = async (e: React.ChangeEvent<HTMLInputElement>): Promise<ContractInterface | void> => {
     setContract(undefined)
-    setLoadAbiError(false)
+    
 
     const cleanInput = e.currentTarget?.value?.trim()
     setAddressOrAbi(cleanInput)
@@ -42,9 +44,10 @@ const TransactionBuild: FC = () => {
     try {
       const contract = await services.interfaceRepo.loadAbi(cleanInput)
       setContract(contract)
-    } catch (e) {
-      setLoadAbiError(true)
-      console.error(e)
+    } catch (error) {
+
+      console.error(error)
+      addToast((error as Error).message , { appearance: 'error' })
     }
   }
 
@@ -155,12 +158,9 @@ const TransactionBuild: FC = () => {
   const handleSubmit = () => {
     sendTransactions()
     setTransactions([])
-    setReviewing(false)
+    
   }
 
-  const handleDismiss = () => {
-    setReviewing(false)
-  }
 
   const getInputInterface = (input: any) => {
     // This code renders a helper for the input text.

@@ -53,7 +53,7 @@ class InterfaceRepository {
     }
 
     const abi = await getAbi(getAbiUrl(address));
-    if (abi.status !== '1') throw Error(`Request not successful: ${abi.data.message}; ${abi.data.result}.`);
+    if (abi.status !== '1') throw Error(`Request not successful: ${abi.message}; ${abi.result}.`);
     return abi.result;
   }
 
