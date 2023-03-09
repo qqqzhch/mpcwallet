@@ -41,6 +41,20 @@ export const CHAIN_IDS_TO_NAMES = {
   [SupportedChainId.OPTIMISM_GOERLI]: 'optimism_goerli'
 }
 
+export function getNameBychainId(chainId: number | null | undefined){
+  if(chainId){
+    const id = chainId as SupportedChainId
+    return  CHAIN_IDS_TO_NAMES[id]
+  }else{
+    return ""
+  }
+  
+
+}
+
+
+export type SupportedChainNames = typeof CHAIN_IDS_TO_NAMES[SupportedChainId]
+
 export declare type Networks = 'MAINNET' | 'MORDEN' | 'ROPSTEN' | 'RINKEBY' | 'GOERLI' | 'KOVAN' | 'XDAI' | 'ENERGY_WEB_CHAIN' | 'VOLTA' | 'UNKNOWN' | 'BSC_MAINNET';
 
 /**

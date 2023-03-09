@@ -1,5 +1,5 @@
 import memoize from 'lodash/memoize';
-import { Networks } from '../../constants/chains';
+import { Networks,SupportedChainNames } from '../../constants/chains';
 import {api} from '@monorepo/api'
 import {SCAN_KEY}  from '../../constants/networks';
 
@@ -19,29 +19,29 @@ export interface ContractInterface {
 const getAbi = memoize(async (apiUrl: string) => api.get<object>(apiUrl));
 
 const abiUrlGetterByNetwork: {
-  [key in Networks]?: ((address: string) => string) | null;
+  [key in SupportedChainNames]?: ((address: string) => string) | null;
 } = {
-  MAINNET: (address: string) => `https://api.etherscan.io/api?module=contract&action=getabi&address=${address}&apikey=${SCAN_KEY}`,
+  mainnet: (address: string) => `https://api.etherscan.io/api?module=contract&action=getabi&address=${address}&apikey=${SCAN_KEY}`,
   MORDEN: null,
-  RINKEBY: (address: string) => `https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=${address}&apikey=${SCAN_KEY}`,
+  rinkeby: (address: string) => `https://api-rinkeby.etherscan.io/api?module=contract&action=getabi&address=${address}&apikey=${SCAN_KEY}`,
   ROPSTEN: null,
-  GOERLI:  (address: string) => `https://api-goerli.etherscan.io/api?module=contract&action=getabi&address=${address}&apikey=${SCAN_KEY}`,
+  goerli:  (address: string) => `https://api-goerli.etherscan.io/api?module=contract&action=getabi&address=${address}&apikey=${SCAN_KEY}`,
   KOVAN: null,
-  XDAI: (address: string) => `https://blockscout.com/poa/xdai/api?module=contract&action=getabi&address=${address}&apikey=${SCAN_KEY}`,
-  ENERGY_WEB_CHAIN: (address: string) =>
-    `https://explorer.energyweb.org/api?module=contract&action=getabi&address=${address}&apikey=${SCAN_KEY}`,
-  VOLTA: (address: string) =>
-    `https://volta-explorer.energyweb.org/api?module=contract&action=getabi&address=${address}&apikey=${SCAN_KEY}`,
-  UNKNOWN: null,
-  BSC_MAINNET: (address: string) =>
-  `https://api.bscscan.com/api?module=contract&action=getabi&address=${address}&apikey=${SCAN_KEY}`,
+  xdai: (address: string) => `https://blockscout.com/poa/xdai/api?module=contract&action=getabi&address=${address}&apikey=${SCAN_KEY}`,
+  // ENERGY_WEB_CHAIN: (address: string) =>
+  //   `https://explorer.energyweb.org/api?module=contract&action=getabi&address=${address}&apikey=${SCAN_KEY}`,
+  // VOLTA: (address: string) =>
+  //   `https://volta-explorer.energyweb.org/api?module=contract&action=getabi&address=${address}&apikey=${SCAN_KEY}`,
+  // UNKNOWN: null,
+  // BSC_MAINNET: (address: string) =>
+  // `https://api.bscscan.com/api?module=contract&action=getabi&address=${address}&apikey=${SCAN_KEY}`,
 };
 
 class InterfaceRepository {
-  network: Networks;
+  network: SupportedChainNames;
   web3: any;
 
-  constructor(network: Networks, web3: any) {
+  constructor(network: SupportedChainNames, web3: any) {
     this.network = network;
     this.web3 = web3;
   }

@@ -5,9 +5,12 @@ import { ProposedTransaction } from '../../hooks/useServices/models'
 import { When } from 'react-if'
 import { AbiItem } from 'web3-utils';
 import { cutOut } from '../../utils'
+import useChainName from '../../hooks/useChainName'
+
 
 const TransactionBuild: FC = () => {
-  const services = useServices('GOERLI')
+  const ChainName = useChainName();
+  const services = useServices(ChainName)
 
   const [addressOrAbi, setAddressOrAbi] = useState('')
   const [loadAbiError, setLoadAbiError] = useState(false)

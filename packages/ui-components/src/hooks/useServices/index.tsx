@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Web3 from 'web3';
-import { Networks } from '../../constants/chains';
+import { Networks,SupportedChainNames  } from '../../constants/chains';
 
 import InterfaceRepository from './interfaceRepository';
 import { InterfaceRepo } from './interfaceRepository';
@@ -12,7 +12,7 @@ export interface Services {
   interfaceRepo: InterfaceRepo | undefined;
 }
 
-export default function useServices(network: Networks): Services {
+export default function useServices(network: SupportedChainNames): Services {
   const [web3, setWeb3] = useState<Web3 | undefined>();
   const [interfaceRepo, setInterfaceRepo] = useState<InterfaceRepository | undefined>();
 
