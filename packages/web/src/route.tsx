@@ -14,6 +14,7 @@ import Dashboard from './views/dashboard'
 import WalletHome from './views/dashboard/walletHome'
 import Asserts from './views/dashboard/asserts'
 import Transactions from './views/dashboard/transactions'
+import Txbuild from './views/dashboard/txbuilder'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -92,6 +93,16 @@ const router = createBrowserRouter(
             </ProtectedRoute>
           }
         ></Route>
+        <Route
+          path="txbuild"
+          element={
+            <ProtectedRoute>
+              <Txbuild></Txbuild>
+            </ProtectedRoute>
+          }
+        ></Route>
+
+
       </Route>
 
       <Route path="*" element={<NoMatch />} />
