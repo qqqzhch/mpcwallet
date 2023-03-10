@@ -27,5 +27,6 @@ export * from './components/chainList/chainName'
 export * from './components/walletHomePanels/overview'
 export * from './components/walletHomePanels/transactionQueue'
 export * from './components/transactionbuild'
+export * from './components/fetchGlobal/index'
 
 export { providers }

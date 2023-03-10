@@ -25,7 +25,7 @@ async function fetcher(account: string | null | undefined): Promise<Array<wallet
 
 export default function useAccounts() {
   const { account } = useWeb3React()
-  const setwalletAccounts = useAppStore(state => state.setwalletAccounts)
+  const setwalletAccounts = useAppStore(state => state.addWalletAccounts)
   const [list, setList] = useState<Array<walletaccount>>([])
 
   const { data, error, isLoading } = useSWR(account ? '/smw/getAccountList' : null, () => fetcher(account), {

@@ -56,10 +56,12 @@ export interface AppState {
   setpollingPubKey: (pollingPubKey: PollingPubKey) => void
   setWalletApproveList: (list: Array<walletApprove>) => void
   hidenWalletApprove: (item: walletApprove) => void
-  setwalletAccounts: (list: Array<walletaccount>) => void
+  addWalletAccounts: (list: Array<walletaccount>) => void
   setcreateGroupWalletKeyID: (keyid: string) => void
   togglesideBar: () => void
   resetCreateGroupAdmin: () => void
+  getWalletAccounts: (address: string | null | undefined) => Array<walletaccount>
+  getWalletAccount: (address: string | null | undefined, mpcAddress: string | undefined) => walletaccount | undefined
 }
 
 export const intialState = {
@@ -202,9 +204,16 @@ const createMyStore = (state: typeof intialState = intialState) => {
                 })
               })
             },
-            setwalletAccounts: (list: Array<walletaccount>) => {
+            addWalletAccounts: (list: Array<walletaccount>) => {
               set(state => {
-                state.walletAccounts = list
+                list.forEach(item => {
+                  const havefind = state.walletAccounts.find(it => {
+                    return it.Mpc_address == item.Mpc_address && it.User_account == item.User_account
+                  })
+                  if (havefind == undefined) {
+                    state.walletAccounts.push(item)
+                  }
+                })
               })
             },
             togglesideBar: () => {
@@ -215,6 +224,18 @@ const createMyStore = (state: typeof intialState = intialState) => {
             resetCreateGroupAdmin: () => {
               set(state => {
                 state.createGroup = intialState.createGroup
+              })
+            },
+            getWalletAccounts: (address: string | null | undefined) => {
+              const list = get().walletAccounts
+              return list.filter(item => {
+                return item.User_account === address
+              })
+            },
+            getWalletAccount: (address: string | null | undefined, mpcAddress: string | undefined) => {
+              const list = get().walletAccounts
+              return list.find(item => {
+                return item.User_account === address && item.Mpc_address === mpcAddress
               })
             }
           }),
