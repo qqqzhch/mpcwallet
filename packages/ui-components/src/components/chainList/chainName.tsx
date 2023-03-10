@@ -1,4 +1,4 @@
-import useChainName from '../../hooks/useChainName'
+import useChainName from '../../hooks/useChainInfo'
 const ChainName = () => {
   const name = useChainName()
   return <div className=" bg-yellow-300 font-thin text-sm text-center py-0.5   ">{name}</div>

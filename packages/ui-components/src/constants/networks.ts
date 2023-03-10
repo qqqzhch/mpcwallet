@@ -1,9 +1,15 @@
 import { SupportedChainId } from './chains'
 
-const INFURA_KEY = import.meta.env.VITE_REACT_APP_INFURA_KEY
+export const INFURA_KEY = import.meta.env.VITE_REACT_APP_INFURA_KEY
 
 if (typeof INFURA_KEY === 'undefined') {
   throw new Error(`REACT_APP_INFURA_KEY must be a defined environment variable`)
+}
+
+export const SCAN_KEY = import.meta.env.VITE_REACT_APP_SCAN_KEY
+
+if (typeof INFURA_KEY === 'undefined') {
+  throw new Error(`REACT_APP_SCAN_KEY must be a defined environment variable`)
 }
 
 /**
