@@ -1,19 +1,23 @@
 import { FC, useCallback, useState } from 'react'
-import useAccounts from '../../hooks/useAccounts'
+
 import { walletaccount } from '../../state/walletaccount'
 // import { Fragment } from 'react'
 import Avvvatars from 'avvvatars-react'
 import { ChevronDownIcon, ChevronUpIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
 import { When } from 'react-if'
+import { useWeb3React } from '@web3-react/core'
 // import { Transition } from '@headlessui/react'
+import { useAppStore } from '../../state/index'
 
 import Skeleton from 'react-loading-skeleton'
 import { useNavigate } from 'react-router-dom'
 
 const WalletList: FC = props => {
-  const { data: walletAccounts, isLoading } = useAccounts()
+  // const { data: walletAccounts, isLoading } = useAccounts()
+  const { account } = useWeb3React()
   const [showwalletMobile, setshowwalletMobile] = useState<boolean>(false)
   const navigate = useNavigate()
+  const walletAccounts = useAppStore((state)=>state.getWalletAccounts(account))
 
   const toggle = useCallback(() => {
     setshowwalletMobile(!showwalletMobile)
@@ -39,10 +43,10 @@ const WalletList: FC = props => {
       </div>
 
       <div className={showwalletMobile ? 'block sm:block' : 'hidden sm:block'}>
-        <When condition={isLoading}>
+        {/* <When condition={isLoading}>
           <Skeleton count={10} height={100} />
-        </When>
-        <When condition={isLoading == false}>
+        </When> */}
+        <When condition={walletAccounts.length>0}>
           {walletAccounts.map((item: walletaccount) => {
             return (
               <div
@@ -68,7 +72,7 @@ const WalletList: FC = props => {
             )
           })}
         </When>
-        <When condition={isLoading == false && walletAccounts.length == 0}>
+        <When condition={walletAccounts.length == 0}>
           <div className="flex flex-col  items-center text-center">
             <span>
               <Squares2X2Icon className="h-52 w-52 text-gray-200 mt-32"></Squares2X2Icon>

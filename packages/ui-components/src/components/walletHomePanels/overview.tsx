@@ -1,16 +1,42 @@
 import { FC } from 'react'
 import { useParams } from 'react-router-dom'
 import Avvvatars from 'avvvatars-react'
+import MpcAvvvatar from '../mpcAvvvatar'
+import { useWeb3React } from '@web3-react/core'
+import CopyAddress from '../mpcinfo/copyAddress'
+import ScanUrl from '../mpcinfo/scanUrl'
 
 const Overview: FC = () => {
   const { address } = useParams<{ address: string; chainType: string }>()
+  const {chainId}= useWeb3React();
+
   return (
     <div className="flex  min-h-80 rounded bg-gray-50 flex-col  gap-6 p-8" title={address}>
       <h1 className=" border-b border-blue-300 pb-4">Overview</h1>
       <div className="">
-        <Avvvatars value={address ? address : ''} style="shape" size={40} />
+      <MpcAvvvatar address={address} chainid={chainId}></MpcAvvvatar>
       </div>
-      <div className=" break-all">{address}</div>
+      <div className=" break-all">{address}
+      <button
+          type="button"
+          className="text-blue-700
+      hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 
+      font-medium rounded-lg text-sm   p-1.5 text-center inline-flex items-center mr-2 ml-2"
+        >
+          <CopyAddress></CopyAddress>
+        </button>
+        <button
+          type="button"
+          className="text-blue-700  
+      hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 
+      font-medium rounded-lg text-sm   p-1.5 text-center inline-flex items-center mr-2 ml-2"
+        >
+        <ScanUrl></ScanUrl>  
+        </button>
+        
+        
+        
+      </div>
       <div className=" flex flex-row">
         <div className=" flex  flex-col w-1/4 sm:w-1/3  gap-2">
           <div className=" text-blue-500">tokens</div>

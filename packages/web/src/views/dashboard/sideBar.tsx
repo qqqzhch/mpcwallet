@@ -4,6 +4,7 @@ import UserPanel from '@monorepo/ui-components/src/components/siderBar/userPanel
 import SiderMenu from '@monorepo/ui-components/src/components/siderBar/siderMenu'
 import ChainName from '@monorepo/ui-components/src/components/chainList/chainName'
 
+
 const SideBar = () => {
   const showsideBar = useAppStore(state => state.sideBar)
 
@@ -17,7 +18,7 @@ const SideBar = () => {
     <div>
       <aside
         id="logo-sidebar"
-        className={`fixed rounded-xl top-14 left-0 z-40 w-64 h-screen transition-transform ${showsideBar ? '' : '-translate-x-full sm:translate-x-0'}  `}
+        className={`fixed  rounded-xl top-14 left-0 z-40 w-64 h-screen transition-transform ${showsideBar ? '' : '-translate-x-full sm:translate-x-0'}  `}
         aria-label="Sidebar"
       >
         <ChainName></ChainName>
@@ -25,7 +26,12 @@ const SideBar = () => {
           <UserPanel></UserPanel>
           <SiderMenu></SiderMenu>
         </div>
+        
       </aside>
+      {/* <div className={`fixed  rounded-xl top-14 left-0 z-40 w-64 h-screen transition-transform ${showsideBar ? '' : '-translate-x-full sm:translate-x-0'}  `}>
+      
+      </div> */}
+      
       <When condition={showsideBar}>
         <div onClick={onClick} className="bg-gray-900 bg-opacity-50 dark:bg-opacity-80 fixed inset-0 z-30 sm:hidden"></div>
       </When>
