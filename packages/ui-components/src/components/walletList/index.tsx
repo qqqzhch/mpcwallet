@@ -9,7 +9,6 @@ import { useWeb3React } from '@web3-react/core'
 // import { Transition } from '@headlessui/react'
 import { useAppStore } from '../../state/index'
 
-import Skeleton from 'react-loading-skeleton'
 import { useNavigate } from 'react-router-dom'
 
 const WalletList: FC = props => {
@@ -17,7 +16,7 @@ const WalletList: FC = props => {
   const { account } = useWeb3React()
   const [showwalletMobile, setshowwalletMobile] = useState<boolean>(false)
   const navigate = useNavigate()
-  const walletAccounts = useAppStore((state)=>state.getWalletAccounts(account))
+  const walletAccounts = useAppStore(state => state.getWalletAccounts(account))
 
   const toggle = useCallback(() => {
     setshowwalletMobile(!showwalletMobile)
@@ -46,7 +45,7 @@ const WalletList: FC = props => {
         {/* <When condition={isLoading}>
           <Skeleton count={10} height={100} />
         </When> */}
-        <When condition={walletAccounts.length>0}>
+        <When condition={walletAccounts.length > 0}>
           {walletAccounts.map((item: walletaccount) => {
             return (
               <div

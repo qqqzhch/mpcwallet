@@ -1,12 +1,12 @@
-import { FC, useCallback } from 'react'
+import { FC } from 'react'
 import { useParams } from 'react-router-dom'
 import { cutOut } from '../../utils'
 // import { When } from 'react-if'
-import Avvvatars from 'avvvatars-react'
+
 import NewTransaction from './newTransaction'
-import { CopyToClipboard } from 'react-copy-to-clipboard'
-import { SquaresPlusIcon, ClipboardDocumentIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/20/solid'
-import { useToasts } from 'react-toast-notifications'
+
+import { SquaresPlusIcon } from '@heroicons/react/20/solid'
+
 import MpcAvvvatar from '../mpcAvvvatar'
 import CopyAddress from '../mpcinfo/copyAddress'
 
@@ -17,14 +17,8 @@ import ScanUrl from '../mpcinfo/scanUrl'
 
 const UserPanel: FC = () => {
   const { address } = useParams<{ address: string; chainType: string }>()
-  const { addToast } = useToasts()
-  const {chainId}= useWeb3React();
-  
-  
 
-  const onCopy = useCallback(() => {
-    addToast('Copy successful', { appearance: 'success' })
-  }, [addToast])
+  const { chainId } = useWeb3React()
 
   return (
     <>
@@ -35,7 +29,7 @@ const UserPanel: FC = () => {
         </div>
         <div className=" flex-1  flex flex-col ">
           <div className=" break-all">{address ? cutOut(address, 8, 8) : ''}</div>
-          <div>{formatUnits(chainId,"1000000000000000000")}</div>
+          <div>{formatUnits(chainId, '1000000000000000000')}</div>
         </div>
       </div>
       <div className="pl-2.5 mb-5">

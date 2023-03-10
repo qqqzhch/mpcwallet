@@ -1,9 +1,9 @@
-import {FC} from 'react';
-import useAccounts from '../../hooks/useAccounts';
+import { FC } from 'react'
+import useAccounts from '../../hooks/useAccounts'
 
-const FetchDataGlobal:FC = () => {
-    useAccounts()
-    return (<></>);
-};
+const FetchDataGlobal: FC = () => {
+  useAccounts()
+  return <></>
+}
 
-export default FetchDataGlobal;
+export default FetchDataGlobal

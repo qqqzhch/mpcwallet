@@ -13,7 +13,6 @@ const WalletHome = () => {
       </div>
       <div className="flex flex-col gap-2 items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
         <ContractPanel></ContractPanel>
-        
       </div>
     </div>
   )

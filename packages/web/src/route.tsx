@@ -101,8 +101,6 @@ const router = createBrowserRouter(
             </ProtectedRoute>
           }
         ></Route>
-
-
       </Route>
 
       <Route path="*" element={<NoMatch />} />

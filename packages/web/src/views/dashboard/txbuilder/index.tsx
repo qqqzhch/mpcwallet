@@ -8,7 +8,7 @@ const Txbuild: FC = () => {
         <h2 className="text-3xl font-bold">Transaction Build</h2>
       </div>
       <div>
-          <TransactionBuild></TransactionBuild>
+        <TransactionBuild></TransactionBuild>
       </div>
     </div>
   )
