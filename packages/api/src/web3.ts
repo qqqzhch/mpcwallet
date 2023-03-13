@@ -239,6 +239,13 @@ web3.extend({
       inputFormatter: [null],
       outputFormatter: undefined,
     },
+    {
+      name: "getUnsigedTransactionHash",
+      call: "smw_getUnsigedTransactionHash",
+      params: 2,
+      inputFormatter: [null,null],
+      outputFormatter: undefined,
+    }
   ],
 });
 

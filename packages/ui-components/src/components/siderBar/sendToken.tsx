@@ -5,11 +5,59 @@ import Avvvatars from 'avvvatars-react'
 import { When } from 'react-if'
 import ethlogo from '../../assets/icon/ethereum-logo.png'
 import ChainName from '../chainList/chainName'
+import { useForm, SubmitHandler,ErrorOption,ValidateResult } from "react-hook-form";
+import {ethers} from 'ethers'
+import { useParams } from 'react-router-dom'
+import {cutOut} from '../../utils/index'
+import {TxInput} from '../../utils/buildMpcTx'
+import useChainName from '../../hooks/useChainName'
+
+
+type Inputs = {
+  toAddress: string,
+  toAddressRequired: string,
+  assert:string,
+  assertRequired: string,
+  amount:string,
+  amountRequired: string,
+};
+
+
+
+const isAmount = (Amount: string) => {
+  const result = parseFloat(Amount)
+  if(isNaN(result)){
+    return false
+  }else {
+    if(result>0) {
+      return true
+    }else{
+     return false
+    }
+     
+  }
+
+};
+
+const isAddress =(address: string)=>{
+  const result =  ethers.utils.isAddress(address)
+  if(result==false){
+    const message="need right address";
+    return message
+  }
+ }
 
 const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBack }) => {
   const [isTokenOpen, setIsTokenOpen] = useState(open || false)
   const [isPreviewStep, setIsPreviewStep] = useState(false)
+  const { address } = useParams<{ address: string; chainType: string }>()
+  const [userTxInput, setUsertTxInput] = useState<TxInput>()
+  const chainName = useChainName();
+  
 
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
+  
+  
   function closeTokenModal() {
     setIsTokenOpen(false)
     setIsPreviewStep(false)
@@ -23,9 +71,28 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
     }
   }, [open])
 
-  const next = useCallback(() => {
+  // const onSubmit: SubmitHandler<Inputs> = data =>{
+  //   setIsPreviewStep(true)
+  // };
+  const onSubmit: SubmitHandler<Inputs> = useCallback((data) => {
+    console.log('onSubmit',data)
     setIsPreviewStep(true)
+    if(address!=undefined){
+      setUsertTxInput({
+        from:address,
+        to:data.toAddress,
+        gas:0,
+        gasPrice:0,
+        originValue: data.amount,
+        name:data.assert
+      })
+
+    }
+    
+
   }, [setIsPreviewStep])
+
+
   const previous = useCallback(() => {
     setIsPreviewStep(false)
   }, [setIsPreviewStep])
@@ -67,13 +134,14 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                         </div>
                       </Dialog.Title>
                       <div className="mt-4 flex flex-col  gap-1  w-96 ">
+                      <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="mb-6">
                           <label htmlFor="sendingfrom" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                             Sending from{' '}
                           </label>
-                          <div className="flex flex-row ">
-                            <Avvvatars value={'0x12CF5132064Ee45AcD4843E8C9D7Ae5e3852Aaab'} style="shape" size={40} />
-                            <div className="break-all pl-2">0x12CF5132064Ee45AcD4843E8C9D7Ae5e3852Aaab</div>
+                          <div className="flex flex-row   items-center ">
+                            <Avvvatars value={address?address:""} style="shape" size={40} />
+                            <div className="break-all pl-2">{address?cutOut(address,12,12):""}</div>
                           </div>
                         </div>
                         <div className="mb-6">
@@ -82,23 +150,26 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                           </label>
                           <select
                             id="assert"
+                            {...register("assert",{ required: true })}
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           >
-                            <option selected>eth</option>
+                            <option value="eth">eth</option>
                             <option value="bnb">bnb</option>
                             <option value="btc">btc</option>
                           </select>
                         </div>
-
+                        {errors.toAddressRequired && <span>This field is required</span>}
                         <div className="mb-6">
                           <label htmlFor="recipientAddress" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                             Recipient address{' '}
                           </label>
                           <input
+                          {...register("toAddress",{ required: true ,validate:isAddress})}
                             type="text"
                             id="recipientAddress"
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           />
+                          {errors.toAddress && <div className=" text-red-400 ">{errors.toAddress.message}</div>}
                         </div>
                         <div className="mb-6">
                           <div className="flex flex-row justify-between">
@@ -113,21 +184,25 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                           <input
                             type="text"
                             id="Amount"
+                            {...register("amount",{ required: true,validate:isAmount })}
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           />
                         </div>
+                        {errors.toAddressRequired && <span>This field is required</span>}
                         <div className="mb-6 flex flex-col sm:flex-row justify-between gap-8">
                           <button className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                             Previous
                           </button>
                           <button
-                            type="button"
-                            onClick={next}
+                            type="submit"
+                            // onClick={next}
                             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 "
                           >
                             next
                           </button>
+                          
                         </div>
+                        </form>
                       </div>
                     </Dialog.Panel>
                   </When>
@@ -146,8 +221,8 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                               Sending from
                             </label>
                             <div className="flex flex-row  items-center">
-                              <Avvvatars value={'0x12CF5132064Ee45AcD4843E8C9D7Ae5e3852Aaab'} style="shape" size={40} />
-                              <div className="break-all pl-2">0x12C...Aaab</div>
+                              <Avvvatars value={address?address:""} style="shape" size={40} />
+                              <div className="break-all pl-2">{address?cutOut(address,6,6):""}</div>
                             </div>
                           </div>
                           <div>
@@ -155,8 +230,8 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                               Recipient
                             </label>
                             <div className="flex flex-row items-center">
-                              <Avvvatars value={'0x12CF5132064Ee45AcD4843E8C9D7Ae5e3852Aaab'} style="shape" size={40} />
-                              <div className="break-all pl-2">0x12C...Aaab</div>
+                              <Avvvatars value={userTxInput?.to?userTxInput?.to:""} style="shape" size={40} />
+                              <div className="break-all pl-2">{userTxInput?.to?cutOut(userTxInput?.to,6,6):""}</div>
                             </div>
                           </div>
                         </div>
@@ -164,12 +239,12 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Assert </label>
                           <div className=" flex flex-row items-center gap-1">
                             <img width={32} src={ethlogo}></img>
-                            <span>11.11 eth</span>
+                            <span>{userTxInput?.originValue} eth</span>
                           </div>
                         </div>
                         <div className="mb-6">
                           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estimated fee </label>
-                          <div>0.001 eth</div>
+                          <div>{userTxInput?.originValue} {userTxInput?.name}</div>
                         </div>
                         <div className="mb-6">
                           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Transaction validity </label>

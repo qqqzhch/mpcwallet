@@ -107,3 +107,8 @@ Storybook [`@monorepo-boilerplate/ui-components`](./packages/ui-components) :
 | `yarn watch:components` | Hot reload ui-components package                                                                                                                                                               |
 | `yarn build-app`        | Build of front app([`@monorepo-boilerplate/web`](./packages/web)) and generate a directory with all assets in the following path: `packages/web/build`                                                |
 | `yarn build-storybook`  | Build of storybook with components([`@monorepo-boilerplate/ui-components`](./packages/ui-components)) and generate a directory with all assets in the following path: `packages/ui-components/storybook-static` |
+
+### yarn
+```
+yarn policies set-version 1.19.0
+```
