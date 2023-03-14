@@ -5,12 +5,20 @@ import Avvvatars from 'avvvatars-react'
 import { When } from 'react-if'
 import ethlogo from '../../assets/icon/ethereum-logo.png'
 import ChainName from '../chainList/chainName'
-import { useForm, SubmitHandler,ErrorOption,ValidateResult } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import {ethers} from 'ethers'
 import { useParams } from 'react-router-dom'
 import {cutOut} from '../../utils/index'
-import {TxInput} from '../../utils/buildMpcTx'
+import {TxInput,buidTransactionJson,Unsigedtx} from '../../utils/buildMpcTx'
 import useChainName from '../../hooks/useChainName'
+
+import {useGetTxMsgHash,useTransactionSigner} from '../../hooks/useSigns'
+import { rpclist } from '../../constants/rpcConfig'
+import { useWeb3React } from '@web3-react/core'
+import useAccount from '../../hooks/useAccount'
+import { useToasts } from 'react-toast-notifications'
+
+
 
 
 type Inputs = {
@@ -50,9 +58,19 @@ const isAddress =(address: string)=>{
 const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBack }) => {
   const [isTokenOpen, setIsTokenOpen] = useState(open || false)
   const [isPreviewStep, setIsPreviewStep] = useState(false)
-  const { address } = useParams<{ address: string; chainType: string }>()
+  const { address,chainType } = useParams<{ address: string; chainType: string }>()
   const [userTxInput, setUsertTxInput] = useState<TxInput>()
+  const [unsigedtx, setUnsigedtx] = useState<Unsigedtx>()
+  
   const chainName = useChainName();
+  const {execute:getUnsigedTransactionHash} = useGetTxMsgHash(rpclist[0])
+  const {execute:TransactionSigner}=useTransactionSigner(rpclist[0])
+  const { chainId } = useWeb3React()
+  const [msgHash,setMsgHash] =  useState<string>()
+  const { addToast } = useToasts()
+
+  const wallet = useAccount(address)
+  
   
 
   const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
@@ -77,7 +95,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
   const onSubmit: SubmitHandler<Inputs> = useCallback((data) => {
     console.log('onSubmit',data)
     setIsPreviewStep(true)
-    if(address!=undefined){
+    if(address!=undefined&&chainType!==undefined&&chainId!==undefined){
       setUsertTxInput({
         from:address,
         to:data.toAddress,
@@ -86,11 +104,53 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
         originValue: data.amount,
         name:data.assert
       })
+      
+      
 
     }
     
 
-  }, [setIsPreviewStep])
+  }, [setIsPreviewStep,address,chainType,chainId])
+
+  useEffect(()=>{
+    
+    const run = async function(){
+      if(userTxInput!==undefined&&chainType!==undefined&&chainId!==undefined){
+        const dataUnsigedtx =  buidTransactionJson(chainType,chainId,userTxInput)
+        setUnsigedtx(dataUnsigedtx)
+         if(getUnsigedTransactionHash!=undefined){
+          const data = await  getUnsigedTransactionHash(dataUnsigedtx,chainType)
+          if(data.msg=="Success"){
+            setMsgHash(data.info)
+            
+          }
+   
+         } 
+       }
+
+    }
+
+    run();
+
+
+
+  },[chainType,chainId,userTxInput,getUnsigedTransactionHash])
+
+
+const sendSigner= useCallback(async()=>{
+  if(wallet!=undefined&&chainType!=undefined&&msgHash!=undefined&&unsigedtx!=undefined&&TransactionSigner!=undefined){
+   const data = await TransactionSigner(wallet,chainType,msgHash,unsigedtx)
+   if(data.msg=="Success"){
+    addToast("Transactions have been sent", { appearance: 'success' })
+
+   }else{
+    addToast(data.tip, { appearance: 'error' })
+   }
+   console.log(data)
+   closeTokenModal()
+  } 
+ },[TransactionSigner,wallet,chainType,msgHash,unsigedtx])
+
 
 
   const previous = useCallback(() => {
@@ -260,6 +320,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                           </button>
                           <button
                             type="button"
+                            onClick={sendSigner}
                             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 "
                           >
                             next

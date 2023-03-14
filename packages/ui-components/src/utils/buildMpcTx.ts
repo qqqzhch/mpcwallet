@@ -1,4 +1,4 @@
-import {ethers } from 'ethers'
+import {ethers,BigNumber } from 'ethers'
 
 export type TxInput = {
     from:string,
@@ -15,11 +15,11 @@ export type Unsigedtx =TxInput&{
     nonce?:number
 }
 
-export function buidTransactionJson(chainType:string,chainId:string,data:TxInput):Unsigedtx{
+export function buidTransactionJson(chainType:string,chainId:number,data:TxInput):Unsigedtx{
     return {
         ...data,
         chainId:ethers.utils.hexValue(chainId),
-        value:ethers.utils.hexValue(data.originValue),
+        value:ethers.utils.hexValue(BigNumber.from(data.originValue)),
         data:""
     }
 

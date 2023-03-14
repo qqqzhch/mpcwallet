@@ -14,7 +14,9 @@
                 "Reply_timestamp": "1677825648726",
                 "Reply_enode": "xxxxx",
                 "Gid": "2bc9ac6c25f2e47fa1f0d2f6968d19b13c261179f4b783414ac86e9a2db6501f71eb20114c759dfb58a2708dc2b180afe4d44d4a2d88b53e312d97cbc3134b73",
-                "Threshold": "2/2"
+                "Threshold": "2/2",
+                "Mode": "2",
+                "Key_Type": "EC256K1"
             },
             {
                 "Status": "1",
@@ -27,7 +29,10 @@
                 "Reply_timestamp": "1677825648726",
                 "Reply_enode": "xxxxx",
                 "Gid": "2bc9ac6c25f2e47fa1f0d2f6968d19b13c261179f4b783414ac86e9a2db6501f71eb20114c759dfb58a2708dc2b180afe4d44d4a2d88b53e312d97cbc3134b73",
-                "Threshold": "2/2"
+                "Threshold": "2/2",
+                "Mode": "2",
+                "Key_Type": "EC256K1"
+
             },
             {
                 "Status": "1",
@@ -40,7 +45,10 @@
                 "Reply_timestamp": "1677825648726",
                 "Reply_enode": "xxxxx",
                 "Gid": "2bc9ac6c25f2e47fa1f0d2f6968d19b13c261179f4b783414ac86e9a2db6501f71eb20114c759dfb58a2708dc2b180afe4d44d4a2d88b53e312d97cbc3134b73",
-                "Threshold": "2/2"
+                "Threshold": "2/2",
+                "Mode": "2",
+                "Key_Type": "EC256K1"
+
             },
             {
                 "Status": "1",
@@ -53,7 +61,9 @@
                 "Reply_timestamp": "1677825648726",
                 "Reply_enode": "xxxxx",
                 "Gid": "2bc9ac6c25f2e47fa1f0d2f6968d19b13c261179f4b783414ac86e9a2db6501f71eb20114c759dfb58a2708dc2b180afe4d44d4a2d88b53e312d97cbc3134b73",
-                "Threshold": "2/2"
+                "Threshold": "2/2",
+                "Mode": "2",
+                "Key_Type": "EC256K1"
             },
             {
                 "Status": "1",
@@ -66,7 +76,9 @@
                 "Reply_timestamp": "1677825648726",
                 "Reply_enode": "xxxxx",
                 "Gid": "2bc9ac6c25f2e47fa1f0d2f6968d19b13c261179f4b783414ac86e9a2db6501f71eb20114c759dfb58a2708dc2b180afe4d44d4a2d88b53e312d97cbc3134b73",
-                "Threshold": "2/2"
+                "Threshold": "2/2",
+                "Mode": "2",
+                "Key_Type": "EC256K1"
             },
             {
                 "Status": "1",
@@ -79,7 +91,9 @@
                 "Reply_timestamp": "1677825648726",
                 "Reply_enode": "xxxxx",
                 "Gid": "2bc9ac6c25f2e47fa1f0d2f6968d19b13c261179f4b783414ac86e9a2db6501f71eb20114c759dfb58a2708dc2b180afe4d44d4a2d88b53e312d97cbc3134b73",
-                "Threshold": "2/2"
+                "Threshold": "2/2",
+                "Mode": "2",
+                "Key_Type": "EC256K1"
             }
         ],
         "Error": "",
