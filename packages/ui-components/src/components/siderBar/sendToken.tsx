@@ -17,6 +17,9 @@ import { rpclist } from '../../constants/rpcConfig'
 import { useWeb3React } from '@web3-react/core'
 import useAccount from '../../hooks/useAccount'
 import { useToasts } from 'react-toast-notifications'
+import { formatUnits } from '../../utils'
+
+import GasModel from '../transaction/gasmodel'
 
 
 
@@ -68,12 +71,16 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
   const { chainId } = useWeb3React()
   const [msgHash,setMsgHash] =  useState<string>()
   const { addToast } = useToasts()
+  const  [gas,setGas]= useState<{gasLimit?:string,gasPrise?:string}>()
+
+  const [isOpen, setIsOpen] = useState(false);
+  
 
   const wallet = useAccount(address)
   
   
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
+  const { register, handleSubmit, watch,reset, formState: { errors } } = useForm<Inputs>();
   
   
   function closeTokenModal() {
@@ -82,6 +89,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
     if (callBack) {
       callBack()
     }
+    reset()
   }
   useEffect(() => {
     if (open != undefined) {
@@ -116,6 +124,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
     
     const run = async function(){
       if(userTxInput!==undefined&&chainType!==undefined&&chainId!==undefined){
+        
         const dataUnsigedtx =  buidTransactionJson(chainType,chainId,userTxInput)
         setUnsigedtx(dataUnsigedtx)
          if(getUnsigedTransactionHash!=undefined){
@@ -149,13 +158,41 @@ const sendSigner= useCallback(async()=>{
    console.log(data)
    closeTokenModal()
   } 
- },[TransactionSigner,wallet,chainType,msgHash,unsigedtx])
+ },[TransactionSigner,wallet,chainType,msgHash,unsigedtx,addToast,closeTokenModal])
 
 
 
   const previous = useCallback(() => {
     setIsPreviewStep(false)
   }, [setIsPreviewStep])
+
+  function openGasModel(){
+    setIsOpen(true)
+  }
+  function editGas ({gasLimit,gasPrise}:{
+    gasLimit?:string,
+    gasPrise?:string
+}){
+    console.log(gasLimit,gasPrise)
+    setGas({gasLimit,gasPrise})
+    setIsOpen(false)
+    if(gasLimit!=undefined&&gasPrise!=undefined){
+      setUsertTxInput((prevState: TxInput | undefined)=>{
+        return {
+          ...(prevState||{}),
+          gas:parseInt(gasLimit),
+          gasPrice:parseInt(gasPrise),
+        } as TxInput
+  
+      })
+
+    }
+    
+    
+    
+  }
+
+
 
   return (
     <>
@@ -304,7 +341,10 @@ const sendSigner= useCallback(async()=>{
                         </div>
                         <div className="mb-6">
                           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estimated fee </label>
-                          <div>{userTxInput?.originValue} {userTxInput?.name}</div>
+                          <div className=" flex flex-row ">
+                           <span className=" flex-1 "> {formatUnits(chainId, '100000000000')} </span> 
+                           <span onClick={openGasModel} className=" underline "> edit </span>
+                            </div>
                         </div>
                         <div className="mb-6">
                           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Transaction validity </label>
@@ -335,6 +375,7 @@ const sendSigner= useCallback(async()=>{
           </div>
         </Dialog>
       </Transition>
+      <GasModel isOpen={isOpen} closeModal={editGas} ></GasModel>
     </>
   )
 }
