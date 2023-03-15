@@ -9,10 +9,10 @@ export function cutOut(str: string, start: number, end: number) {
   return (str = str1 + '…' + str2)
 }
 
-export function formatUnits(chainId: number | undefined, value: string) {
+export function formatUnits(chainId: number | undefined, value: string | number) {
   const chainInfo = getChainInfo(chainId)
   if (chainInfo) {
-    return ethers.utils.formatUnits(value, chainInfo?.nativeCurrency.decimals) + ' ' + chainInfo?.nativeCurrency.symbol
+    return ethers.utils.formatUnits(value.toString(), chainInfo?.nativeCurrency.decimals) + ' ' + chainInfo?.nativeCurrency.symbol
   } else {
     return '...'
   }

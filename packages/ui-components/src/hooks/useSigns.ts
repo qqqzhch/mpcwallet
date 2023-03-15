@@ -7,6 +7,16 @@ import { web3 } from '@monorepo/api'
 import { getsmpc } from '@monorepo/api/src/web3'
 
 import { walletApprove } from '../state/approve'
+import { Unsigedtx } from '../utils/buildMpcTx'
+import { walletaccount } from '../state/walletaccount'
+
+interface chainTypes {
+  [key: string]: number
+}
+
+const chainTypeName: chainTypes = {
+  evm: 0
+}
 
 export function eNodeCut(enode: any) {
   const obj = {
@@ -237,6 +247,85 @@ export function useApproveReqSmpcAddress(rpc: string | undefined): {
         }
         if (cbData.Status !== 'Error') {
           resultData = { msg: 'Success', info: cbData.Data.result }
+        } else {
+          resultData = { msg: 'Error', error: cbData.Tip }
+        }
+        return resultData
+      }
+    }
+  }, [account, library, rpc])
+}
+
+export function useGetTxMsgHash(rpc: string | undefined): {
+  execute?: (r: Unsigedtx, chainType: string) => Promise<any> | undefined
+} {
+  const { account, library } = useWeb3React()
+
+  return useMemo(() => {
+    if (!account || !library || !rpc) return {}
+    return {
+      execute: async (r: Unsigedtx, chainType: string) => {
+        web3.setProvider(rpc)
+        const Nonce = await getNonce(account, rpc)
+        const data = {
+          ...r,
+          nonce: Nonce
+        }
+
+        const cbData = await getsmpc().getUnsigedTransactionHash(JSON.stringify(data, null, 8), chainTypeName[chainType])
+
+        let resultData: any = {}
+        if (cbData.Status !== 'Error') {
+          resultData = { msg: 'Success', info: cbData.Data }
+        } else {
+          resultData = { msg: 'Error', error: cbData.Tip }
+        }
+        return resultData
+      }
+    }
+  }, [account, library, rpc])
+}
+
+export function useTransactionSigner(rpc: string | undefined): {
+  execute?: (wallet: walletaccount, chainType: string, MsgHash: string, MsgContext: Unsigedtx) => Promise<any> | undefined
+} {
+  const { account, library } = useWeb3React()
+
+  return useMemo(() => {
+    if (!account || !library || !rpc) return {}
+    return {
+      execute: async (wallet: walletaccount, chainType: string, MsgHash: string, MsgContext: Unsigedtx) => {
+        web3.setProvider(rpc)
+        const Nonce = await getNonce(account, rpc)
+        const data = {
+          TxType: 'SIGN',
+          Account: account,
+          Nonce,
+          PubKey: wallet.Public_key,
+          InputCode: '',
+          MsgHash,
+          MsgContext,
+          Keytype: wallet.Key_Type,
+          GroupID: wallet.Gid,
+          ThresHold: wallet.Threshold,
+          Mode: wallet.Mode,
+          AcceptTimeOut: 604800,
+          TimeStamp: Date.now().toString(),
+          FixedApprover: null,
+          Comment: '',
+          ChainType: chainTypeName[chainType]
+        }
+
+        const signer = library.getSigner()
+        let rsv = await signer.signMessage(JSON.stringify(data, null, 8))
+        // 如果v是1b换成00 如果v是1c换成01
+        rsv = rsv.slice(0, 130) + (rsv.slice(130) === '1b' ? '00' : '01')
+        const cbData = await getsmpc().sign(rsv, JSON.stringify(data, null, 8))
+
+        let resultData: any = {}
+
+        if (cbData.Status !== 'Error') {
+          resultData = { msg: 'Success', info: cbData.Data }
         } else {
           resultData = { msg: 'Error', error: cbData.Tip }
         }

@@ -41,7 +41,7 @@ app.post('/api', async (_req: any, res: any) => {
     jsondata=JSON.parse(jsondata)
     jsondata.id=_req.body.id
   } else {
-    const response = await fetch('http://43.156.1.182:5928', {
+    const response = await fetch('http://43.157.49.23:5928', {
       method: 'post',
       body: JSON.stringify(_req.body),
       headers: { 'Content-Type': 'application/json' }

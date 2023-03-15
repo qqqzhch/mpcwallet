@@ -10,6 +10,8 @@ export interface walletaccount {
   Reply_enode: string
   Gid: string
   Threshold: string
+  Mode: string
+  Key_Type: string
 }
 
 export const walletaccountintial = []

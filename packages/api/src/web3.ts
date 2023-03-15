@@ -220,9 +220,9 @@ web3.extend({
     },
     {
       name: "sign",
-      call: "smpc_sign",
-      params: 1,
-      inputFormatter: [null],
+      call: "smw_sign",
+      params: 2,
+      inputFormatter: [null,null],
       outputFormatter: undefined,
     },
     {
@@ -239,6 +239,13 @@ web3.extend({
       inputFormatter: [null],
       outputFormatter: undefined,
     },
+    {
+      name: "getUnsigedTransactionHash",
+      call: "smw_getUnsigedTransactionHash",
+      params: 2,
+      inputFormatter: [null,null],
+      outputFormatter: undefined,
+    }
   ],
 });
 
