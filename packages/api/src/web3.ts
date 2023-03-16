@@ -245,6 +245,13 @@ web3.extend({
       params: 2,
       inputFormatter: [null,null],
       outputFormatter: undefined,
+    },
+    {
+      name: "getApprovalList",
+      call: "smw_getApprovalList",
+      params: 1,
+      inputFormatter: [null],
+      outputFormatter: undefined,
     }
   ],
 });
