@@ -50,8 +50,8 @@ web3.extend({
       outputFormatter: undefined,
     },
     {
-      name: "acceptSigning",
-      call: "smpc_acceptSigning",
+      name: "acceptSign",
+      call: "smw_acceptSign",
       params: 2,
       inputFormatter: [null, null],
       outputFormatter: undefined,
@@ -179,13 +179,6 @@ web3.extend({
     {
       name: "acceptReqAddr",
       call: "smpc_acceptReqAddr",
-      params: 1,
-      inputFormatter: [null],
-      outputFormatter: undefined,
-    },
-    {
-      name: "acceptSign",
-      call: "smpc_acceptSign",
       params: 1,
       inputFormatter: [null],
       outputFormatter: undefined,

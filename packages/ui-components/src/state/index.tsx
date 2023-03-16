@@ -63,6 +63,7 @@ export interface AppState {
   getWalletAccounts: (address: string | null | undefined) => Array<walletaccount>
   getWalletAccount: (address: string | null | undefined, mpcAddress: string | undefined) => walletaccount | undefined
   getTxApproveListByStatus: (status:number) => Array<TxApprove>
+  getTxApproveByKeyID:(keyid:string|undefined)=>TxApprove|undefined
 }
 
 export const intialState = {
@@ -245,6 +246,12 @@ const createMyStore = (state: typeof intialState = intialState) => {
               })
               return list
 
+            },
+            getTxApproveByKeyID:(keyid:string|undefined)=>{
+              const list = get().approve.txApproveList.find((item)=>{
+                return item.Key_id==keyid
+              })
+              return list
             }
           }),
           { name: 'app-storage' }
