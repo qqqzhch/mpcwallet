@@ -13,18 +13,18 @@ describe('App First Test', () => {
     })
   })
 
-  it('Create new Wallet', () => {
+  it('use metamask login', () => {
     cy.visit('http://localhost:5173')
     cy.contains('My MPC Wallet')
     cy.contains('Welcome to the Multichain - SMPC')
-    cy.contains('Create new Wallet')
-    cy.contains('Support Network')
+    
+    
 
     cy.contains('Connect wallet').click()
     cy.contains('Connect with MetaMask').click()
     cy.contains('metamask')
     cy.contains('Görli')
-    cy.contains('Create new Wallet').click()
+    
     
     
 

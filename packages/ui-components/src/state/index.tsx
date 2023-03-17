@@ -80,7 +80,7 @@ export const intialState = {
         key: 1
       }
     ],
-    keytype: 'EC256k1',
+    keytype: 'EC256K1',
     threshold: 2,
     walletname: '',
     keyid: ''
@@ -231,7 +231,7 @@ const createMyStore = (state: typeof intialState = intialState) => {
             getWalletAccounts: (address: string | null | undefined) => {
               const list = get().walletAccounts
               return list.filter(item => {
-                return item.User_account === address
+                return item.User_account.toLowerCase() === address ? address.toLowerCase() : address
               })
             },
             getWalletAccount: (address: string | null | undefined, mpcAddress: string | undefined) => {

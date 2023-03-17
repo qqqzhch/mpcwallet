@@ -15,7 +15,7 @@ web3.extend({
   methods: [
     {
       name: "getGroupID",
-      call: "smw_getGroupID",
+      call: "smw_getGroupId",
       params: 2,
       inputFormatter: [null, null],
       outputFormatter: undefined,
@@ -29,7 +29,7 @@ web3.extend({
     },
     {
       name: "reqKeyGen",
-      call: "smw_keygen",
+      call: "smw_keyGen",
       params: 2,
       inputFormatter: [null, null],
       outputFormatter: undefined,
