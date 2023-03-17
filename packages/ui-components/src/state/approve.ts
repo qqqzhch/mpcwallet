@@ -13,6 +13,9 @@ export interface TxApprove {
   Status:number,
   hiden?:boolean,
   TimeStamp:string
+  Txid?:string
+  Reply_status?:string
+  Reply_timestamp?:string
 }
 
 export const txApproveListintial = []

@@ -245,6 +245,13 @@ web3.extend({
       params: 1,
       inputFormatter: [null],
       outputFormatter: undefined,
+    },
+    {
+      name: "getSignHistory",
+      call: "smw_getSignHistory",
+      params: 1,
+      inputFormatter: [null],
+      outputFormatter: undefined,
     }
   ],
 });

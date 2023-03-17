@@ -11,6 +11,7 @@ import {useTxApproveAccept} from '../../hooks/useSigns'
 import { rpclist } from '../../constants/rpcConfig'
 import {  useParams } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
+import { TxtxSignHistory } from '../../state/txSignHistory';
 
 function checkThreshold(str:string){
   const list=str.split("/")
@@ -24,10 +25,12 @@ function checkThreshold(str:string){
 
 
 interface Props {
-   txApprove:TxApprove|undefined
+   txApprove:TxtxSignHistory|TxApprove|undefined
 }
 
 const TxApproveItem:FC<Props> = ({txApprove}) => {
+  
+
   const {execute}=useTxApproveAccept(rpclist[0])
   const [actives,setActives]= useState<{
                                         [key: string]:boolean
@@ -73,7 +76,7 @@ const { chainType } = useParams<{ address: string; chainType: string }>()
                       sent
                     </div>
                     <div className=" w-full sm:w-1/5 ">
-                      {dayjs(Number(item.TimeStamp)).format('DD/MM/YYYY:HH:MM')}
+                      {dayjs(Number(item.TimeStamp||item.Reply_timestamp)).format('DD/MM/YYYY:HH:MM')}
                     </div>
                     <div className=" w-full sm:w-1/5 ">
                     {txList.map((tx)=>{
@@ -113,12 +116,38 @@ const { chainType } = useParams<{ address: string; chainType: string }>()
 
                         })}
                         <div  className="flex flex-col gap-2 p-4">
-                            <div className="flex flex-row">
+                          <When condition={item.TimeStamp!==undefined}>
+                          <div className="flex flex-row">
                               <div className="w-1/3">Created:</div>
                               <div className="w-2/3">{dayjs(Number(item.TimeStamp)).format('DD/MM/YYYY:HH:MM')} </div>
                             </div>
+                          </When>
+                          <When condition={item.Reply_timestamp!==undefined}>
+                          <div className="flex flex-row">
+                              <div className="w-1/3">Reply time:</div>
+                              <div className="w-2/3">{dayjs(Number(item.Reply_timestamp)).format('DD/MM/YYYY:HH:MM')} </div>
+                            </div>
+                          </When>
+                            
                             
                           </div>
+                          <When condition={item.Reply_status!==undefined&&item.Reply_status!==""}>
+                          <div  className="flex flex-col gap-2 p-4">
+                          <div className="flex flex-row">
+                              <div className="w-1/3">Reply status:</div>
+                              <div className="w-2/3">{item.Reply_status} </div>
+                            </div>
+                            </div>
+                          </When> 
+                          <When condition={item.Txid!==undefined&&item.Txid!==""}>
+                          <div  className="flex flex-col gap-2 p-4">
+                          <div className="flex flex-row">
+                              <div className="w-1/3">Transaction Hash:</div>
+                              <div className="w-2/3 break-words">{item.Txid} </div>
+                            </div>
+                            </div>
+                          </When>  
+                          
 
                       </div>
                       <div className=" w-full sm:w-1/3 flex flex-col p-8 gap-4">
