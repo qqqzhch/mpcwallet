@@ -1,0 +1,18 @@
+import { FC } from 'react'
+import { useAppStore } from '../..'
+
+import TxApproveItem from './txApproveItem'
+
+const TxApproveQueue: FC = () => {
+  const needMpcApproves = useAppStore(state => state.getTxApproveListByStatus(0))
+
+  return (
+    <div className="flex flex-col overflow-x-auto  text-base p-2">
+      {needMpcApproves.map(item => {
+        return <TxApproveItem key={item.Key_id} txApprove={item}></TxApproveItem>
+      })}
+    </div>
+  )
+}
+
+export default TxApproveQueue

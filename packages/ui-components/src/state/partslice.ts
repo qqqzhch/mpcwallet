@@ -1,4 +1,4 @@
-import { walletApprove } from './approve'
+import { TxApprove } from './approve'
 // import { walletaccount } from './walletaccount'
 import { StateCreator } from 'zustand'
 //https://github.com/pmndrs/zustand/blob/main/docs/guides/typescript.md
@@ -32,7 +32,7 @@ export interface AppState {
     walletname: string
   }
   approve: {
-    walletApproveList: Array<walletApprove>
+    txApproveList: Array<TxApprove>
   }
   pollingPubKey: Array<PollingPubKey>
   increase: (by: number) => void
@@ -45,8 +45,8 @@ export interface AppState {
   setcreateGroupWalletName: (name: string) => void
   editcreateGroupAdmin: (index: number, name: string) => void
   setpollingPubKey: (pollingPubKey: PollingPubKey) => void
-  setWalletApproveList: (list: Array<walletApprove>) => void
-  hidenWalletApprove: (item: walletApprove) => void
+  // setWalletApproveList: (list: Array<TxApprove>) => void
+  // hidenWalletApprove: (item: TxApprove) => void
 }
 
 export const intialState = {
@@ -74,7 +74,7 @@ export const intialState = {
   },
   pollingPubKey: [],
   approve: {
-    walletApproveList: []
+    txApproveList: []
   }
 }
 export const createPartSlice: StateCreator<AppState, [], [], AppState> = set => ({
@@ -161,25 +161,11 @@ export const createPartSlice: StateCreator<AppState, [], [], AppState> = set => 
         pollingPubKey: state.pollingPubKey
       }
     })
-  },
-  setWalletApproveList: (list: Array<walletApprove>) => {
-    set(state => {
-      state.approve.walletApproveList = list
-      return {
-        approve: state.approve
-      }
-    })
-  },
-  hidenWalletApprove: (item: walletApprove) => {
-    set(state => {
-      state.approve.walletApproveList.forEach(it => {
-        if (it.GroupID == item.GroupID && it.Account == item.Account && it.TimeStamp == it.TimeStamp) {
-          it.show = false
-        }
-      })
-      return {
-        approve: state.approve
-      }
-    })
   }
+  // setWalletApproveList:()=>{
+
+  // },
+  // hidenWalletApprove:()=>{
+
+  // }
 })

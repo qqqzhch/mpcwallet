@@ -1,13 +1,21 @@
-export interface walletApprove {
-  Account: string
-  Cointype: string
-  GroupID: string
-  Key: string
-  Mode: string
+export interface TxApprove {
+  User_account: string
+  Group_id: string
+  Key_id: string
+  Key_type: string
+  Mode: number
+  Msg_context: Array<string>
+  Msg_hash: Array<string>
   Nonce: string
-  ThresHold: string
+  Public_key: boolean
+  Mpc_address: string
+  Threshold: string
+  Status: number
+  hiden?: boolean
   TimeStamp: string
-  show?: boolean
+  Txid?: string
+  Reply_status?: string
+  Reply_timestamp?: string
 }
 
-export const walletApproveListintial = []
+export const txApproveListintial = []

@@ -2,8 +2,8 @@ import { createStore, useStore } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import React, { createContext, FC, useContext } from 'react'
-import { walletApprove } from './approve'
 import { walletaccount } from './walletaccount'
+import { TxApprove } from './approve'
 
 export interface adminInfo {
   address: string
@@ -38,7 +38,7 @@ export interface AppState {
     keyid: string
   }
   approve: {
-    walletApproveList: Array<walletApprove>
+    txApproveList: Array<TxApprove>
   }
   walletAccounts: Array<walletaccount>
   pollingPubKey: Array<PollingPubKey>
@@ -54,14 +54,16 @@ export interface AppState {
   setcreateGroupWalletName: (name: string) => void
   editcreateGroupAdmin: (index: number, name: string) => void
   setpollingPubKey: (pollingPubKey: PollingPubKey) => void
-  setWalletApproveList: (list: Array<walletApprove>) => void
-  hidenWalletApprove: (item: walletApprove) => void
+  setWalletApproveList: (list: Array<TxApprove>) => void
+  hidenWalletApprove: (item: TxApprove) => void
   addWalletAccounts: (list: Array<walletaccount>) => void
   setcreateGroupWalletKeyID: (keyid: string) => void
   togglesideBar: () => void
   resetCreateGroupAdmin: () => void
   getWalletAccounts: (address: string | null | undefined) => Array<walletaccount>
   getWalletAccount: (address: string | null | undefined, mpcAddress: string | undefined) => walletaccount | undefined
+  getTxApproveListByStatus: (status: number) => Array<TxApprove>
+  getTxApproveByKeyID: (keyid: string | undefined) => TxApprove | undefined
 }
 
 export const intialState = {
@@ -85,7 +87,7 @@ export const intialState = {
   },
   pollingPubKey: [],
   approve: {
-    walletApproveList: []
+    txApproveList: []
   },
   walletAccounts: [],
   sideBar: false
@@ -190,16 +192,16 @@ const createMyStore = (state: typeof intialState = intialState) => {
                 state.pollingPubKey = list.concat(pollingPubKey)
               })
             },
-            setWalletApproveList: (list: Array<walletApprove>) => {
+            setWalletApproveList: (list: Array<TxApprove>) => {
               set(state => {
-                state.approve.walletApproveList = list
+                state.approve.txApproveList = list
               })
             },
-            hidenWalletApprove: (item: walletApprove) => {
+            hidenWalletApprove: (item: TxApprove) => {
               set(state => {
-                state.approve.walletApproveList.forEach(it => {
-                  if (it.GroupID == item.GroupID && it.Account == item.Account && it.TimeStamp == it.TimeStamp) {
-                    it.show = false
+                state.approve.txApproveList.forEach(it => {
+                  if (it.Key_id === item.Key_id) {
+                    it.hiden = true
                   }
                 })
               })
@@ -237,6 +239,18 @@ const createMyStore = (state: typeof intialState = intialState) => {
               return list.find(item => {
                 return item.User_account === address && item.Mpc_address === mpcAddress
               })
+            },
+            getTxApproveListByStatus: (status: number) => {
+              const list = get().approve.txApproveList.filter(item => {
+                return item.Status == status
+              })
+              return list
+            },
+            getTxApproveByKeyID: (keyid: string | undefined) => {
+              const list = get().approve.txApproveList.find(item => {
+                return item.Key_id == keyid
+              })
+              return list
             }
           }),
           { name: 'app-storage' }

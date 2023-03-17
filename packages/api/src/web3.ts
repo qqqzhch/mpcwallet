@@ -50,8 +50,8 @@ web3.extend({
       outputFormatter: undefined,
     },
     {
-      name: "acceptSigning",
-      call: "smpc_acceptSigning",
+      name: "acceptSign",
+      call: "smw_acceptSign",
       params: 2,
       inputFormatter: [null, null],
       outputFormatter: undefined,
@@ -184,13 +184,6 @@ web3.extend({
       outputFormatter: undefined,
     },
     {
-      name: "acceptSign",
-      call: "smpc_acceptSign",
-      params: 1,
-      inputFormatter: [null],
-      outputFormatter: undefined,
-    },
-    {
       name: "getSignNonce",
       call: "smpc_getSignNonce",
       params: 1,
@@ -244,6 +237,20 @@ web3.extend({
       call: "smw_getUnsigedTransactionHash",
       params: 2,
       inputFormatter: [null,null],
+      outputFormatter: undefined,
+    },
+    {
+      name: "getApprovalList",
+      call: "smw_getApprovalList",
+      params: 1,
+      inputFormatter: [null],
+      outputFormatter: undefined,
+    },
+    {
+      name: "getSignHistory",
+      call: "smw_getSignHistory",
+      params: 1,
+      inputFormatter: [null],
       outputFormatter: undefined,
     }
   ],
