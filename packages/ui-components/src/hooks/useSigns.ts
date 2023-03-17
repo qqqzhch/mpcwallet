@@ -335,24 +335,22 @@ export function useTransactionSigner(rpc: string | undefined): {
   }, [account, library, rpc])
 }
 
-
-
 export function useTxApproveAccept(rpc: string | undefined): {
-  execute?: (keyid: string, chainType: string, MsgHash: string[], MsgContext: string[],Accept:string) => Promise<any> | undefined
+  execute?: (keyid: string, chainType: string, MsgHash: string[], MsgContext: string[], Accept: string) => Promise<any> | undefined
 } {
   const { account, library } = useWeb3React()
 
   return useMemo(() => {
     if (!account || !library || !rpc) return {}
     return {
-      execute: async (keyid: string, chainType: string, MsgHash: string[], MsgContext: string[],Accept:string) => {
+      execute: async (keyid: string, chainType: string, MsgHash: string[], MsgContext: string[], Accept: string) => {
         web3.setProvider(rpc)
         const Nonce = await getNonce(account, rpc)
         const data = {
           TxType: 'ACCEPTSIGN',
           Account: account,
           Nonce,
-          Key:keyid,
+          Key: keyid,
           Accept,
           MsgHash,
           MsgContext,

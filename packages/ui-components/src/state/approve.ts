@@ -8,14 +8,14 @@ export interface TxApprove {
   Msg_hash: Array<string>
   Nonce: string
   Public_key: boolean
-  Mpc_address:string
-  Threshold:string
-  Status:number,
-  hiden?:boolean,
-  TimeStamp:string
-  Txid?:string
-  Reply_status?:string
-  Reply_timestamp?:string
+  Mpc_address: string
+  Threshold: string
+  Status: number
+  hiden?: boolean
+  TimeStamp: string
+  Txid?: string
+  Reply_status?: string
+  Reply_timestamp?: string
 }
 
 export const txApproveListintial = []

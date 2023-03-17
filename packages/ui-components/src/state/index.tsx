@@ -3,7 +3,7 @@ import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import React, { createContext, FC, useContext } from 'react'
 import { walletaccount } from './walletaccount'
-import { TxApprove, txApproveListintial } from './approve'
+import { TxApprove } from './approve'
 
 export interface adminInfo {
   address: string
@@ -62,8 +62,8 @@ export interface AppState {
   resetCreateGroupAdmin: () => void
   getWalletAccounts: (address: string | null | undefined) => Array<walletaccount>
   getWalletAccount: (address: string | null | undefined, mpcAddress: string | undefined) => walletaccount | undefined
-  getTxApproveListByStatus: (status:number) => Array<TxApprove>
-  getTxApproveByKeyID:(keyid:string|undefined)=>TxApprove|undefined
+  getTxApproveListByStatus: (status: number) => Array<TxApprove>
+  getTxApproveByKeyID: (keyid: string | undefined) => TxApprove | undefined
 }
 
 export const intialState = {
@@ -200,7 +200,7 @@ const createMyStore = (state: typeof intialState = intialState) => {
             hidenWalletApprove: (item: TxApprove) => {
               set(state => {
                 state.approve.txApproveList.forEach(it => {
-                  if (it.Key_id===item.Key_id) {
+                  if (it.Key_id === item.Key_id) {
                     it.hiden = true
                   }
                 })
@@ -240,16 +240,15 @@ const createMyStore = (state: typeof intialState = intialState) => {
                 return item.User_account === address && item.Mpc_address === mpcAddress
               })
             },
-            getTxApproveListByStatus:(status:number)=>{
-              const list = get().approve.txApproveList.filter((item)=>{
-                return item.Status==status
+            getTxApproveListByStatus: (status: number) => {
+              const list = get().approve.txApproveList.filter(item => {
+                return item.Status == status
               })
               return list
-
             },
-            getTxApproveByKeyID:(keyid:string|undefined)=>{
-              const list = get().approve.txApproveList.find((item)=>{
-                return item.Key_id==keyid
+            getTxApproveByKeyID: (keyid: string | undefined) => {
+              const list = get().approve.txApproveList.find(item => {
+                return item.Key_id == keyid
               })
               return list
             }

@@ -1,8 +1,7 @@
 // import React from 'react';
 import { Tab } from '@headlessui/react'
-import { ArrowDownIcon, ArrowUpRightIcon } from '@heroicons/react/20/solid'
-import TxApproveQueue  from "@monorepo/ui-components/src/components/transaction/txApproveQueue"
-import SignHistory  from "@monorepo/ui-components/src/components/transaction/signHistory"
+import TxApproveQueue from '@monorepo/ui-components/src/components/transaction/txApproveQueue'
+import SignHistory from '@monorepo/ui-components/src/components/transaction/signHistory'
 
 function classNames(...classes: Array<string>) {
   return classes.filter(Boolean).join(' ')

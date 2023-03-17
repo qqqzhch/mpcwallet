@@ -1,6 +1,6 @@
 import { getChainInfo } from '../constants/chainInfo'
 import { ethers } from 'ethers'
-import {Unsigedtx} from './buildMpcTx'
+import { Unsigedtx } from './buildMpcTx'
 
 export function cutOut(str: string, start: number, end: number) {
   // console.log(str)
@@ -19,17 +19,15 @@ export function formatUnits(chainId: number | undefined, value: string | number)
   }
 }
 
-export function formatTxApprove(txmsglist:Array<string>):Array<Unsigedtx>{
-  const result:Array<Unsigedtx>=[]
-  txmsglist.forEach((str)=>{
-    const json:Unsigedtx = JSON.parse(str);
+export function formatTxApprove(txmsglist: Array<string>): Array<Unsigedtx> {
+  const result: Array<Unsigedtx> = []
+  txmsglist.forEach(str => {
+    const json: Unsigedtx = JSON.parse(str)
     result.push(json)
   })
-  return result;
-
+  return result
 }
 
 export function classNames(...classes: Array<string>) {
   return classes.filter(Boolean).join(' ')
 }
-

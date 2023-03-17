@@ -4,7 +4,7 @@ import useApprovalList from '../../hooks/useApprovalList'
 
 const FetchDataGlobal: FC = () => {
   useAccounts()
-  useApprovalList();
+  useApprovalList()
   return <></>
 }
 

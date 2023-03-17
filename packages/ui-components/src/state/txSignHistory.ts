@@ -1,11 +1,9 @@
-import { TxApprove } from "./approve";
+import { TxApprove } from './approve'
 
 interface Txinfo {
-    Txid:string
-    Reply_status:string
-    Reply_timestamp:string
+  Txid: string
+  Reply_status: string
+  Reply_timestamp: string
 }
 
-export type TxtxSignHistory=TxApprove&Txinfo
-
-
+export type TxtxSignHistory = TxApprove & Txinfo

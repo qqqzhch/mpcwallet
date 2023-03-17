@@ -8,14 +8,12 @@ import { useEffect } from 'react'
 import { rpclist } from '../constants/rpcConfig'
 import { useParams } from 'react-router-dom'
 
-async function fetcher(mpcAccount: string | null | undefined): Promise<Array<TxApprove>
-  | undefined
-> {
+async function fetcher(mpcAccount: string | null | undefined): Promise<Array<TxApprove> | undefined> {
   if (mpcAccount == null || mpcAccount == undefined) {
     return
   }
   web3.setProvider(rpclist[0])
-  
+
   const result = await getsmpc().getApprovalList(mpcAccount)
 
   if (result.Status != 'Success') {
@@ -25,8 +23,6 @@ async function fetcher(mpcAccount: string | null | undefined): Promise<Array<TxA
 }
 
 export default function useApprovalList() {
-  
-  console.log('- -')
   const setWalletApproveList = useAppStore(state => state.setWalletApproveList)
   const { address } = useParams<{ address: string; chainType: string }>()
 

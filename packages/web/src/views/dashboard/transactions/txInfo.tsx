@@ -1,17 +1,14 @@
-import React from 'react';
-import TxApproveDetails from "@monorepo/ui-components/src/components/transaction/txApproveDetails"
+import TxApproveDetails from '@monorepo/ui-components/src/components/transaction/txApproveDetails'
 
 const TxInfo = () => {
-    return (
-        <div className="p-4 ">
-            <div className="space-y-2">
-            <h2 className="text-3xl font-bold">Transactions details</h2>
-            <TxApproveDetails></TxApproveDetails>
-            </div>
+  return (
+    <div className="p-4 ">
+      <div className="space-y-2">
+        <h2 className="text-3xl font-bold">Transactions details</h2>
+        <TxApproveDetails></TxApproveDetails>
+      </div>
+    </div>
+  )
+}
 
-        </div>
-        
-    );
-};
-
-export default TxInfo;
+export default TxInfo
