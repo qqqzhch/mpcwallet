@@ -37,9 +37,9 @@ export function eNodeCut(enode: any) {
 }
 
 // let nonceLocal = 0;
+// mpc account Nonce
 async function getNonce(account: any, rpc: any) {
-  web3.setProvider(rpc)
-  const nonceResult = await getsmpc().getReqAddrNonce(account)
+  const nonceResult = await getsmpc(rpc).getReqAddrNonce(account)
   // nonceLocal++;
   // return nonceLocal;
   return nonceResult.Data.result
@@ -140,9 +140,8 @@ export function useCreateGroup(
     if (!thresholdmode || nodeArr.length <= 0 || !rpc) return {}
     return {
       execute: async () => {
-        web3.setProvider(rpc)
+        const result = await getsmpc(rpc).getGroupID(thresholdmode, nodeArr)
 
-        const result = await getsmpc().getGroupID(thresholdmode, nodeArr)
         let cbData = result
         if (result && typeof result === 'string') {
           cbData = JSON.parse(cbData)
@@ -176,11 +175,11 @@ export function useReqSmpcAddress(
     return {
       execute: async () => {
         web3.setProvider(rpc)
-        const nonce = await getNonce(account, rpc)
+        const nonce = await library.getTransactionCount(account)
         const data = {
           TxType: 'REQSMPCADDR',
           Account: account,
-          Nonce: nonce,
+          Nonce: String(nonce),
           keytype,
           GroupId: gID,
           ThresHold: ThresHold,
@@ -197,15 +196,17 @@ export function useReqSmpcAddress(
         let rsv = await signer.signMessage(JSON.stringify(data, null, 8))
         // 如果v是1b换成00 如果v是1c换成01
         rsv = rsv.slice(0, 130) + (rsv.slice(130) === '1b' ? '00' : '01')
+
         let cbData = await getsmpc().reqKeyGen(rsv, JSON.stringify(data, null, 8))
+
         let resultData: any = {}
         if (cbData && typeof cbData === 'string') {
           cbData = JSON.parse(cbData)
         }
-        if (cbData.Status !== 'Error') {
+        if (cbData.Status.toLowerCase() !== 'error') {
           resultData = { msg: 'Success', info: cbData.Data }
         } else {
-          resultData = { msg: cbData.Error || 'Error', error: cbData.Tip }
+          resultData = { msg: 'Error', error: cbData.Tip }
         }
         return resultData
       }

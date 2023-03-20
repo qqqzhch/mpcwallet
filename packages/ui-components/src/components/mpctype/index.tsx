@@ -6,7 +6,7 @@ import { useAppStore } from '../../state/index'
 
 const plans = [
   {
-    name: 'EC256k1',
+    name: 'EC256K1',
     brif: ''
   },
   {
