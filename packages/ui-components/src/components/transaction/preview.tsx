@@ -54,7 +54,7 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next }) => {
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Assert </label>
             <div className=" flex flex-row items-center gap-1">
-              <img width={20} src={ethlogo}></img>
+              <img width={20} src={userTxInput?.assert?.img}></img>
               <span>
                 {userTxInput?.originValue} {userTxInput?.name}
               </span>

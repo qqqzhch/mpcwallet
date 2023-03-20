@@ -31,3 +31,14 @@ export function formatTxApprove(txmsglist: Array<string>): Array<Unsigedtx> {
 export function classNames(...classes: Array<string>) {
   return classes.filter(Boolean).join(' ')
 }
+
+
+export function formatToWei(value: string | number,decimals:number) {
+  return ethers.utils.parseUnits(value.toString(), decimals).toString()
+  //ethers.utils.parseUnits
+}
+
+export function formatFromWei(value: string | number,decimals:number) {
+  return ethers.utils.formatUnits(value.toString(), decimals).toString()
+  //ethers.utils.parseUnits
+}
