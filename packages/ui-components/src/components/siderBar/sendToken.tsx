@@ -140,33 +140,67 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
         const signer = library.getSigner()
 
         const dataUnsigedtx = buidTransactionJson(chainType, chainId, userTxInput)
-        const txforestimateGas={
-          from:dataUnsigedtx.from,
-          to:dataUnsigedtx.to,
-          data:dataUnsigedtx.assert?.contractaddress? dataUnsigedtx.data:"",
-          value:dataUnsigedtx.assert?.contractaddress? "0":dataUnsigedtx.originValue
-        }
-        setUnsigedtx(dataUnsigedtx)
-        const gas:BigNumber = await library.estimateGas(txforestimateGas);
-        const gasprise:BigNumber = await library.getGasPrice()
-        dataUnsigedtx.gas=gas.toNumber()
-        dataUnsigedtx.gasPrice=gasprise.toNumber()
-        setGas({ gasLimit:gas.toString(), gasPrise:gasprise.toString() })
-        //get gas
-        setUnsigedtx(dataUnsigedtx)
-        setUsertTxInputReview( Object.assign(userTxInput,{gas: gas.toNumber(),gasPrice: gasprise.toNumber()}))
-        if (getUnsigedTransactionHash != undefined) {
         
-          const data = await getUnsigedTransactionHash(dataUnsigedtx, chainType)
-          if (data.msg == 'Success') {
-            setMsgHash(data.info)
-          }
-        }
+        setUnsigedtx(dataUnsigedtx)
+
+        setUsertTxInputReview(userTxInput)
+        // dataUnsigedtx.gas=gas.toNumber()
+        // dataUnsigedtx.gasPrice=gasprise.toNumber()
+        
+        //get gas
+        // setUnsigedtx(dataUnsigedtx)
+        
+
       }
     }
 
     run()
   }, [chainType, chainId, userTxInput, getUnsigedTransactionHash,library,setUsertTxInputReview])
+
+  useEffect(()=>{
+    const run =async ()=>{
+      if(unsigedtx!=undefined){
+        const txforestimateGas={
+          from:unsigedtx.from,
+          to:unsigedtx.to,
+          data:unsigedtx.assert?.contractaddress? unsigedtx.data:"",
+          value:unsigedtx.assert?.contractaddress? "0":unsigedtx.originValue
+        }
+        const gas:BigNumber = await library.estimateGas(txforestimateGas);
+        const gasprise:BigNumber = await library.getGasPrice()
+
+        setGas({ gasLimit:gas.toString(), gasPrise:gasprise.toString() })
+        setUsertTxInputReview( Object.assign(userTxInput,{gas: gas.toNumber(),gasPrice: gasprise.toNumber()}))
+        
+
+      }
+      
+
+    }
+    run()
+
+  },[unsigedtx,library,userTxInput,chainType,getUnsigedTransactionHash])
+
+  useEffect(()=>{
+    const run =async ()=>{
+      if (getUnsigedTransactionHash != undefined&&chainType!=undefined&&unsigedtx!=undefined
+        &&gas!=undefined&&gas.gasLimit!=undefined&&gas.gasPrise!=undefined) {
+        const txinfo:Unsigedtx={
+          ...unsigedtx,
+          gas:gas.gasLimit as unknown as number,
+          gasPrice:gas.gasLimit as unknown as number
+
+
+        }
+        const data = await getUnsigedTransactionHash(txinfo, chainType)
+        if (data.msg == 'Success') {
+          setMsgHash(data.info)
+        }
+      }
+    }
+    run()
+
+  },[unsigedtx,gas,chainType,getUnsigedTransactionHash])
 
   
 
