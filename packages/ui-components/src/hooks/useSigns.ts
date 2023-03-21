@@ -40,7 +40,7 @@ export function eNodeCut(enode: any) {
 // mpc account Nonce
 async function getNonce(account: any, rpc: any) {
   const nonceResult = await getsmpc(rpc).getReqAddrNonce(account)
-  
+
   // nonceLocal++;
   // return nonceLocal;
   return nonceResult.Data

@@ -11,7 +11,7 @@ import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { ethers } from 'ethers'
 import { useParams } from 'react-router-dom'
 import { cutOut } from '../../utils/index'
-import { TxInput,assertType, buidTransactionJson, Unsigedtx } from '../../utils/buildMpcTx'
+import { TxInput, assertType, buidTransactionJson, Unsigedtx } from '../../utils/buildMpcTx'
 
 import { useGetTxMsgHash, useTransactionSigner } from '../../hooks/useSigns'
 import { rpclist } from '../../constants/rpcConfig'
@@ -23,14 +23,12 @@ import GasModel from '../transaction/gasmodel'
 import Preview from '../transaction/preview'
 import metamask from '../../assets/icon/metamask.svg'
 import { formatFromWei } from '../../utils/index'
-import {  BigNumber } from 'ethers'
-
-
+import { BigNumber } from 'ethers'
 
 const assertList: Array<assertType> = [
-  { name: 'eth', img: metamask,balance:"100000000000000000",decimals:18 },
-  { name: 'weth', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e',balance:"100000000000000000",decimals:18 },
-  { name: 'weth1', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e',balance:"100000000000000000",decimals:18 }
+  { name: 'eth', img: metamask, balance: '100000000000000000', decimals: 18 },
+  { name: 'weth', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e', balance: '100000000000000000', decimals: 18 },
+  { name: 'weth1', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e', balance: '100000000000000000', decimals: 18 }
 ]
 
 type Inputs = {
@@ -73,7 +71,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
 
   const { execute: getUnsigedTransactionHash } = useGetTxMsgHash(rpclist[0])
   const { execute: TransactionSigner } = useTransactionSigner(rpclist[0])
-  const { chainId,library } = useWeb3React()
+  const { chainId, library } = useWeb3React()
   const [msgHash, setMsgHash] = useState<string>()
   const { addToast } = useToasts()
   const [gas, setGas] = useState<{ gasLimit?: string; gasPrise?: string }>({})
@@ -82,7 +80,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
 
   const [isOpen, setIsOpen] = useState(false)
 
-  const wallet = useAccount(address)
+  const mpcGroupAccount = useAccount(address)
 
   const {
     register,
@@ -114,7 +112,6 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
   // };
   const onSubmit: SubmitHandler<Inputs> = useCallback(
     data => {
-      console.log('onSubmit')
       setIsPreviewStep(true)
       if (address != undefined && chainType !== undefined && chainId !== undefined) {
         //1 拼接 交易结构
@@ -126,7 +123,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
           gasPrice: 0,
           originValue: data.amount,
           name: data.assert.name,
-          assert:data.assert
+          assert: data.assert
         })
       }
     },
@@ -136,61 +133,62 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
   useEffect(() => {
     const run = async function () {
       if (userTxInput !== undefined && chainType !== undefined && chainId !== undefined) {
-        console.log('getUnsigedTransactionHash')
-        const signer = library.getSigner()
-
         const dataUnsigedtx = buidTransactionJson(chainType, chainId, userTxInput)
-        
+
         setUnsigedtx(dataUnsigedtx)
 
         setUsertTxInputReview(userTxInput)
         // dataUnsigedtx.gas=gas.toNumber()
         // dataUnsigedtx.gasPrice=gasprise.toNumber()
-        
+
         //get gas
         // setUnsigedtx(dataUnsigedtx)
-        
-
       }
     }
 
     run()
-  }, [chainType, chainId, userTxInput, getUnsigedTransactionHash,library,setUsertTxInputReview])
+  }, [chainType, chainId, userTxInput, setUsertTxInputReview])
 
-  useEffect(()=>{
-    const run =async ()=>{
-      if(unsigedtx!=undefined){
-        const txforestimateGas={
-          from:unsigedtx.from,
-          to:unsigedtx.to,
-          data:unsigedtx.assert?.contractaddress? unsigedtx.data:"",
-          value:unsigedtx.assert?.contractaddress? "0":unsigedtx.originValue
+  useEffect(() => {
+    const run = async () => {
+      if (unsigedtx != undefined) {
+        const txforestimateGas = {
+          from: unsigedtx.from,
+          to: unsigedtx.to,
+          data: unsigedtx.assert?.contractaddress ? unsigedtx.data : '',
+          value: unsigedtx.assert?.contractaddress ? '0' : unsigedtx.originValue
         }
-        const gas:BigNumber = await library.estimateGas(txforestimateGas);
-        const gasprise:BigNumber = await library.getGasPrice()
+        const gas: BigNumber = await library.estimateGas(txforestimateGas)
+        const gasprise: BigNumber = await library.getGasPrice()
 
-        setGas({ gasLimit:gas.toString(), gasPrise:gasprise.toString() })
-        setUsertTxInputReview( Object.assign(userTxInput,{gas: gas.toNumber(),gasPrice: gasprise.toNumber()}))
-        
-
+        setGas({ gasLimit: gas.toString(), gasPrise: gasprise.toString() })
+        if (userTxInput) {
+          const txinfoInput: TxInput = {
+            ...userTxInput,
+            gas: gas.toNumber(),
+            gasPrice: gasprise.toNumber()
+          }
+          setUsertTxInputReview(txinfoInput)
+        }
       }
-      
-
     }
     run()
+  }, [unsigedtx, library, userTxInput, chainType, getUnsigedTransactionHash])
 
-  },[unsigedtx,library,userTxInput,chainType,getUnsigedTransactionHash])
-
-  useEffect(()=>{
-    const run =async ()=>{
-      if (getUnsigedTransactionHash != undefined&&chainType!=undefined&&unsigedtx!=undefined
-        &&gas!=undefined&&gas.gasLimit!=undefined&&gas.gasPrise!=undefined) {
-        const txinfo:Unsigedtx={
+  useEffect(() => {
+    const run = async () => {
+      if (
+        getUnsigedTransactionHash != undefined &&
+        chainType != undefined &&
+        unsigedtx != undefined &&
+        gas != undefined &&
+        gas.gasLimit != undefined &&
+        gas.gasPrise != undefined
+      ) {
+        const txinfo: Unsigedtx = {
           ...unsigedtx,
-          gas:gas.gasLimit as unknown as number,
-          gasPrice:gas.gasLimit as unknown as number
-
-
+          gas: gas.gasLimit as unknown as number,
+          gasPrice: gas.gasLimit as unknown as number
         }
         const data = await getUnsigedTransactionHash(txinfo, chainType)
         if (data.msg == 'Success') {
@@ -199,14 +197,16 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
       }
     }
     run()
-
-  },[unsigedtx,gas,chainType,getUnsigedTransactionHash])
-
-  
+  }, [unsigedtx, gas, chainType, getUnsigedTransactionHash])
 
   const sendSigner = useCallback(async () => {
-    if (wallet != undefined && chainType != undefined && msgHash != undefined && unsigedtx != undefined && TransactionSigner != undefined) {
-      const data = await TransactionSigner(wallet, chainType, msgHash, unsigedtx)
+    if (mpcGroupAccount != undefined && chainType != undefined && msgHash != undefined && unsigedtx != undefined && TransactionSigner != undefined) {
+      const unsigedtxtxinfo: Unsigedtx = {
+        ...unsigedtx,
+        gas: gas.gasLimit as unknown as number,
+        gasPrice: gas.gasLimit as unknown as number
+      }
+      const data = await TransactionSigner(mpcGroupAccount, chainType, msgHash, unsigedtxtxinfo)
       if (data.msg == 'Success') {
         addToast('Transactions have been sent', { appearance: 'success' })
       } else {
@@ -215,7 +215,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
 
       closeTokenModal()
     }
-  }, [TransactionSigner, wallet, chainType, msgHash, unsigedtx, addToast, closeTokenModal])
+  }, [TransactionSigner, mpcGroupAccount, chainType, msgHash, unsigedtx, addToast, closeTokenModal, gas])
 
   const previous = useCallback(() => {
     setIsPreviewStep(false)
@@ -289,16 +289,17 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                             <label htmlFor="assert" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                               Assert{' '}
                             </label>
-                          
+
                             <Controller
                               name="assert"
-                              
                               control={control}
-                              rules={{validate:(assertValue:assertType)=>{
-                                if(assertValue==undefined){
-                                  return 'need select assert'
+                              rules={{
+                                validate: (assertValue: assertType) => {
+                                  if (assertValue == undefined) {
+                                    return 'need select assert'
+                                  }
                                 }
-                               } }}
+                              }}
                               render={({ field: { onChange } }) => {
                                 return (
                                   <Listbox
@@ -330,7 +331,6 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                                             >
                                               {({ selected }) => (
                                                 <div className="flex flex-row ">
-                                                  
                                                   <img width={16} src={Assert.img} className="m-1"></img>
                                                   <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>{Assert.name}</span>
                                                   {selected ? (
@@ -370,7 +370,8 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                                 Amount{' '}
                               </label>
                               <label htmlFor="Amount" className="block mb-2 text-sm font-medium text-gray-600 dark:text-white">
-                                Balance:{selectedAssert?formatFromWei(selectedAssert?.balance,selectedAssert?.decimals):""}{selectedAssert?.name} {' '}
+                                Balance:{selectedAssert ? formatFromWei(selectedAssert?.balance, selectedAssert?.decimals) : ''}
+                                {selectedAssert?.name}{' '}
                               </label>
                             </div>
 
@@ -400,7 +401,6 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                   </When>
                   <When condition={isPreviewStep === true}>
                     <Preview userTxInput={userTxInputReview} openGasModel={openGasModel} previous={previous} next={sendSigner}></Preview>
-                    
                   </When>
                 </div>
               </Transition.Child>

@@ -4,8 +4,8 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 
 type Props = {
   isOpen: boolean
-  gasPrise: string|undefined
-  gasLimit: string|undefined
+  gasPrise: string | undefined
+  gasLimit: string | undefined
   closeModal: (data: { gasLimit?: string; gasPrise?: string }) => void
 }
 
@@ -16,8 +16,8 @@ type Inputs = {
   gasLimitRequired: string
 }
 
-const GsaModel: FC<Props> = ({ isOpen, closeModal,gasPrise,gasLimit }) => {
-  const { register, handleSubmit, reset } = useForm<Inputs>()
+const GsaModel: FC<Props> = ({ isOpen, closeModal, gasPrise, gasLimit }) => {
+  const { register, handleSubmit } = useForm<Inputs>()
 
   const onSubmit: SubmitHandler<Inputs> = data => {
     const { gasLimit, gasPrise } = data
@@ -72,7 +72,7 @@ const GsaModel: FC<Props> = ({ isOpen, closeModal,gasPrise,gasLimit }) => {
                           <input
                             type="number"
                             id="gaslimit"
-                            value={gasLimit||0}
+                            value={gasLimit || 0}
                             {...register('gasLimit', { required: true, min: 1 })}
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           />
@@ -84,7 +84,7 @@ const GsaModel: FC<Props> = ({ isOpen, closeModal,gasPrise,gasLimit }) => {
                           <input
                             type="number"
                             id="gasprise"
-                            value={gasPrise||0}
+                            value={gasPrise || 0}
                             {...register('gasPrise', { required: true, min: 1 })}
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           />
