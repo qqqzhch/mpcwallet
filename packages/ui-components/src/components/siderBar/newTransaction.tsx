@@ -1,12 +1,14 @@
-import { FC } from 'react'
+import { FC, useCallback } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import SendToken from './sendToken'
+import { useParams, useNavigate } from 'react-router-dom'
 
 const NewTransaction: FC = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [isTokenOpen, setIsTokenOpen] = useState(false)
-
+  const { address, chainType } = useParams<{ address: string; chainType: string }>()
+  const navigate = useNavigate()
   function closeModal() {
     setIsOpen(false)
   }
@@ -19,6 +21,13 @@ const NewTransaction: FC = () => {
     setIsOpen(false)
     setIsTokenOpen(true)
   }
+  const pageToTxbuild = useCallback(
+    function () {
+      navigate(`/dashboard/${chainType}/${address}/txbuild`)
+      closeModal()
+    },
+    [navigate, chainType, address]
+  )
 
   return (
     <>
@@ -59,12 +68,12 @@ const NewTransaction: FC = () => {
                     New transaction
                   </Dialog.Title>
                   <div className="mt-2 flex flex-col m-10 gap-4 p-10">
-                    <button
+                    {/* <button
                       type="button"
                       className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
                     >
                       Send Nfts
-                    </button>
+                    </button> */}
                     <button
                       type="button"
                       onClick={openTokenModal}
@@ -72,7 +81,9 @@ const NewTransaction: FC = () => {
                     >
                       Send Tokens
                     </button>
+
                     <button
+                      onClick={pageToTxbuild}
                       type="button"
                       className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                     >

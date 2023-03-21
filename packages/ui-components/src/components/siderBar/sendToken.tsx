@@ -3,13 +3,15 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import Avvvatars from 'avvvatars-react'
 import { When } from 'react-if'
+import { Listbox } from '@headlessui/react'
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 
 import ChainName from '../chainList/chainName'
-import { useForm, SubmitHandler } from 'react-hook-form'
+import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { ethers } from 'ethers'
 import { useParams } from 'react-router-dom'
 import { cutOut } from '../../utils/index'
-import { TxInput, buidTransactionJson, Unsigedtx } from '../../utils/buildMpcTx'
+import { TxInput, assertType, buidTransactionJson, Unsigedtx } from '../../utils/buildMpcTx'
 
 import { useGetTxMsgHash, useTransactionSigner } from '../../hooks/useSigns'
 import { rpclist } from '../../constants/rpcConfig'
@@ -19,11 +21,20 @@ import { useToasts } from 'react-toast-notifications'
 
 import GasModel from '../transaction/gasmodel'
 import Preview from '../transaction/preview'
+import metamask from '../../assets/icon/metamask.svg'
+import { formatFromWei } from '../../utils/index'
+import { BigNumber } from 'ethers'
+
+const assertList: Array<assertType> = [
+  { name: 'eth', img: metamask, balance: '100000000000000000', decimals: 18 },
+  { name: 'weth', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e', balance: '100000000000000000', decimals: 18 },
+  { name: 'weth1', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e', balance: '100000000000000000', decimals: 18 }
+]
 
 type Inputs = {
   toAddress: string
   toAddressRequired: string
-  assert: string
+  assert: assertType
   assertRequired: string
   amount: string
   amountRequired: string
@@ -56,23 +67,27 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
   const { address, chainType } = useParams<{ address: string; chainType: string }>()
   const [userTxInput, setUsertTxInput] = useState<TxInput>()
   const [unsigedtx, setUnsigedtx] = useState<Unsigedtx>()
+  const [userTxInputReview, setUsertTxInputReview] = useState<TxInput>()
 
   const { execute: getUnsigedTransactionHash } = useGetTxMsgHash(rpclist[0])
   const { execute: TransactionSigner } = useTransactionSigner(rpclist[0])
-  const { chainId } = useWeb3React()
+  const { chainId, library } = useWeb3React()
   const [msgHash, setMsgHash] = useState<string>()
   const { addToast } = useToasts()
-  const [, setGas] = useState<{ gasLimit?: string; gasPrise?: string }>()
+  const [gas, setGas] = useState<{ gasLimit?: string; gasPrise?: string }>({})
+
+  const [selectedAssert, setSelectedAssert] = useState<assertType>()
 
   const [isOpen, setIsOpen] = useState(false)
 
-  const wallet = useAccount(address)
+  const mpcGroupAccount = useAccount(address)
 
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors }
+    formState: { errors },
+    control
   } = useForm<Inputs>()
 
   const closeTokenModal = useCallback(
@@ -99,13 +114,16 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
     data => {
       setIsPreviewStep(true)
       if (address != undefined && chainType !== undefined && chainId !== undefined) {
+        //1 拼接 交易结构
+        //
         setUsertTxInput({
           from: address,
           to: data.toAddress,
           gas: 0,
           gasPrice: 0,
           originValue: data.amount,
-          name: data.assert
+          name: data.assert.name,
+          assert: data.assert
         })
       }
     },
@@ -116,22 +134,79 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
     const run = async function () {
       if (userTxInput !== undefined && chainType !== undefined && chainId !== undefined) {
         const dataUnsigedtx = buidTransactionJson(chainType, chainId, userTxInput)
+
         setUnsigedtx(dataUnsigedtx)
-        if (getUnsigedTransactionHash != undefined) {
-          const data = await getUnsigedTransactionHash(dataUnsigedtx, chainType)
-          if (data.msg == 'Success') {
-            setMsgHash(data.info)
-          }
-        }
+
+        setUsertTxInputReview(userTxInput)
+        // dataUnsigedtx.gas=gas.toNumber()
+        // dataUnsigedtx.gasPrice=gasprise.toNumber()
+
+        //get gas
+        // setUnsigedtx(dataUnsigedtx)
       }
     }
 
     run()
-  }, [chainType, chainId, userTxInput, getUnsigedTransactionHash])
+  }, [chainType, chainId, userTxInput, setUsertTxInputReview])
+
+  useEffect(() => {
+    const run = async () => {
+      if (unsigedtx != undefined) {
+        const txforestimateGas = {
+          from: unsigedtx.from,
+          to: unsigedtx.to,
+          data: unsigedtx.assert?.contractaddress ? unsigedtx.data : '',
+          value: unsigedtx.assert?.contractaddress ? '0' : unsigedtx.originValue
+        }
+        const gas: BigNumber = await library.estimateGas(txforestimateGas)
+        const gasprise: BigNumber = await library.getGasPrice()
+
+        setGas({ gasLimit: gas.toString(), gasPrise: gasprise.toString() })
+        if (userTxInput) {
+          const txinfoInput: TxInput = {
+            ...userTxInput,
+            gas: gas.toNumber(),
+            gasPrice: gasprise.toNumber()
+          }
+          setUsertTxInputReview(txinfoInput)
+        }
+      }
+    }
+    run()
+  }, [unsigedtx, library, userTxInput, chainType, getUnsigedTransactionHash])
+
+  useEffect(() => {
+    const run = async () => {
+      if (
+        getUnsigedTransactionHash != undefined &&
+        chainType != undefined &&
+        unsigedtx != undefined &&
+        gas != undefined &&
+        gas.gasLimit != undefined &&
+        gas.gasPrise != undefined
+      ) {
+        const txinfo: Unsigedtx = {
+          ...unsigedtx,
+          gas: gas.gasLimit as unknown as number,
+          gasPrice: gas.gasLimit as unknown as number
+        }
+        const data = await getUnsigedTransactionHash(txinfo, chainType)
+        if (data.msg == 'Success') {
+          setMsgHash(data.info)
+        }
+      }
+    }
+    run()
+  }, [unsigedtx, gas, chainType, getUnsigedTransactionHash])
 
   const sendSigner = useCallback(async () => {
-    if (wallet != undefined && chainType != undefined && msgHash != undefined && unsigedtx != undefined && TransactionSigner != undefined) {
-      const data = await TransactionSigner(wallet, chainType, msgHash, unsigedtx)
+    if (mpcGroupAccount != undefined && chainType != undefined && msgHash != undefined && unsigedtx != undefined && TransactionSigner != undefined) {
+      const unsigedtxtxinfo: Unsigedtx = {
+        ...unsigedtx,
+        gas: gas.gasLimit as unknown as number,
+        gasPrice: gas.gasLimit as unknown as number
+      }
+      const data = await TransactionSigner(mpcGroupAccount, chainType, msgHash, unsigedtxtxinfo)
       if (data.msg == 'Success') {
         addToast('Transactions have been sent', { appearance: 'success' })
       } else {
@@ -140,7 +215,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
 
       closeTokenModal()
     }
-  }, [TransactionSigner, wallet, chainType, msgHash, unsigedtx, addToast, closeTokenModal])
+  }, [TransactionSigner, mpcGroupAccount, chainType, msgHash, unsigedtx, addToast, closeTokenModal, gas])
 
   const previous = useCallback(() => {
     setIsPreviewStep(false)
@@ -214,15 +289,67 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                             <label htmlFor="assert" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                               Assert{' '}
                             </label>
-                            <select
-                              id="assert"
-                              {...register('assert', { required: true })}
-                              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            >
-                              <option value="eth">eth</option>
-                              <option value="bnb">bnb</option>
-                              <option value="btc">btc</option>
-                            </select>
+
+                            <Controller
+                              name="assert"
+                              control={control}
+                              rules={{
+                                validate: (assertValue: assertType) => {
+                                  if (assertValue == undefined) {
+                                    return 'need select assert'
+                                  }
+                                }
+                              }}
+                              render={({ field: { onChange } }) => {
+                                return (
+                                  <Listbox
+                                    value={selectedAssert}
+                                    onChange={e => {
+                                      onChange(e)
+                                      setSelectedAssert(e)
+                                    }}
+                                  >
+                                    <div className="relative mt-1">
+                                      <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
+                                        <span className="block truncate">{selectedAssert ? selectedAssert.name : 'please select assert'}</span>
+                                        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                                          <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+                                        </span>
+                                      </Listbox.Button>
+
+                                      <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
+                                        <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                          {assertList.map((Assert, AssertIdx) => (
+                                            <Listbox.Option
+                                              key={AssertIdx}
+                                              className={({ active }) =>
+                                                `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                                                  active ? 'bg-amber-100 text-amber-900' : 'text-gray-900'
+                                                }`
+                                              }
+                                              value={Assert}
+                                            >
+                                              {({ selected }) => (
+                                                <div className="flex flex-row ">
+                                                  <img width={16} src={Assert.img} className="m-1"></img>
+                                                  <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>{Assert.name}</span>
+                                                  {selected ? (
+                                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                                                      <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                                                    </span>
+                                                  ) : null}
+                                                </div>
+                                              )}
+                                            </Listbox.Option>
+                                          ))}
+                                        </Listbox.Options>
+                                      </Transition>
+                                    </div>
+                                  </Listbox>
+                                )
+                              }}
+                            />
+                            {errors.assert && <div className=" text-red-400 ">{errors.assert.message}</div>}
                           </div>
                           {errors.toAddressRequired && <span>This field is required</span>}
                           <div className="mb-6">
@@ -243,7 +370,8 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                                 Amount{' '}
                               </label>
                               <label htmlFor="Amount" className="block mb-2 text-sm font-medium text-gray-600 dark:text-white">
-                                Balance:111eth{' '}
+                                Balance:{selectedAssert ? formatFromWei(selectedAssert?.balance, selectedAssert?.decimals) : ''}
+                                {selectedAssert?.name}{' '}
                               </label>
                             </div>
 
@@ -272,74 +400,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                     </Dialog.Panel>
                   </When>
                   <When condition={isPreviewStep === true}>
-                    <Preview userTxInput={userTxInput} openGasModel={openGasModel} previous={previous} next={sendSigner}></Preview>
-                    {/* <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                      <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900 flex  flex-row justify-between">
-                        <span className=" flex-1 ">Send Preview</span>{' '}
-                        <div className=" w-28 mx-2">
-                          <ChainName></ChainName>
-                        </div>
-                      </Dialog.Title>
-                      <div className="mt-4 flex flex-col  gap-1    w-96 ">
-                        <div className="mb-6 flex flex-row gap-2  items-center  justify-between text-center">
-                          <div>
-                            <label htmlFor="sendingfrom" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                              Sending from
-                            </label>
-                            <div className="flex flex-row  items-center">
-                              <Avvvatars value={address?address:""} style="shape" size={40} />
-                              <div className="break-all pl-2">{address?cutOut(address,6,6):""}</div>
-                            </div>
-                          </div>
-                          <div>
-                            <label htmlFor="sendingfrom" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                              Recipient
-                            </label>
-                            <div className="flex flex-row items-center">
-                              <Avvvatars value={userTxInput?.to?userTxInput?.to:""} style="shape" size={40} />
-                              <div className="break-all pl-2">{userTxInput?.to?cutOut(userTxInput?.to,6,6):""}</div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="mb-6">
-                          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Assert </label>
-                          <div className=" flex flex-row items-center gap-1">
-                            <img width={20} src={ethlogo}></img>
-                            <span>{userTxInput?.originValue} {userTxInput?.name}</span>
-                          </div>
-                        </div>
-                        <div className="mb-6">
-                          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estimated fee </label>
-                          <div className=" flex flex-row ">
-                           <span className=" flex-1 "> {userTxInput?formatUnits(chainId, userTxInput?.gas*userTxInput?.gasPrice):""} </span> 
-                           <span onClick={openGasModel} className=" underline "> edit </span>
-                            </div>
-                        </div>
-                         <div className="mb-6">
-                          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Transaction validity </label>
-                          <div>Simulate</div>
-                        </div> 
-
-                        <div className="mb-6 flex flex-col sm:flex-row justify-between gap-8">
-                          <button
-                            onClick={previous}
-                            className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                          >
-                            Previous
-                          </button>
-                          <button
-                            type="button"
-                            onClick={sendSigner}
-                            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 "
-                          >
-                            next
-                          </button>
-                        </div>
-                        <p className=" font-light text-xs text-gray-400">
-                        You're about to create and execute a transaction and will need to Sign it with your currently connected wallet.
-                        </p>
-                      </div>
-                    </Dialog.Panel> */}
+                    <Preview userTxInput={userTxInputReview} openGasModel={openGasModel} previous={previous} next={sendSigner}></Preview>
                   </When>
                 </div>
               </Transition.Child>
@@ -347,7 +408,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
           </div>
         </Dialog>
       </Transition>
-      <GasModel isOpen={isOpen} closeModal={editGas}></GasModel>
+      <GasModel isOpen={isOpen} closeModal={editGas} gasPrise={gas.gasPrise} gasLimit={gas.gasLimit}></GasModel>
     </>
   )
 }

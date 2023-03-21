@@ -230,15 +230,21 @@ const createMyStore = (state: typeof intialState = intialState) => {
             },
             getWalletAccounts: (address: string | null | undefined) => {
               const list = get().walletAccounts
-              return list.filter(item => {
-                return item.User_account.toLowerCase() === address ? address.toLowerCase() : address
-              })
+              if (address) {
+                return list.filter(item => {
+                  return item.User_account.toLowerCase() === address.toLowerCase()
+                })
+              } else {
+                return []
+              }
             },
             getWalletAccount: (address: string | null | undefined, mpcAddress: string | undefined) => {
               const list = get().walletAccounts
-              return list.find(item => {
-                return item.User_account === address && item.Mpc_address === mpcAddress
-              })
+              if (address && mpcAddress) {
+                return list.find(item => {
+                  return item.User_account.toLowerCase() === address.toLowerCase() && item.Mpc_address.toLowerCase() === mpcAddress.toLowerCase()
+                })
+              }
             },
             getTxApproveListByStatus: (status: number) => {
               const list = get().approve.txApproveList.filter(item => {

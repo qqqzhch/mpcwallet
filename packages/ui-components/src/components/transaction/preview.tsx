@@ -8,7 +8,10 @@ import { cutOut } from '../../utils/index'
 import { TxInput } from '../../utils/buildMpcTx'
 import { formatUnits } from '../../utils'
 import { useWeb3React } from '@web3-react/core'
-import ethlogo from '../../assets/icon/ethereum-logo.png'
+
+import Skeleton from 'react-loading-skeleton'
+import { If, Then, Else } from 'react-if'
+//Skeleton
 
 type Props = {
   userTxInput: TxInput | undefined
@@ -54,7 +57,7 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next }) => {
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Assert </label>
             <div className=" flex flex-row items-center gap-1">
-              <img width={20} src={ethlogo}></img>
+              <img width={20} src={userTxInput?.assert?.img}></img>
               <span>
                 {userTxInput?.originValue} {userTxInput?.name}
               </span>
@@ -63,11 +66,20 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next }) => {
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estimated fee </label>
             <div className=" flex flex-row ">
-              <span className=" flex-1 "> {userTxInput ? formatUnits(chainId, userTxInput?.gas * userTxInput?.gasPrice) : ''} </span>
-              <span onClick={openGasModel} className=" underline ">
-                {' '}
-                edit{' '}
-              </span>
+              <If condition={userTxInput == undefined || userTxInput.gas == 0 || userTxInput.gasPrice == 0}>
+                <Then>
+                  <div className=" flex-1 ">
+                    <Skeleton count={1}></Skeleton>
+                  </div>
+                </Then>
+                <Else>
+                  <span className=" flex-1 "> {userTxInput ? formatUnits(chainId, userTxInput?.gas * userTxInput?.gasPrice) : ''} </span>
+                  <span onClick={openGasModel} className=" underline ">
+                    {' '}
+                    edit{' '}
+                  </span>
+                </Else>
+              </If>
             </div>
           </div>
           {/* <div className="mb-6">
