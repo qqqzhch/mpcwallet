@@ -27,23 +27,41 @@ export type Unsigedtx = TxInput & {
   nonce?: number
 }
 
-export function buidTransactionJson(chainType: string, chainId: number, data: TxInput): Unsigedtx {
+export function buidTransactionJson(chainType: string, chainId: number, data: TxInput): Unsigedtx|undefined {
   const havecontractaddress = data.assert?.contractaddress === '' ? false : true
-  let encodeFunctionData = ''
+  if(data.assert==undefined){
+    return undefined 
+  }
+  let encodeFunctionData = '0x'
   if (havecontractaddress && data.assert?.contractaddress !== undefined) {
     const erc20Contract = new ethers.utils.Interface(ERC20ABI)
     //  erc20Contract.transfer(data.from,data.to,formatToWei(data.originValue,18))
-    encodeFunctionData = erc20Contract.encodeFunctionData('transferFrom', [data.from, data.to, formatToWei(data.originValue, 18)])
+    encodeFunctionData = erc20Contract.encodeFunctionData('transferFrom', [data.from, data.to, formatToWei(data.originValue, data.assert.decimals)])
   }
+  
   return {
     from: data.from,
     to: data.assert?.contractaddress || data.to,
     gas: data.gas,
     gasPrice: data.gasPrice,
-    originValue: formatToWei(data.originValue, 18),
+    originValue: formatToWei(data.originValue, data.assert.decimals),
     name: data.name,
     chainId: ethers.utils.hexValue(chainId),
-    value: ethers.utils.hexValue(BigNumber.from(formatToWei(data.originValue, 18))),
+    value:data.assert?.contractaddress==undefined?ethers.utils.hexValue(BigNumber.from(formatToWei(data.originValue, data.assert.decimals))):"0x",
+    data: encodeFunctionData
+  }
+}
+
+export function buidTransactionForTxbuild(chainType: string, chainId: number, data: TxInput,encodeFunctionData:string,havenative:boolean): Unsigedtx {
+  return {
+    from: data.from,
+    to:  data.to,
+    gas: data.gas,
+    gasPrice: data.gasPrice,
+    originValue: data.originValue,
+    name: data.name,
+    chainId: ethers.utils.hexValue(chainId),
+    value: havenative?ethers.utils.hexValue(BigNumber.from(data.originValue)):"0x",
     data: encodeFunctionData
   }
 }

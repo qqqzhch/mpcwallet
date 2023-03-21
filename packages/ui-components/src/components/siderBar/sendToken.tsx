@@ -67,7 +67,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
   const { address, chainType } = useParams<{ address: string; chainType: string }>()
   const [userTxInput, setUsertTxInput] = useState<TxInput>()
   const [unsigedtx, setUnsigedtx] = useState<Unsigedtx>()
-  const [userTxInputReview, setUsertTxInputReview] = useState<TxInput>()
+  const [userTxInputReview, setUsertTxInputReview] = useState<Unsigedtx>()
 
   const { execute: getUnsigedTransactionHash } = useGetTxMsgHash(rpclist[0])
   const { execute: TransactionSigner } = useTransactionSigner(rpclist[0])
@@ -129,15 +129,16 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
     },
     [setIsPreviewStep, address, chainType, chainId]
   )
-
+  console.log('- -')
   useEffect(() => {
     const run = async function () {
       if (userTxInput !== undefined && chainType !== undefined && chainId !== undefined) {
+        
         const dataUnsigedtx = buidTransactionJson(chainType, chainId, userTxInput)
 
         setUnsigedtx(dataUnsigedtx)
 
-        setUsertTxInputReview(userTxInput)
+        setUsertTxInputReview(dataUnsigedtx)
         // dataUnsigedtx.gas=gas.toNumber()
         // dataUnsigedtx.gasPrice=gasprise.toNumber()
 
@@ -162,9 +163,9 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
         const gasprise: BigNumber = await library.getGasPrice()
 
         setGas({ gasLimit: gas.toString(), gasPrise: gasprise.toString() })
-        if (userTxInput) {
-          const txinfoInput: TxInput = {
-            ...userTxInput,
+        if (unsigedtx) {
+          const txinfoInput: Unsigedtx = {
+            ...unsigedtx,
             gas: gas.toNumber(),
             gasPrice: gasprise.toNumber()
           }
@@ -173,7 +174,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
       }
     }
     run()
-  }, [unsigedtx, library, userTxInput, chainType, getUnsigedTransactionHash])
+  }, [unsigedtx, library, chainType, getUnsigedTransactionHash])
 
   useEffect(() => {
     const run = async () => {
@@ -400,7 +401,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                     </Dialog.Panel>
                   </When>
                   <When condition={isPreviewStep === true}>
-                    <Preview userTxInput={userTxInputReview} openGasModel={openGasModel} previous={previous} next={sendSigner}></Preview>
+                    <Preview userTxInput={userTxInputReview} openGasModel={openGasModel} previous={previous} next={sendSigner} assert={userTxInput?.assert}></Preview>
                   </When>
                 </div>
               </Transition.Child>

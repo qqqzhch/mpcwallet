@@ -5,8 +5,8 @@ import Avvvatars from 'avvvatars-react'
 
 import { useParams } from 'react-router-dom'
 import { cutOut } from '../../utils/index'
-import { TxInput } from '../../utils/buildMpcTx'
-import { formatUnits } from '../../utils'
+import { TxInput,assertType,Unsigedtx } from '../../utils/buildMpcTx'
+import { formatUnits,formatFromWei } from '../../utils'
 import { useWeb3React } from '@web3-react/core'
 
 import Skeleton from 'react-loading-skeleton'
@@ -14,13 +14,14 @@ import { If, Then, Else } from 'react-if'
 //Skeleton
 
 type Props = {
-  userTxInput: TxInput | undefined
+  userTxInput: Unsigedtx | undefined
   openGasModel: () => void
   previous: () => void
-  next: () => void
+  next: () => void,
+  assert?: assertType | undefined
 }
 
-const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next }) => {
+const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next,assert }) => {
   const { address } = useParams<{ address: string; chainType: string }>()
   const { chainId } = useWeb3React()
 
@@ -57,9 +58,9 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next }) => {
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Assert </label>
             <div className=" flex flex-row items-center gap-1">
-              <img width={20} src={userTxInput?.assert?.img}></img>
+              <img width={20} src={assert?.img}></img>
               <span>
-                {userTxInput?.originValue} {userTxInput?.name}
+                {userTxInput&&assert?formatFromWei(userTxInput?.originValue,assert?.decimals):""} {assert?.name}
               </span>
             </div>
           </div>
