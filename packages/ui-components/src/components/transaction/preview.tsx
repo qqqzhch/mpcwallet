@@ -60,7 +60,7 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next,assert }
             <div className=" flex flex-row items-center gap-1">
               <img width={20} src={assert?.img}></img>
               <span>
-                {userTxInput&&assert?formatFromWei(userTxInput?.originValue,assert?.decimals):""} {assert?.name}
+                {userTxInput&&assert?userTxInput?.originValue:""} {assert?.name}
               </span>
             </div>
           </div>

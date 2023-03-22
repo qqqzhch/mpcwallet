@@ -191,10 +191,10 @@ web3.extend({
       outputFormatter: undefined,
     },
     {
-      name: "getReqAddrNonce",
-      call: "smpc_getReqAddrNonce",
-      params: 1,
-      inputFormatter: [null],
+      name: "getNonce",
+      call: "smw_getNonce",
+      params: 4,
+      inputFormatter: [null,null,null,null],
       outputFormatter: undefined,
     },
     {

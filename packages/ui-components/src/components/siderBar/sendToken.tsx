@@ -72,7 +72,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
   const { execute: getUnsigedTransactionHash } = useGetTxMsgHash(rpclist[0])
   const { execute: TransactionSigner } = useTransactionSigner(rpclist[0])
   const { chainId, library } = useWeb3React()
-  const [msgHash, setMsgHash] = useState<string>()
+  const [msgHash, setMsgHash] = useState<{hash:string,msg:string}>()
   const { addToast } = useToasts()
   const [gas, setGas] = useState<{ gasLimit?: string; gasPrise?: string }>({})
 
@@ -157,7 +157,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
           from: unsigedtx.from,
           to: unsigedtx.to,
           data: unsigedtx.assert?.contractaddress ? unsigedtx.data : '',
-          value: unsigedtx.assert?.contractaddress ? '0' : unsigedtx.originValue
+          value: unsigedtx.assert?.contractaddress ? '0x' : unsigedtx.value
         }
         const gas: BigNumber = await library.estimateGas(txforestimateGas)
         const gasprise: BigNumber = await library.getGasPrice()
@@ -184,39 +184,45 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
         unsigedtx != undefined &&
         gas != undefined &&
         gas.gasLimit != undefined &&
-        gas.gasPrise != undefined
+        gas.gasPrise != undefined&&
+        chainId!=undefined
       ) {
         const txinfo: Unsigedtx = {
           ...unsigedtx,
           gas: gas.gasLimit as unknown as number,
           gasPrice: gas.gasLimit as unknown as number
         }
-        const data = await getUnsigedTransactionHash(txinfo, chainType)
+        const data = await getUnsigedTransactionHash(txinfo, chainType,chainId)
         if (data.msg == 'Success') {
           setMsgHash(data.info)
+          setMsgHash({hash:data.info,msg:data.msgContext})
+        }else{
+
         }
       }
     }
     run()
-  }, [unsigedtx, gas, chainType, getUnsigedTransactionHash])
+  }, [unsigedtx, gas, chainType, getUnsigedTransactionHash,chainId])
 
   const sendSigner = useCallback(async () => {
-    if (mpcGroupAccount != undefined && chainType != undefined && msgHash != undefined && unsigedtx != undefined && TransactionSigner != undefined) {
+    if (mpcGroupAccount != undefined && chainType != undefined && 
+      msgHash != undefined && unsigedtx != undefined && TransactionSigner != undefined&&chainId!=undefined&&
+      gas.gasLimit!=undefined&&gas.gasPrise!=undefined) {
       const unsigedtxtxinfo: Unsigedtx = {
         ...unsigedtx,
-        gas: gas.gasLimit as unknown as number,
-        gasPrice: gas.gasLimit as unknown as number
+        gas:parseFloat(gas.gasLimit ) ,
+        gasPrice: parseFloat(gas.gasPrise) 
       }
-      const data = await TransactionSigner(mpcGroupAccount, chainType, msgHash, unsigedtxtxinfo)
+      const data = await TransactionSigner(mpcGroupAccount, chainType, msgHash,chainId)
       if (data.msg == 'Success') {
         addToast('Transactions have been sent', { appearance: 'success' })
       } else {
-        addToast(data.tip, { appearance: 'error' })
+        addToast(data.error, { appearance: 'error' })
       }
 
       closeTokenModal()
     }
-  }, [TransactionSigner, mpcGroupAccount, chainType, msgHash, unsigedtx, addToast, closeTokenModal, gas])
+  }, [TransactionSigner, mpcGroupAccount, chainType, msgHash, unsigedtx, addToast, closeTokenModal, gas,chainId])
 
   const previous = useCallback(() => {
     setIsPreviewStep(false)

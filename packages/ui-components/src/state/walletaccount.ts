@@ -11,7 +11,7 @@ export interface walletaccount {
   Gid: string
   Threshold: string
   Mode: string
-  Key_Type: string
+  Key_type: string
 }
 
 export const walletaccountintial = []

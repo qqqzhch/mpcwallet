@@ -44,7 +44,7 @@ export function buidTransactionJson(chainType: string, chainId: number, data: Tx
     to: data.assert?.contractaddress || data.to,
     gas: data.gas,
     gasPrice: data.gasPrice,
-    originValue: formatToWei(data.originValue, data.assert.decimals),
+    originValue: data.originValue,
     name: data.name,
     chainId: ethers.utils.hexValue(chainId),
     value:data.assert?.contractaddress==undefined?ethers.utils.hexValue(BigNumber.from(formatToWei(data.originValue, data.assert.decimals))):"0x",

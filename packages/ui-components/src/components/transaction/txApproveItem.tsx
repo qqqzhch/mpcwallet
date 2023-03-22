@@ -12,6 +12,7 @@ import { rpclist } from '../../constants/rpcConfig'
 import { useParams } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
 import { TxtxSignHistory } from '../../state/txSignHistory'
+import { useWeb3React } from '@web3-react/core'
 
 function checkThreshold(str: string) {
   const list = str.split('/')
@@ -28,6 +29,7 @@ interface Props {
 
 const TxApproveItem: FC<Props> = ({ txApprove }) => {
   const { execute } = useTxApproveAccept(rpclist[0])
+  const { chainId } = useWeb3React()
   const [actives, setActives] = useState<{
     [key: string]: boolean
   }>({})
@@ -47,8 +49,8 @@ const TxApproveItem: FC<Props> = ({ txApprove }) => {
 
   const Agree = useCallback(
     async (nameType: string) => {
-      if (execute != undefined && chainType != undefined && txApprove != undefined) {
-        const result = await execute(txApprove.Key_id, chainType, txApprove?.Msg_hash, txApprove?.Msg_context, nameType)
+      if (execute != undefined && chainType != undefined && txApprove != undefined&&chainId!=undefined) {
+        const result = await execute(txApprove.Key_id, chainType, txApprove?.Msg_hash, txApprove?.Msg_context, nameType,chainId)
 
         //"Status": "success",
         if (result.Status == 'Success') {
@@ -58,7 +60,7 @@ const TxApproveItem: FC<Props> = ({ txApprove }) => {
         }
       }
     },
-    [execute, chainType, txApprove, addToast]
+    [execute, chainType, txApprove, addToast,chainId]
   )
 
   return (
