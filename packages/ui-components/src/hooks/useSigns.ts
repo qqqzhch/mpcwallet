@@ -289,8 +289,7 @@ export function useGetTxMsgHash(rpc: string | undefined): {
       execute: async (r: Unsigedtx, chainType: string,chainId:number) => {
         console.log('- -')
         web3.setProvider(rpc)
-        // const Nonce = await getNonce(account, rpc,chainId,chainType)
-        const Nonce:string = await library.getTransactionCount(account)
+        const Nonce = await getNonce(account, rpc,chainId,chainType)
         const data = {
           ...r,
           nonce: parseFloat(Nonce),
@@ -326,11 +325,12 @@ export function useTransactionSigner(rpc: string | undefined): {
     return {
       execute: async (wallet: walletaccount, chainType: string, MsgHash: msgHashType,chainId:number) => {
         web3.setProvider(rpc)
-        const Nonce = await getNonce(account, rpc,chainId,chainType)
+        // const Nonce = await getNonce(account, rpc,chainId,chainType)
+        const Nonce = await library.getTransactionCount(account)
         const data = {
           TxType: 'SIGN',
           Account: account,
-          Nonce,
+          Nonce:Nonce.toString(),
           PubKey: wallet.Public_key,
           InputCode: '',
           MsgHash:[MsgHash.hash],
@@ -375,11 +375,12 @@ export function useTxApproveAccept(rpc: string | undefined): {
     return {
       execute: async (keyid: string, chainType: string, MsgHash: string[], MsgContext: string[], Accept: string,chainId:number) => {
         web3.setProvider(rpc)
-        const Nonce = await getNonce(account, rpc,chainId,chainType)
+        // const Nonce = await getNonce(account, rpc,chainId,chainType)
+        const Nonce = await library.getTransactionCount(account)
         const data = {
           TxType: 'ACCEPTSIGN',
           Account: account,
-          Nonce,
+          Nonce:Nonce.toString(),
           Key: keyid,
           Accept,
           MsgHash,

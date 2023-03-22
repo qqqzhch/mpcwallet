@@ -51,7 +51,9 @@ const TxApproveItem: FC<Props> = ({ txApprove,issignHIstory=false }) => {
     [setActives]
   )
   const { addToast } = useToasts()
-  const txStatus = useTxStatusByKeyId(txApprove?.Key_id)
+  const [refreshInterval,setRefreshInterval]=useState<number>(1000*15)
+  const txStatus = useTxStatusByKeyId(txApprove?.Key_id,refreshInterval)
+  const [showBtn,setShowBtn]= useState<boolean>(true)
 
   const Agree = useCallback(
     async (nameType: string) => {
@@ -61,6 +63,8 @@ const TxApproveItem: FC<Props> = ({ txApprove,issignHIstory=false }) => {
         //"Status": "success",
         if (result.Status == 'success') {
           addToast(nameType + ' Operation succeeded', { appearance: 'success' })
+          setRefreshInterval(1000*5)
+          setShowBtn(false)
         } else {
           addToast(result.Tip, { appearance: 'error' })
         }
@@ -199,8 +203,8 @@ const TxApproveItem: FC<Props> = ({ txApprove,issignHIstory=false }) => {
                           <div className="h-full w-1 bg-gray-200 pointer-events-none"></div>
                         </div>
                         <div className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-500 inline-flex items-center justify-center text-white relative z-10">
-                          <When condition={item.Status == 0}>~</When>
-                          <When condition={item.Status == 1}>✓</When>
+                          <When condition={txStatus.data.code == "0"}>~</When>
+                          <When condition={txStatus.data.code == "1"}>✓</When>
                         </div>
                         <div className="flex-grow pl-4">
                           <h2 className="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">Executed </h2>
@@ -208,7 +212,7 @@ const TxApproveItem: FC<Props> = ({ txApprove,issignHIstory=false }) => {
                         </div>
                       </div>
                     </div>
-                    <When condition={item.Status == 0&&issignHIstory===false}>
+                    <When condition={showBtn==true&&txStatus.data.code == "0"&&issignHIstory===false}>
                       <div className="lg:w-3/5 md:w-2/3 flex  flex-row justify-between ">
                         <button
                           onClick={() => {
@@ -227,6 +231,11 @@ const TxApproveItem: FC<Props> = ({ txApprove,issignHIstory=false }) => {
                           Agree
                         </button>
                       </div>
+                    </When>
+                    <When condition={showBtn==false}>
+                    <div className="flex items-center justify-center   bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+                      <div className="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">loading...</div>
+                    </div>
                     </When>
                   </div>
                 </div>

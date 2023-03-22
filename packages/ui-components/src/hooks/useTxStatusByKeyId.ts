@@ -8,7 +8,7 @@ import { walletaccount } from '../state/walletaccount'
 import { useEffect, useState } from 'react'
 import { rpclist } from '../constants/rpcConfig'
 
-async function fetcher(KeyId: string | null | undefined): Promise<string> {
+async function fetcher(KeyId: string | null | undefined): Promise<string|undefined> {
   if (KeyId == null || KeyId == undefined) {
     return
   }
@@ -34,17 +34,17 @@ const statusCode:{[Key:string]:string}={
     "7":"Tx-NotValid"
 }
 
-export default function useTxStatusByKeyId(KeyId:string|undefined) {
+export default function useTxStatusByKeyId(KeyId:string|undefined,refreshInterval:number) {
   
 
   const { data, error, isLoading } = useSWR(KeyId ? '/smw/getTxStatusByKeyId' : null, () => fetcher(KeyId), {
-    refreshInterval: 1000 * 15
+    refreshInterval: refreshInterval||1000 * 15
   })
 
   return {
     data: {
         code:data,
-        text:statusCode[data]
+        text:data!=undefined?statusCode[data]:"~"
     },
     error,
     isLoading

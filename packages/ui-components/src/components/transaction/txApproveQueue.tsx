@@ -14,7 +14,7 @@ const TxApproveQueue: FC = () => {
       })}
       <When condition={needMpcApproves.length==0}>
         <div className=' text-center'>
-          No tx need to approve
+        This wallet has no queued transactions
         </div>
 
       </When>

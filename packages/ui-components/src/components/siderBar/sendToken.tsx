@@ -166,10 +166,11 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
           data: unsigedtx.assert?.contractaddress ? unsigedtx.data : '',
           value: unsigedtx.assert?.contractaddress ? '0x' : unsigedtx.value
         }
+        console.log('gas')
         const gas: BigNumber = await library.estimateGas(txforestimateGas)
         const gasprise: BigNumber = await library.getGasPrice()
 
-        setGas({ gasLimit: gas.toString(), gasPrise: gasprise.toString() })
+        setGas({ gasLimit:'10000000', gasPrise: gasprise.toString() })
         if (unsigedtx) {
           const txinfoInput: Unsigedtx = {
             ...unsigedtx,
@@ -204,7 +205,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
           setMsgHash(data.info)
           setMsgHash({hash:data.info,msg:data.msgContext})
         }else{
-
+          addToast(data.error, { appearance: 'error' })
         }
       }
     }

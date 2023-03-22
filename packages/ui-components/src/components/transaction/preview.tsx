@@ -24,6 +24,10 @@ type Props = {
 const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next,assert }) => {
   const { address } = useParams<{ address: string; chainType: string }>()
   const { chainId } = useWeb3React()
+  if(userTxInput){
+    console.log(userTxInput?.gas * userTxInput?.gasPrice)
+  }
+  
 
   return (
     <>

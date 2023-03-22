@@ -13,9 +13,8 @@ async function fetcher(Account: string | null | undefined): Promise<Array<TxAppr
   if (Account == null || Account == undefined) {
     return
   }
-  web3.setProvider(rpclist[0])
-
-  const result = await getsmpc().getApprovalList(Account)
+  
+  const result = await getsmpc(rpclist[0]).getApprovalList(Account)
 
   if (result.Status === 'error') {
     throw new Error('get tx approve info error ')
