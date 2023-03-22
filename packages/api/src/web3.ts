@@ -252,6 +252,13 @@ web3.extend({
       params: 1,
       inputFormatter: [null],
       outputFormatter: undefined,
+    },
+    {
+      name: "getTxStatusByKeyId",
+      call: "smw_getTxStatusByKeyId",
+      params: 1,
+      inputFormatter: [null],
+      outputFormatter: undefined,
     }
   ],
 });

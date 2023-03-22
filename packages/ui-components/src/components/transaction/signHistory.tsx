@@ -8,7 +8,7 @@ const SignHistory = () => {
     <>
       <When condition={isLoading == false}>
         {data.map(item => {
-          return <TxApproveItem key={item.Key_id} txApprove={item}></TxApproveItem>
+          return <TxApproveItem key={item.Key_id} txApprove={item} issignHIstory={true}></TxApproveItem>
         })}
       </When>
       <When condition={isLoading == true}>

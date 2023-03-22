@@ -4,7 +4,7 @@ import { ArrowDownIcon, ArrowUpRightIcon, UsersIcon } from '@heroicons/react/20/
 import { formatTxApprove } from '../../utils'
 import dayjs from 'dayjs'
 import { classNames } from '../../utils'
-import { When } from 'react-if'
+import { When,If,Then,Else } from 'react-if'
 import Avvvatars from 'avvvatars-react'
 import { TxApprove } from '../../state/approve'
 import { useTxApproveAccept } from '../../hooks/useSigns'
@@ -13,6 +13,8 @@ import { useParams } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
 import { TxtxSignHistory } from '../../state/txSignHistory'
 import { useWeb3React } from '@web3-react/core'
+import {nowThreshold} from '../../utils/index'
+import useTxStatusByKeyId from '../../hooks/useTxStatusByKeyId'
 
 function checkThreshold(str: string) {
   const list = str.split('/')
@@ -23,11 +25,14 @@ function checkThreshold(str: string) {
   }
 }
 
+
+
 interface Props {
-  txApprove: TxtxSignHistory | TxApprove | undefined
+  txApprove: TxtxSignHistory | TxApprove | undefined,
+  issignHIstory?:boolean
 }
 
-const TxApproveItem: FC<Props> = ({ txApprove }) => {
+const TxApproveItem: FC<Props> = ({ txApprove,issignHIstory=false }) => {
   const { execute } = useTxApproveAccept(rpclist[0])
   const { chainId } = useWeb3React()
   const [actives, setActives] = useState<{
@@ -46,6 +51,7 @@ const TxApproveItem: FC<Props> = ({ txApprove }) => {
     [setActives]
   )
   const { addToast } = useToasts()
+  const txStatus = useTxStatusByKeyId(txApprove?.Key_id)
 
   const Agree = useCallback(
     async (nameType: string) => {
@@ -53,7 +59,7 @@ const TxApproveItem: FC<Props> = ({ txApprove }) => {
         const result = await execute(txApprove.Key_id, chainType, txApprove?.Msg_hash, txApprove?.Msg_context, nameType,chainId)
 
         //"Status": "success",
-        if (result.Status == 'Success') {
+        if (result.Status == 'success') {
           addToast(nameType + ' Operation succeeded', { appearance: 'success' })
         } else {
           addToast(result.Tip, { appearance: 'error' })
@@ -84,7 +90,7 @@ const TxApproveItem: FC<Props> = ({ txApprove }) => {
                   <ArrowUpRightIcon className="text-indigo-500 w-6 h-6 flex-shrink-0 mr-4 inline-block"></ArrowUpRightIcon>
                   sent
                 </div>
-                <div className=" w-full sm:w-1/5 ">{dayjs(Number(item.TimeStamp || item.Reply_timestamp)).format('DD/MM/YYYY:HH:MM')}</div>
+                <div className=" w-full sm:w-1/5 ">{dayjs(Number(item.Timestamp || item.Reply_timestamp)).format('DD/MM/YYYY:HH:MM')}</div>
                 <div className=" w-full sm:w-1/5 ">
                   {txList.map(tx => {
                     return tx.originValue + ' ' + tx.name + ' '
@@ -92,11 +98,20 @@ const TxApproveItem: FC<Props> = ({ txApprove }) => {
                 </div>
                 <div className=" w-full sm:w-1/5 ">
                   <UsersIcon className="text-indigo-500 w-6 h-6 flex-shrink-0 mr-4 inline-block"></UsersIcon>
-                  {item.Threshold}
+                  {nowThreshold(item.Threshold,item.Signed)}
                 </div>
                 <div className=" w-full sm:w-1/5 text-right sm:text-left text-indigo-500">
+                <If condition={item.Status == 0&&issignHIstory===false}>
+                  <Then>
                   Needs your confirmation
                   <ArrowDownIcon className=" w-6 h-6 flex-shrink-0 ml-4 inline-block"></ArrowDownIcon>
+                  </Then>
+                  <Else>
+                  TX Status:{txStatus.data.text}
+                  </Else>
+                  
+                </If>
+
                 </div>
               </div>
               <When condition={actives[item.Key_id]}>
@@ -119,13 +134,13 @@ const TxApproveItem: FC<Props> = ({ txApprove }) => {
                       )
                     })}
                     <div className="flex flex-col gap-2 p-4">
-                      <When condition={item.TimeStamp !== undefined}>
+                      <When condition={item.Timestamp !== undefined&&item.Timestamp!==""}>
                         <div className="flex flex-row">
                           <div className="w-1/3">Created:</div>
-                          <div className="w-2/3">{dayjs(Number(item.TimeStamp)).format('DD/MM/YYYY:HH:MM')} </div>
+                          <div className="w-2/3">{dayjs(Number(item.Timestamp)).format('DD/MM/YYYY:HH:MM')} </div>
                         </div>
                       </When>
-                      <When condition={item.Reply_timestamp !== undefined}>
+                      <When condition={item.Reply_timestamp !== undefined&&item.Reply_timestamp!==""}>
                         <div className="flex flex-row">
                           <div className="w-1/3">Reply time:</div>
                           <div className="w-2/3">{dayjs(Number(item.Reply_timestamp)).format('DD/MM/YYYY:HH:MM')} </div>
@@ -173,7 +188,7 @@ const TxApproveItem: FC<Props> = ({ txApprove }) => {
                           <When condition={checkThreshold(item.Threshold) === false}>~</When>
                         </div>
                         <div className="flex-grow pl-4">
-                          <h2 className="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">Confirmations {item.Threshold}</h2>
+                          <h2 className="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">Confirmations {nowThreshold(item.Threshold,item.Signed)}</h2>
                           <p className="leading-relaxed">{/* xx */}</p>
                         </div>
                       </div>
@@ -189,11 +204,11 @@ const TxApproveItem: FC<Props> = ({ txApprove }) => {
                         </div>
                         <div className="flex-grow pl-4">
                           <h2 className="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">Executed </h2>
-                          <p className="leading-relaxed">Can be executed</p>
+                          <p className="leading-relaxed"> Status:{txStatus.data.text}</p>
                         </div>
                       </div>
                     </div>
-                    <When condition={item.Status == 0}>
+                    <When condition={item.Status == 0&&issignHIstory===false}>
                       <div className="lg:w-3/5 md:w-2/3 flex  flex-row justify-between ">
                         <button
                           onClick={() => {

@@ -61,6 +61,12 @@ const isAddress = (address: string) => {
   }
 }
 
+
+
+
+
+
+
 const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBack }) => {
   const [isTokenOpen, setIsTokenOpen] = useState(open || false)
   const [isPreviewStep, setIsPreviewStep] = useState(false)
@@ -98,6 +104,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
         callBack()
       }
       reset()
+      setSelectedAssert(undefined)
     },
     [callBack, reset]
   )
@@ -190,7 +197,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
         const txinfo: Unsigedtx = {
           ...unsigedtx,
           gas: gas.gasLimit as unknown as number,
-          gasPrice: gas.gasLimit as unknown as number
+          gasPrice: gas.gasPrise as unknown as number
         }
         const data = await getUnsigedTransactionHash(txinfo, chainType,chainId)
         if (data.msg == 'Success') {

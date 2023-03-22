@@ -41,3 +41,17 @@ export function formatFromWei(value: string | number, decimals: number) {
   return ethers.utils.formatUnits(value.toString(), decimals).toString()
   //ethers.utils.parseUnits
 }
+
+export function checkThreshold(str: string) {
+  const list = str.split('/')
+  if (list[0] === list[1]) {
+    return true
+  } else {
+    return false
+  }
+}
+
+export function nowThreshold(str: string,Signed:number  ) {
+  const list = str.split('/')
+  return Signed+"/"+list[1]
+}

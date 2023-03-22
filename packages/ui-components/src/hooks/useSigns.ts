@@ -19,6 +19,21 @@ const chainTypeName: chainTypes = {
   evm: 0
 }
 
+
+export function serverStatusIsSuccess(res:{Status:string}){
+  if(res.Status.toLowerCase()=="success"){
+    return true;
+  }else{
+    return false
+  }
+
+}
+// export function getServerError(data:){
+
+// }
+
+
+
 export function eNodeCut(enode: any) {
   const obj = {
     key: '',
