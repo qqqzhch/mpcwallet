@@ -9,6 +9,7 @@ import { getsmpc } from '@monorepo/api/src/web3'
 // import { walletApprove } from '../state/approve'
 import { Unsigedtx } from '../utils/buildMpcTx'
 import { walletaccount } from '../state/walletaccount'
+import { useParams } from 'react-router-dom'
 
 interface chainTypes {
   [key: string]: number
@@ -17,6 +18,17 @@ interface chainTypes {
 const chainTypeName: chainTypes = {
   evm: 0
 }
+
+export function serverStatusIsSuccess(res: { Status: string }) {
+  if (res.Status.toLowerCase() == 'success') {
+    return true
+  } else {
+    return false
+  }
+}
+// export function getServerError(data:){
+
+// }
 
 export function eNodeCut(enode: any) {
   const obj = {
@@ -38,12 +50,11 @@ export function eNodeCut(enode: any) {
 
 // let nonceLocal = 0;
 // mpc account Nonce
-async function getNonce(account: any, rpc: any) {
-  const nonceResult = await getsmpc(rpc).getReqAddrNonce(account)
+async function getNonce(account: any, rpc: any, evmChainID: number, chainType: string) {
+  const isEvm = chainTypeName[chainType] == 0 ? true : false
+  const nonceResult = await getsmpc(rpc).getNonce(account, evmChainID, isEvm, chainTypeName[chainType])
 
-  // nonceLocal++;
-  // return nonceLocal;
-  return nonceResult.Data
+  return (nonceResult.Data + 1).toString()
 }
 
 export function useSign(): any {
@@ -259,59 +270,66 @@ export function useReqSmpcAddress(
 // }
 
 export function useGetTxMsgHash(rpc: string | undefined): {
-  execute?: (r: Unsigedtx, chainType: string) => Promise<any> | undefined
+  execute?: (r: Unsigedtx, chainType: string, chainId: number) => Promise<any> | undefined
 } {
   const { account, library } = useWeb3React()
+  const { address: mpcAddress } = useParams<{ address: string }>()
 
   return useMemo(() => {
-    if (!account || !library || !rpc) return {}
+    if (!account || !library || !rpc || !mpcAddress) return {}
     return {
-      execute: async (r: Unsigedtx, chainType: string) => {
+      execute: async (r: Unsigedtx, chainType: string, chainId: number) => {
         web3.setProvider(rpc)
-        const Nonce = await getNonce(account, rpc)
+        const Nonce = await getNonce(mpcAddress, rpc, chainId, chainType)
         const data = {
           ...r,
-          nonce: Nonce
+          nonce: parseFloat(Nonce),
+          gas: parseFloat(r.gas.toString()),
+          gasPrice: parseFloat(r.gasPrice.toString())
         }
 
-        const cbData = await getsmpc().getUnsigedTransactionHash(JSON.stringify(data, null, 8), chainTypeName[chainType])
+        const msgContext = JSON.stringify(data, null, 8)
+
+        const cbData = await getsmpc().getUnsigedTransactionHash(msgContext, chainTypeName[chainType])
 
         let resultData: any = {}
-        if (cbData.Status !== 'Error') {
-          resultData = { msg: 'Success', info: cbData.Data }
+        if (cbData.Status == 'success') {
+          resultData = { msg: 'Success', info: cbData.Data, msgContext }
         } else {
           resultData = { msg: 'Error', error: cbData.Tip }
         }
         return resultData
       }
     }
-  }, [account, library, rpc])
+  }, [account, library, rpc, mpcAddress])
 }
 
+type msgHashType = { hash: string; msg: string }
 export function useTransactionSigner(rpc: string | undefined): {
-  execute?: (wallet: walletaccount, chainType: string, MsgHash: string, MsgContext: Unsigedtx) => Promise<any> | undefined
+  execute?: (wallet: walletaccount, chainType: string, MsgHash: msgHashType, chainId: number) => Promise<any> | undefined
 } {
   const { account, library } = useWeb3React()
 
   return useMemo(() => {
     if (!account || !library || !rpc) return {}
     return {
-      execute: async (wallet: walletaccount, chainType: string, MsgHash: string, MsgContext: Unsigedtx) => {
+      execute: async (wallet: walletaccount, chainType: string, MsgHash: msgHashType, chainId: number) => {
         web3.setProvider(rpc)
-        const Nonce = await getNonce(account, rpc)
+        // const Nonce = await getNonce(account, rpc,chainId,chainType)
+        const Nonce = await library.getTransactionCount(account)
         const data = {
           TxType: 'SIGN',
           Account: account,
-          Nonce,
+          Nonce: Nonce.toString(),
           PubKey: wallet.Public_key,
           InputCode: '',
-          MsgHash,
-          MsgContext,
-          Keytype: wallet.Key_Type,
+          MsgHash: [MsgHash.hash],
+          MsgContext: [MsgHash.msg],
+          Keytype: wallet.Key_type,
           GroupID: wallet.Gid,
           ThresHold: wallet.Threshold,
           Mode: wallet.Mode,
-          AcceptTimeOut: 604800,
+          AcceptTimeOut: '604800',
           TimeStamp: Date.now().toString(),
           FixedApprover: null,
           Comment: '',
@@ -326,7 +344,7 @@ export function useTransactionSigner(rpc: string | undefined): {
 
         let resultData: any = {}
 
-        if (cbData.Status !== 'Error') {
+        if (cbData.Status == 'success') {
           resultData = { msg: 'Success', info: cbData.Data }
         } else {
           resultData = { msg: 'Error', error: cbData.Tip }
@@ -338,20 +356,21 @@ export function useTransactionSigner(rpc: string | undefined): {
 }
 
 export function useTxApproveAccept(rpc: string | undefined): {
-  execute?: (keyid: string, chainType: string, MsgHash: string[], MsgContext: string[], Accept: string) => Promise<any> | undefined
+  execute?: (keyid: string, chainType: string, MsgHash: string[], MsgContext: string[], Accept: string, chainId: number) => Promise<any> | undefined
 } {
   const { account, library } = useWeb3React()
 
   return useMemo(() => {
     if (!account || !library || !rpc) return {}
     return {
-      execute: async (keyid: string, chainType: string, MsgHash: string[], MsgContext: string[], Accept: string) => {
+      execute: async (keyid: string, chainType: string, MsgHash: string[], MsgContext: string[], Accept: string, chainId: number) => {
         web3.setProvider(rpc)
-        const Nonce = await getNonce(account, rpc)
+        // const Nonce = await getNonce(account, rpc,chainId,chainType)
+        const Nonce = await library.getTransactionCount(account)
         const data = {
           TxType: 'ACCEPTSIGN',
           Account: account,
-          Nonce,
+          Nonce: Nonce.toString(),
           Key: keyid,
           Accept,
           MsgHash,

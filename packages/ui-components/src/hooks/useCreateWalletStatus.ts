@@ -56,7 +56,7 @@ export function useCreateWalletStatus() {
 
   // const [list,setList]= useState<Array<walletaccount>>([])
 
-  const { data, error, isLoading } = useSWR(keyid ? '/smw/walletstatus' : null, () => fetcher(keyid), {
+  const { data, error, isLoading } = useSWR(keyid ? ['/smw/walletstatus', keyid] : null, () => fetcher(keyid), {
     refreshInterval: 1000 * 15
   })
 

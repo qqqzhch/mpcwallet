@@ -1,12 +1,12 @@
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { Dialog } from '@headlessui/react'
 import ChainName from '../chainList/chainName'
 import Avvvatars from 'avvvatars-react'
 
 import { useParams } from 'react-router-dom'
 import { cutOut } from '../../utils/index'
-import { TxInput } from '../../utils/buildMpcTx'
-import { formatUnits } from '../../utils'
+import { assertType, Unsigedtx } from '../../utils/buildMpcTx'
+import { formatUnits, gasFee } from '../../utils'
 import { useWeb3React } from '@web3-react/core'
 
 import Skeleton from 'react-loading-skeleton'
@@ -14,15 +14,40 @@ import { If, Then, Else } from 'react-if'
 //Skeleton
 
 type Props = {
-  userTxInput: TxInput | undefined
+  userTxInput: Unsigedtx | undefined
   openGasModel: () => void
   previous: () => void
   next: () => void
+  assert?: assertType | undefined
 }
 
-const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next }) => {
+const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert }) => {
   const { address } = useParams<{ address: string; chainType: string }>()
-  const { chainId } = useWeb3React()
+  const { chainId, library } = useWeb3React()
+  const [gasError, setGasError] = useState<string>()
+
+  useEffect(() => {
+    const run = async () => {
+      if (userTxInput != undefined) {
+        const txforestimateGas = {
+          from: userTxInput?.from,
+          to: userTxInput?.to,
+          data: userTxInput.assert?.contractaddress ? userTxInput.data : '',
+          value: userTxInput.assert?.contractaddress ? '0x' : userTxInput.value
+        }
+
+        try {
+          await library.estimateGas(txforestimateGas)
+          setGasError('')
+        } catch (error: unknown) {
+          const errorinfo = error as { reason: string }
+          setGasError(errorinfo.reason)
+          return
+        }
+      }
+    }
+    run()
+  }, [library, userTxInput])
 
   return (
     <>
@@ -57,27 +82,34 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next }) => {
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Assert </label>
             <div className=" flex flex-row items-center gap-1">
-              <img width={20} src={userTxInput?.assert?.img}></img>
+              <img width={20} src={assert?.img}></img>
               <span>
-                {userTxInput?.originValue} {userTxInput?.name}
+                {userTxInput && assert ? userTxInput?.originValue : ''} {assert?.name}
               </span>
             </div>
           </div>
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estimated fee </label>
             <div className=" flex flex-row ">
-              <If condition={userTxInput == undefined || userTxInput.gas == 0 || userTxInput.gasPrice == 0}>
+              <If condition={gasError === undefined}>
                 <Then>
-                  <div className=" flex-1 ">
-                    <Skeleton count={1}></Skeleton>
-                  </div>
+                  <If condition={userTxInput == undefined || userTxInput.gas == 0 || userTxInput.gasPrice == 0}>
+                    <Then>
+                      <div className=" flex-1 ">
+                        <Skeleton count={1}></Skeleton>
+                      </div>
+                    </Then>
+                    <Else>
+                      <span className=" flex-1 "> {userTxInput ? formatUnits(chainId, gasFee(userTxInput?.gas, userTxInput?.gasPrice)) : ''} </span>
+                      <span onClick={openGasModel} className=" underline ">
+                        {' '}
+                        edit{' '}
+                      </span>
+                    </Else>
+                  </If>
                 </Then>
                 <Else>
-                  <span className=" flex-1 "> {userTxInput ? formatUnits(chainId, userTxInput?.gas * userTxInput?.gasPrice) : ''} </span>
-                  <span onClick={openGasModel} className=" underline ">
-                    {' '}
-                    edit{' '}
-                  </span>
+                  <div className="text-red-400">{gasError}</div>
                 </Else>
               </If>
             </div>

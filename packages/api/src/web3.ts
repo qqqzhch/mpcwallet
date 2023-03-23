@@ -191,10 +191,10 @@ web3.extend({
       outputFormatter: undefined,
     },
     {
-      name: "getReqAddrNonce",
-      call: "smpc_getReqAddrNonce",
-      params: 1,
-      inputFormatter: [null],
+      name: "getNonce",
+      call: "smw_getNonce",
+      params: 4,
+      inputFormatter: [null,null,null,null],
       outputFormatter: undefined,
     },
     {
@@ -252,7 +252,23 @@ web3.extend({
       params: 1,
       inputFormatter: [null],
       outputFormatter: undefined,
+    },
+    {
+      name: "getTxStatusByKeyId",
+      call: "smw_getTxStatusByKeyId",
+      params: 1,
+      inputFormatter: [null],
+      outputFormatter: undefined,
+    },
+    {
+      name: "getTxHashByKeyId",
+      call: "smw_getTxHashByKeyId",
+      params: 1,
+      inputFormatter: [null],
+      outputFormatter: undefined,
     }
+
+    
   ],
 });
 

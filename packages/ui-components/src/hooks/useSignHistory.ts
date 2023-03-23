@@ -5,7 +5,7 @@ import { getsmpc } from '@monorepo/api/src/web3'
 import { TxApprove } from '../state/approve'
 import { useEffect, useState } from 'react'
 import { rpclist } from '../constants/rpcConfig'
-import { useParams } from 'react-router-dom'
+import { useWeb3React } from '@web3-react/core'
 
 async function fetcher(account: string | null | undefined): Promise<Array<TxApprove> | undefined> {
   if (account == null || account == undefined) {
@@ -23,10 +23,10 @@ async function fetcher(account: string | null | undefined): Promise<Array<TxAppr
 }
 
 export default function useSignHistory() {
-  const { address } = useParams<{ address: string; chainType: string }>()
+  const { account } = useWeb3React()
   const [list, setList] = useState<Array<TxApprove>>([])
 
-  const { data, error, isLoading } = useSWR(address ? '/smw/SignHistory' : null, () => fetcher(address), {
+  const { data, error, isLoading } = useSWR(account ? ['/smw/SignHistory', account] : null, () => fetcher(account), {
     refreshInterval: 1000 * 15
   })
 
@@ -34,6 +34,13 @@ export default function useSignHistory() {
     if (data == undefined) {
       return
     }
+    data.sort((a, b) => {
+      if (b.Reply_timestamp !== undefined && a.Reply_timestamp !== undefined) {
+        return parseInt(b.Reply_timestamp || '943891200') - parseInt(a.Reply_timestamp || '943891200')
+      } else {
+        return 0
+      }
+    })
     setList(data)
   }, [data])
 

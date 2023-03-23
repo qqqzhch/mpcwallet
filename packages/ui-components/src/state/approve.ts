@@ -12,10 +12,11 @@ export interface TxApprove {
   Threshold: string
   Status: number
   hiden?: boolean
-  TimeStamp: string
+  Timestamp: string
   Txid?: string
   Reply_status?: string
   Reply_timestamp?: string
+  Signed: number
 }
 
 export const txApproveListintial = []

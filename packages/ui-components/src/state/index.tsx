@@ -247,9 +247,13 @@ const createMyStore = (state: typeof intialState = intialState) => {
               }
             },
             getTxApproveListByStatus: (status: number) => {
-              const list = get().approve.txApproveList.filter(item => {
-                return item.Status == status
-              })
+              const list = get()
+                .approve.txApproveList.filter(item => {
+                  return item.Status == status
+                })
+                .sort((a, b) => {
+                  return parseInt(b.Timestamp) - parseInt(a.Timestamp)
+                })
               return list
             },
             getTxApproveByKeyID: (keyid: string | undefined) => {

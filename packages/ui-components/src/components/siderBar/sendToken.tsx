@@ -67,12 +67,12 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
   const { address, chainType } = useParams<{ address: string; chainType: string }>()
   const [userTxInput, setUsertTxInput] = useState<TxInput>()
   const [unsigedtx, setUnsigedtx] = useState<Unsigedtx>()
-  const [userTxInputReview, setUsertTxInputReview] = useState<TxInput>()
+  const [userTxInputReview, setUsertTxInputReview] = useState<Unsigedtx>()
 
   const { execute: getUnsigedTransactionHash } = useGetTxMsgHash(rpclist[0])
   const { execute: TransactionSigner } = useTransactionSigner(rpclist[0])
   const { chainId, library } = useWeb3React()
-  const [msgHash, setMsgHash] = useState<string>()
+  const [msgHash, setMsgHash] = useState<{ hash: string; msg: string }>()
   const { addToast } = useToasts()
   const [gas, setGas] = useState<{ gasLimit?: string; gasPrise?: string }>({})
 
@@ -98,6 +98,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
         callBack()
       }
       reset()
+      setSelectedAssert(undefined)
     },
     [callBack, reset]
   )
@@ -137,7 +138,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
 
         setUnsigedtx(dataUnsigedtx)
 
-        setUsertTxInputReview(userTxInput)
+        setUsertTxInputReview(dataUnsigedtx)
         // dataUnsigedtx.gas=gas.toNumber()
         // dataUnsigedtx.gasPrice=gasprise.toNumber()
 
@@ -152,19 +153,29 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
   useEffect(() => {
     const run = async () => {
       if (unsigedtx != undefined) {
-        const txforestimateGas = {
-          from: unsigedtx.from,
-          to: unsigedtx.to,
-          data: unsigedtx.assert?.contractaddress ? unsigedtx.data : '',
-          value: unsigedtx.assert?.contractaddress ? '0' : unsigedtx.originValue
-        }
-        const gas: BigNumber = await library.estimateGas(txforestimateGas)
+        // const txforestimateGas = {
+        //   from: unsigedtx.from,
+        //   to: unsigedtx.to,
+        //   data: unsigedtx.assert?.contractaddress ? unsigedtx.data : '',
+        //   value: unsigedtx.assert?.contractaddress ? '0x' : unsigedtx.value
+        // }
+        // console.log('gas')
+        // try {
+        //   await library.estimateGas(txforestimateGas)
+        // } catch (error:unknown) {
+        //   console.log(error)
+        //   const errorinfo=error as {reason:string}
+        //   addToast(errorinfo.reason, { appearance: 'error' })
+        //   return;
+        // }
+
         const gasprise: BigNumber = await library.getGasPrice()
+        const gas = ethers.utils.parseUnits('0.0001', 'gwei')
 
         setGas({ gasLimit: gas.toString(), gasPrise: gasprise.toString() })
-        if (userTxInput) {
-          const txinfoInput: TxInput = {
-            ...userTxInput,
+        if (unsigedtx) {
+          const txinfoInput: Unsigedtx = {
+            ...unsigedtx,
             gas: gas.toNumber(),
             gasPrice: gasprise.toNumber()
           }
@@ -173,7 +184,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
       }
     }
     run()
-  }, [unsigedtx, library, userTxInput, chainType, getUnsigedTransactionHash])
+  }, [unsigedtx, library, chainType, getUnsigedTransactionHash])
 
   useEffect(() => {
     const run = async () => {
@@ -183,39 +194,47 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
         unsigedtx != undefined &&
         gas != undefined &&
         gas.gasLimit != undefined &&
-        gas.gasPrise != undefined
+        gas.gasPrise != undefined &&
+        chainId != undefined
       ) {
         const txinfo: Unsigedtx = {
           ...unsigedtx,
           gas: gas.gasLimit as unknown as number,
-          gasPrice: gas.gasLimit as unknown as number
+          gasPrice: gas.gasPrise as unknown as number
         }
-        const data = await getUnsigedTransactionHash(txinfo, chainType)
+        const data = await getUnsigedTransactionHash(txinfo, chainType, chainId)
         if (data.msg == 'Success') {
           setMsgHash(data.info)
+          setMsgHash({ hash: data.info, msg: data.msgContext })
+        } else {
+          addToast(data.error, { appearance: 'error' })
         }
       }
     }
     run()
-  }, [unsigedtx, gas, chainType, getUnsigedTransactionHash])
+  }, [unsigedtx, gas, chainType, getUnsigedTransactionHash, chainId, addToast])
 
   const sendSigner = useCallback(async () => {
-    if (mpcGroupAccount != undefined && chainType != undefined && msgHash != undefined && unsigedtx != undefined && TransactionSigner != undefined) {
-      const unsigedtxtxinfo: Unsigedtx = {
-        ...unsigedtx,
-        gas: gas.gasLimit as unknown as number,
-        gasPrice: gas.gasLimit as unknown as number
-      }
-      const data = await TransactionSigner(mpcGroupAccount, chainType, msgHash, unsigedtxtxinfo)
+    if (
+      mpcGroupAccount != undefined &&
+      chainType != undefined &&
+      msgHash != undefined &&
+      unsigedtx != undefined &&
+      TransactionSigner != undefined &&
+      chainId != undefined &&
+      gas.gasLimit != undefined &&
+      gas.gasPrise != undefined
+    ) {
+      const data = await TransactionSigner(mpcGroupAccount, chainType, msgHash, chainId)
       if (data.msg == 'Success') {
         addToast('Transactions have been sent', { appearance: 'success' })
       } else {
-        addToast(data.tip, { appearance: 'error' })
+        addToast(data.error, { appearance: 'error' })
       }
 
       closeTokenModal()
     }
-  }, [TransactionSigner, mpcGroupAccount, chainType, msgHash, unsigedtx, addToast, closeTokenModal, gas])
+  }, [TransactionSigner, mpcGroupAccount, chainType, msgHash, unsigedtx, addToast, closeTokenModal, gas, chainId])
 
   const previous = useCallback(() => {
     setIsPreviewStep(false)
@@ -400,7 +419,13 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                     </Dialog.Panel>
                   </When>
                   <When condition={isPreviewStep === true}>
-                    <Preview userTxInput={userTxInputReview} openGasModel={openGasModel} previous={previous} next={sendSigner}></Preview>
+                    <Preview
+                      userTxInput={userTxInputReview}
+                      openGasModel={openGasModel}
+                      previous={previous}
+                      next={sendSigner}
+                      assert={userTxInput?.assert}
+                    ></Preview>
                   </When>
                 </div>
               </Transition.Child>

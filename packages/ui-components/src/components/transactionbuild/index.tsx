@@ -7,6 +7,10 @@ import { AbiItem } from 'web3-utils'
 import { cutOut } from '../../utils'
 import useChainName from '../../hooks/useChainName'
 import { useToasts } from 'react-toast-notifications'
+import { useParams } from 'react-router-dom'
+// import useAccount from '../../hooks/useAccount'
+import ContractModel from './contractModel'
+import useChainInfo from '../../hooks/useChainInfo'
 
 const TransactionBuild: FC = () => {
   const ChainName = useChainName()
@@ -23,6 +27,15 @@ const TransactionBuild: FC = () => {
   const [transactions, setTransactions] = useState<ProposedTransaction[]>([])
   const [value, setValue] = useState('')
   const { addToast } = useToasts()
+  const { address } = useParams<{ address: string; chainType: string }>()
+  // const mpcGroupAccount = useAccount(address)
+  const ChainInfo = useChainInfo()
+
+  const [isOpen, setIsOpen] = useState(false)
+
+  function closeModal() {
+    setIsOpen(false)
+  }
 
   const handleAddressOrABI = async (e: React.ChangeEvent<HTMLInputElement>): Promise<ContractInterface | void> => {
     setContract(undefined)
@@ -106,7 +119,9 @@ const TransactionBuild: FC = () => {
 
     try {
       const cleanTo = web3.utils.toChecksumAddress(toAddress)
-      const cleanValue = value.length > 0 ? web3.utils.toWei(value) : 0
+
+      const cleanValue = value.length > 0 ? value : 0
+      const haveNative = value.length > 0 ? true : false
 
       if (data.length === 0) {
         data = '0x'
@@ -115,11 +130,11 @@ const TransactionBuild: FC = () => {
       if (description.length === 0) {
         description = `Transfer ${cleanValue} ETH to ${cleanTo}`
       }
-
-      transactions.push({
-        description,
-        raw: { to: cleanTo, value: cleanValue, data }
-      })
+      if (address != undefined)
+        transactions.push({
+          description,
+          raw: { from: address, to: cleanTo, value: cleanValue, data, haveNative }
+        })
 
       setInputCache([])
       setTransactions(transactions)
@@ -128,7 +143,7 @@ const TransactionBuild: FC = () => {
     } catch (e) {
       console.error(e)
     }
-  }, [services, transactions, toAddress, value, contract, selectedMethodIndex, inputCache])
+  }, [services, transactions, toAddress, value, contract, selectedMethodIndex, inputCache, address])
 
   const deleteTransaction = useCallback(
     async (inputIndex: number) => {
@@ -144,6 +159,8 @@ const TransactionBuild: FC = () => {
       return
     }
 
+    setIsOpen(true)
+
     //     try {
     //       sdk.txs.send({ txs: transactions.map((d) => d.raw) });
     //     } catch (e) {
@@ -153,7 +170,7 @@ const TransactionBuild: FC = () => {
 
   const handleSubmit = () => {
     sendTransactions()
-    setTransactions([])
+    // setTransactions([])
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -243,7 +260,7 @@ const TransactionBuild: FC = () => {
         <When condition={isValueInputVisible()}>
           <div className="mb-6">
             <label htmlFor="ContractAddress" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              ETH
+              {ChainInfo?.nativeCurrency.name}
             </label>
             <input
               type="text"
@@ -333,6 +350,11 @@ const TransactionBuild: FC = () => {
           </div>
         </When>
       </div>
+      <ContractModel
+        isOpen={isOpen}
+        closeModal={closeModal}
+        transaction={transactions && transactions.length > 0 ? transactions[0] : undefined}
+      ></ContractModel>
     </div>
   )
 }

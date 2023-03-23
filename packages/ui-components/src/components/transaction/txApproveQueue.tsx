@@ -2,6 +2,7 @@ import { FC } from 'react'
 import { useAppStore } from '../..'
 
 import TxApproveItem from './txApproveItem'
+import { When } from 'react-if'
 
 const TxApproveQueue: FC = () => {
   const needMpcApproves = useAppStore(state => state.getTxApproveListByStatus(0))
@@ -11,6 +12,9 @@ const TxApproveQueue: FC = () => {
       {needMpcApproves.map(item => {
         return <TxApproveItem key={item.Key_id} txApprove={item}></TxApproveItem>
       })}
+      <When condition={needMpcApproves.length == 0}>
+        <div className=" text-center">This wallet has no queued transactions</div>
+      </When>
     </div>
   )
 }
