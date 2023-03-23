@@ -21,6 +21,8 @@ const UserPanel: FC = () => {
 
   const { chainId } = useWeb3React()
   const togglesidewalletMenu = useAppStore(state => state.togglesidewalletMenu)
+  const togglesideBar = useAppStore(state => state.togglesideBar)
+  const showsideBar = useAppStore(state => state.sideBar)
 
   return (
     <>
@@ -63,6 +65,10 @@ const UserPanel: FC = () => {
         <button
           onClick={() => {
             togglesidewalletMenu()
+            if(showsideBar==false){
+              togglesideBar()
+            }
+            
           }}
           type="button"
           className="text-blue-700  bg-gray-200
