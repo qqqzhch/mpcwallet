@@ -41,8 +41,8 @@ const WalletMenu: FC = props => {
               <div
                 onClick={() => {
                   navigate(`/dashboard/evm/${item.Mpc_address}`)
-                  togglesideBar()
                   togglesidewalletMenu()
+                  togglesideBar()
                 }}
                 key={item.Mpc_address}
                 className="flex flex-wrap  cursor-pointer"
