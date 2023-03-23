@@ -3,9 +3,11 @@ import { useAppStore } from '../..'
 
 import TxApproveItem from './txApproveItem'
 import { When } from 'react-if'
+import { useParams } from 'react-router-dom'
 
 const TxApproveQueue: FC = () => {
-  const needMpcApproves = useAppStore(state => state.getTxApproveListByStatus(0))
+  const { address } = useParams<{ address: string; chainType: string }>()
+  const needMpcApproves = useAppStore(state => state.getTxApproveListByStatus(0, address))
 
   return (
     <div className="flex flex-col overflow-x-auto  text-base p-2">

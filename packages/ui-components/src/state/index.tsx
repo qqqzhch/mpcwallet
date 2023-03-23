@@ -5,6 +5,11 @@ import React, { createContext, FC, useContext } from 'react'
 import { walletaccount } from './walletaccount'
 import { TxApprove } from './approve'
 
+type walletNeedApproval = {
+  mpcAddress: string
+  count: number
+}
+
 export interface adminInfo {
   address: string
   name?: string
@@ -62,8 +67,9 @@ export interface AppState {
   resetCreateGroupAdmin: () => void
   getWalletAccounts: (address: string | null | undefined) => Array<walletaccount>
   getWalletAccount: (address: string | null | undefined, mpcAddress: string | undefined) => walletaccount | undefined
-  getTxApproveListByStatus: (status: number) => Array<TxApprove>
+  getTxApproveListByStatus: (status: number, mpcAddress?: string) => Array<TxApprove>
   getTxApproveByKeyID: (keyid: string | undefined) => TxApprove | undefined
+  getTxApproveGroupByaccountByStatus: (status: number) => Array<walletNeedApproval>
 }
 
 export const intialState = {
@@ -246,10 +252,14 @@ const createMyStore = (state: typeof intialState = intialState) => {
                 })
               }
             },
-            getTxApproveListByStatus: (status: number) => {
+            getTxApproveListByStatus: (status: number, mpcAddress: string | undefined) => {
               const list = get()
                 .approve.txApproveList.filter(item => {
-                  return item.Status == status
+                  if (mpcAddress == undefined) {
+                    return item.Status == status
+                  } else {
+                    return item.Status == status && item.Mpc_address == mpcAddress
+                  }
                 })
                 .sort((a, b) => {
                   return parseInt(b.Timestamp) - parseInt(a.Timestamp)
@@ -261,6 +271,27 @@ const createMyStore = (state: typeof intialState = intialState) => {
                 return item.Key_id == keyid
               })
               return list
+            },
+            getTxApproveGroupByaccountByStatus: (status: number) => {
+              const list = get().approve.txApproveList.filter(item => {
+                return item.Status == status
+              })
+              const result: walletNeedApproval[] = []
+
+              list.forEach(item => {
+                const num = list.filter(tx => {
+                  return tx.Mpc_address == item.Mpc_address
+                })
+
+                if (result.find(tx => tx.mpcAddress == item.Mpc_address) == undefined) {
+                  result.push({
+                    mpcAddress: item.Mpc_address,
+                    count: num.length
+                  })
+                }
+              })
+
+              return result
             }
           }),
           { name: 'app-storage' }

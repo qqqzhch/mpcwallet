@@ -6,15 +6,15 @@ import { Link, useParams } from 'react-router-dom'
 import { nowThreshold } from '../../utils/index'
 
 const TransactionQueue: FC = () => {
-  const needMpcApproves = useAppStore(state => state.getTxApproveListByStatus(0))
-
   const { address, chainType } = useParams<{ address: string; chainType: string }>()
-
+  const needMpcApproves = useAppStore(state => state.getTxApproveListByStatus(0, address))
   return (
     <div className="flex  min-h-80 rounded bg-gray-50 flex-col  gap-6 p-8">
       <h1 className=" border-b border-blue-300 pb-4 flex  flex-row">
         <span className=" flex-1 ">Transaction queue ({needMpcApproves.length})</span>
-        <span className="  text-blue-500 cursor-pointer ">more</span>
+        <Link to={`/dashboard/${chainType}/${address}/transactions`}>
+          <span className="  text-blue-500 cursor-pointer ">more</span>
+        </Link>
       </h1>
 
       <div className="flex flex-col sm:flex-row sm:flex-wrap w-full ">
