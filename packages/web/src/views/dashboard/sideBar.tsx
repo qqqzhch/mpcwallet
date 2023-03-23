@@ -23,22 +23,20 @@ const SideBar = () => {
           <WalletList></WalletList>
         </Then>
         <Else>
-        <aside
-        id="logo-sidebar"
-        className={`fixed  rounded-xl top-14 left-0 z-40 w-64 h-screen transition-transform ${showsideBar ? '' : '-translate-x-full sm:translate-x-0'}  `}
-        aria-label="Sidebar"
-      >
-        <ChainName></ChainName>
-        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50   dark:bg-gray-800">
-          <UserPanel></UserPanel>
-          <SiderMenu></SiderMenu>
-        </div>
-      </aside>
-
+          <aside
+            id="logo-sidebar"
+            className={`fixed  rounded-xl top-14 left-0 z-40 w-64 h-screen transition-transform ${showsideBar ? '' : '-translate-x-full sm:translate-x-0'}  `}
+            aria-label="Sidebar"
+          >
+            <ChainName></ChainName>
+            <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50   dark:bg-gray-800">
+              <UserPanel></UserPanel>
+              <SiderMenu></SiderMenu>
+            </div>
+          </aside>
         </Else>
-
       </If>
-      
+
       {/* <div className={`fixed  rounded-xl top-14 left-0 z-40 w-64 h-screen transition-transform ${showsideBar ? '' : '-translate-x-full sm:translate-x-0'}  `}>
       
       </div> */}

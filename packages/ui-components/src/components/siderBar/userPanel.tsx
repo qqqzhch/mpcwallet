@@ -5,7 +5,7 @@ import { cutOut } from '../../utils'
 
 import NewTransaction from './newTransaction'
 
-import { SquaresPlusIcon ,Bars3Icon } from '@heroicons/react/20/solid'
+import { SquaresPlusIcon, Bars3Icon } from '@heroicons/react/20/solid'
 
 import MpcAvvvatar from '../mpcAvvvatar'
 import CopyAddress from '../mpcinfo/copyAddress'
@@ -20,7 +20,7 @@ const UserPanel: FC = () => {
   const { address } = useParams<{ address: string; chainType: string }>()
 
   const { chainId } = useWeb3React()
-  const togglesidewalletMenu= useAppStore((state)=>state.togglesidewalletMenu)
+  const togglesidewalletMenu = useAppStore(state => state.togglesidewalletMenu)
 
   return (
     <>
@@ -61,7 +61,9 @@ const UserPanel: FC = () => {
           <ScanUrl></ScanUrl>
         </button>
         <button
-        onClick={()=>{togglesidewalletMenu()}}
+          onClick={() => {
+            togglesidewalletMenu()
+          }}
           type="button"
           className="text-blue-700  bg-gray-200
       hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 
@@ -70,11 +72,9 @@ const UserPanel: FC = () => {
           <Bars3Icon className=" h-4 w-4 "></Bars3Icon>
         </button>
       </div>
-      <div  className="pl-2.5 mb-5">
+      <div className="pl-2.5 mb-5">
         <NewTransaction></NewTransaction>
       </div>
-
-      
     </>
   )
 }

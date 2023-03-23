@@ -99,7 +99,7 @@ export const intialState = {
   },
   walletAccounts: [],
   sideBar: false,
-  walletMenu:false
+  walletMenu: false
 }
 
 const createMyStore = (state: typeof intialState = intialState) => {
@@ -233,9 +233,8 @@ const createMyStore = (state: typeof intialState = intialState) => {
               })
             },
             togglesidewalletMenu: () => {
-              console.log('--')
               set(state => {
-                state.walletMenu= !state.walletMenu
+                state.walletMenu = !state.walletMenu
               })
             },
             resetCreateGroupAdmin: () => {
