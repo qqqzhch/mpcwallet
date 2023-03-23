@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC,useEffect, useState } from 'react'
 import { Dialog } from '@headlessui/react'
 import ChainName from '../chainList/chainName'
 import Avvvatars from 'avvvatars-react'
@@ -10,7 +10,7 @@ import { formatUnits,formatFromWei,gasFee } from '../../utils'
 import { useWeb3React } from '@web3-react/core'
 
 import Skeleton from 'react-loading-skeleton'
-import { If, Then, Else } from 'react-if'
+import { If, Then, Else, When } from 'react-if'
 //Skeleton
 
 type Props = {
@@ -23,10 +23,33 @@ type Props = {
 
 const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next,assert }) => {
   const { address } = useParams<{ address: string; chainType: string }>()
-  const { chainId } = useWeb3React()
-  if(userTxInput){
-    console.log(userTxInput?.gas * userTxInput?.gasPrice)
-  }
+  const { chainId, library } = useWeb3React()
+  const [gasError,setGasError]=useState<string>()
+
+  useEffect(() => {
+    const run = async () => {
+      if (userTxInput != undefined) {
+        const txforestimateGas = {
+          from: userTxInput?.from,
+          to: userTxInput?.to,
+          data: userTxInput.assert?.contractaddress ? userTxInput.data : '',
+          value: userTxInput.assert?.contractaddress ? '0x' : userTxInput.value
+        }
+        console.log('gas')
+        try {
+          await library.estimateGas(txforestimateGas)  
+          setGasError("")
+        } catch (error:unknown) {
+          console.log(error)
+          const errorinfo=error as {reason:string}
+          setGasError(errorinfo.reason)
+          return;  
+        }
+        
+      }
+    }
+    run()
+  }, [library,userTxInput])
   
 
   return (
@@ -71,7 +94,9 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next,assert }
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estimated fee </label>
             <div className=" flex flex-row ">
-              <If condition={userTxInput == undefined || userTxInput.gas == 0 || userTxInput.gasPrice == 0}>
+              <If condition={gasError===undefined}>
+                <Then>
+                <If condition={userTxInput == undefined || userTxInput.gas == 0 || userTxInput.gasPrice == 0}>
                 <Then>
                   <div className=" flex-1 ">
                     <Skeleton count={1}></Skeleton>
@@ -85,6 +110,17 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next,assert }
                   </span>
                 </Else>
               </If>
+
+                </Then>
+                <Else>
+                  <div className='text-red-400'>
+                  {gasError}
+                  </div>
+                  
+                </Else>
+
+              </If>
+              
             </div>
           </div>
           {/* <div className="mb-6">

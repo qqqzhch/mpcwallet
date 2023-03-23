@@ -167,6 +167,14 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
         //   value: unsigedtx.assert?.contractaddress ? '0x' : unsigedtx.value
         // }
         // console.log('gas')
+        // try {
+        //   await library.estimateGas(txforestimateGas)  
+        // } catch (error:unknown) {
+        //   console.log(error)
+        //   const errorinfo=error as {reason:string}
+        //   addToast(errorinfo.reason, { appearance: 'error' })
+        //   return;  
+        // }
         
         const gasprise: BigNumber = await library.getGasPrice()
         const gas = ethers.utils.parseUnits("0.0001", "gwei");
