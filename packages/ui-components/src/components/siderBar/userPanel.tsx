@@ -5,7 +5,7 @@ import { cutOut } from '../../utils'
 
 import NewTransaction from './newTransaction'
 
-import { SquaresPlusIcon } from '@heroicons/react/20/solid'
+import { SquaresPlusIcon, Bars3Icon } from '@heroicons/react/20/solid'
 
 import MpcAvvvatar from '../mpcAvvvatar'
 import CopyAddress from '../mpcinfo/copyAddress'
@@ -14,15 +14,17 @@ import { useWeb3React } from '@web3-react/core'
 
 import { formatUnits } from '../../utils'
 import ScanUrl from '../mpcinfo/scanUrl'
+import { useAppStore } from '../..'
 
 const UserPanel: FC = () => {
   const { address } = useParams<{ address: string; chainType: string }>()
 
   const { chainId } = useWeb3React()
+  const togglesidewalletMenu = useAppStore(state => state.togglesidewalletMenu)
 
   return (
     <>
-      <div className="flex items-center pl-2.5 mb-5 flex-row" title={address}>
+      <div className="flex items-center pl-2.5 mb-5 flex-row " title={address}>
         <div className=" w-12 ">
           {/* <Avvvatars value={address ? address : ''} style="shape" size={40} /> */}
           <MpcAvvvatar address={address} chainid={chainId}></MpcAvvvatar>
@@ -32,7 +34,7 @@ const UserPanel: FC = () => {
           <div>{formatUnits(chainId, '1000000000000000000')}</div>
         </div>
       </div>
-      <div className="pl-2.5 mb-5">
+      <div className="pl-2.5 mb-5 flex flex-row justify-between">
         <button
           type="button"
           className="text-blue-700  bg-gray-200
@@ -57,6 +59,17 @@ const UserPanel: FC = () => {
       font-medium rounded-lg text-sm   p-1.5 text-center inline-flex items-center mr-2"
         >
           <ScanUrl></ScanUrl>
+        </button>
+        <button
+          onClick={() => {
+            togglesidewalletMenu()
+          }}
+          type="button"
+          className="text-blue-700  bg-gray-200
+      hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 
+      font-medium rounded-lg text-sm   p-1.5 text-center inline-flex items-center mr-2"
+        >
+          <Bars3Icon className=" h-4 w-4 "></Bars3Icon>
         </button>
       </div>
       <div className="pl-2.5 mb-5">

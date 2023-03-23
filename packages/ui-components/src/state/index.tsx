@@ -48,6 +48,7 @@ export interface AppState {
   walletAccounts: Array<walletaccount>
   pollingPubKey: Array<PollingPubKey>
   sideBar: boolean
+  walletMenu: boolean
   increase: (by: number) => void
   setLoginAccount: (rpc: string, enode: string, adress: string, signEnode?: string) => void
   clearLoginAccount: (adress: string | null | undefined) => void
@@ -70,6 +71,7 @@ export interface AppState {
   getTxApproveListByStatus: (status: number, mpcAddress?: string) => Array<TxApprove>
   getTxApproveByKeyID: (keyid: string | undefined) => TxApprove | undefined
   getTxApproveGroupByaccountByStatus: (status: number) => Array<walletNeedApproval>
+  togglesidewalletMenu: () => void
 }
 
 export const intialState = {
@@ -96,7 +98,8 @@ export const intialState = {
     txApproveList: []
   },
   walletAccounts: [],
-  sideBar: false
+  sideBar: false,
+  walletMenu: false
 }
 
 const createMyStore = (state: typeof intialState = intialState) => {
@@ -229,6 +232,11 @@ const createMyStore = (state: typeof intialState = intialState) => {
                 state.sideBar = !state.sideBar
               })
             },
+            togglesidewalletMenu: () => {
+              set(state => {
+                state.walletMenu = !state.walletMenu
+              })
+            },
             resetCreateGroupAdmin: () => {
               set(state => {
                 state.createGroup = intialState.createGroup
@@ -294,7 +302,7 @@ const createMyStore = (state: typeof intialState = intialState) => {
               return result
             }
           }),
-          { name: 'app-storage' }
+          { name: 'app-storage-v1' }
         )
       )
     )
