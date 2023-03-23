@@ -1,83 +1,71 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState,FC,useCallback, useEffect } from 'react'
+import { Fragment, useState, FC, useCallback, useEffect } from 'react'
 import { ProposedTransaction } from '../../hooks/useServices/models'
 import Preview from '../transaction/preview'
-import { TxInput, assertType, buidTransactionJson, Unsigedtx,buidTransactionForTxbuild } from '../../utils/buildMpcTx'
+import { TxInput, assertType, Unsigedtx, buidTransactionForTxbuild } from '../../utils/buildMpcTx'
 import { useParams } from 'react-router-dom'
 import { useWeb3React } from '@web3-react/core'
 import useChainInfo from '../../hooks/useChainInfo'
 
-type Props={
-    isOpen:boolean
-    closeModal:()=>void,
-    transaction:ProposedTransaction|undefined
+type Props = {
+  isOpen: boolean
+  closeModal: () => void
+  transaction: ProposedTransaction | undefined
 }
 
-const ContractModel:FC<Props> = ({isOpen,closeModal,transaction}) => {
+const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
   const [userTxInputReview, setUsertTxInputReview] = useState<Unsigedtx>()
-  const { address, chainType } = useParams<{ address: string; chainType: string }>()
-  const { chainId, library } = useWeb3React()
+  const { chainType } = useParams<{ address: string; chainType: string }>()
+  const { chainId } = useWeb3React()
   const [assert, setAssert] = useState<assertType>()
-  const  ChainInfo = useChainInfo()
-  
+  const ChainInfo = useChainInfo()
+
   function openGasModel() {
     // setIsOpen(true)
   }
-  console.log('- -')
-  useEffect(()=>{
-    console.log('transactions 2',transaction)
-    if(transaction!=undefined){
-      const item:ProposedTransaction =transaction;
-     if(chainType!=undefined&&chainId!=undefined){
-       const txinfo:TxInput={
-        from: item.raw.from,
-        to: item.raw.to,
-        gas: 0,
-        gasPrice: 0,
-        originValue:item.raw.value.toString(),
-        name: ""
-       }
-      const haveNative =item.raw.haveNative
-      const dataUnsigedtx = buidTransactionForTxbuild(chainType, chainId, txinfo,transaction.raw.data,haveNative)
-      console.log('- -')
-      if(haveNative&&ChainInfo&&ChainInfo.logoUrl){
-        setAssert({
-          name: ChainInfo.nativeCurrency.name,
-          img: ChainInfo.logoUrl,
-          balance: "",
-          decimals: ChainInfo?.nativeCurrency.decimals
-        })
 
+  useEffect(() => {
+    if (transaction != undefined) {
+      const item: ProposedTransaction = transaction
+      if (chainType != undefined && chainId != undefined) {
+        const txinfo: TxInput = {
+          from: item.raw.from,
+          to: item.raw.to,
+          gas: 0,
+          gasPrice: 0,
+          originValue: item.raw.value.toString(),
+          name: ''
+        }
+        const haveNative = item.raw.haveNative
+        const dataUnsigedtx = buidTransactionForTxbuild(chainType, chainId, txinfo, transaction.raw.data, haveNative)
+
+        if (haveNative && ChainInfo && ChainInfo.logoUrl) {
+          setAssert({
+            name: ChainInfo.nativeCurrency.name,
+            img: ChainInfo.logoUrl,
+            balance: '',
+            decimals: ChainInfo?.nativeCurrency.decimals
+          })
+        }
+
+        setUsertTxInputReview(dataUnsigedtx)
       }
-      
-      setUsertTxInputReview(dataUnsigedtx)
-
-     }
-      
-
-      
-
     }
-    
-
-  },[transaction,ChainInfo,chainId,chainType])
+  }, [transaction, ChainInfo, chainId, chainType])
 
   const previous = useCallback(() => {
-    
+    openGasModel()
   }, [])
 
   const sendSigner = useCallback(() => {
-    
+    openGasModel()
   }, [])
 
-  
-    return (
-        <div>
-            
-
+  return (
+    <div>
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
-        <Transition.Child
+          <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0"
@@ -101,18 +89,15 @@ const ContractModel:FC<Props> = ({isOpen,closeModal,transaction}) => {
                 leaveTo="opacity-0 scale-95"
               >
                 <div>
-                  <Preview  userTxInput={userTxInputReview} openGasModel={openGasModel} previous={previous} next={sendSigner}
-                  assert={assert}
-                   ></Preview>
+                  <Preview userTxInput={userTxInputReview} openGasModel={openGasModel} previous={previous} next={sendSigner} assert={assert}></Preview>
                 </div>
               </Transition.Child>
             </div>
           </div>
-
         </Dialog>
       </Transition>
-        </div>
-    );
-};
+    </div>
+  )
+}
 
-export default ContractModel;
+export default ContractModel

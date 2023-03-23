@@ -8,7 +8,7 @@ import { cutOut } from '../../utils'
 import useChainName from '../../hooks/useChainName'
 import { useToasts } from 'react-toast-notifications'
 import { useParams } from 'react-router-dom'
-import useAccount from '../../hooks/useAccount'
+// import useAccount from '../../hooks/useAccount'
 import ContractModel from './contractModel'
 import useChainInfo from '../../hooks/useChainInfo'
 
@@ -27,9 +27,9 @@ const TransactionBuild: FC = () => {
   const [transactions, setTransactions] = useState<ProposedTransaction[]>([])
   const [value, setValue] = useState('')
   const { addToast } = useToasts()
-  const { address, chainType } = useParams<{ address: string; chainType: string }>()
-  const mpcGroupAccount = useAccount(address)
-  const  ChainInfo = useChainInfo()
+  const { address } = useParams<{ address: string; chainType: string }>()
+  // const mpcGroupAccount = useAccount(address)
+  const ChainInfo = useChainInfo()
 
   const [isOpen, setIsOpen] = useState(false)
 
@@ -119,9 +119,9 @@ const TransactionBuild: FC = () => {
 
     try {
       const cleanTo = web3.utils.toChecksumAddress(toAddress)
-      
-      const cleanValue = value.length > 0 ? web3.utils.toWei(value) : 0
-      const haveNative =value.length > 0  ?true:false
+
+      const cleanValue = value.length > 0 ? value : 0
+      const haveNative = value.length > 0 ? true : false
 
       if (data.length === 0) {
         data = '0x'
@@ -130,11 +130,11 @@ const TransactionBuild: FC = () => {
       if (description.length === 0) {
         description = `Transfer ${cleanValue} ETH to ${cleanTo}`
       }
-      if(address!=undefined)
-      transactions.push({
-        description,
-        raw: { from:address,to: cleanTo, value: cleanValue, data,haveNative }
-      })
+      if (address != undefined)
+        transactions.push({
+          description,
+          raw: { from: address, to: cleanTo, value: cleanValue, data, haveNative }
+        })
 
       setInputCache([])
       setTransactions(transactions)
@@ -143,7 +143,7 @@ const TransactionBuild: FC = () => {
     } catch (e) {
       console.error(e)
     }
-  }, [services, transactions, toAddress, value, contract, selectedMethodIndex, inputCache,address])
+  }, [services, transactions, toAddress, value, contract, selectedMethodIndex, inputCache, address])
 
   const deleteTransaction = useCallback(
     async (inputIndex: number) => {
@@ -158,7 +158,7 @@ const TransactionBuild: FC = () => {
     if (!transactions.length) {
       return
     }
-    console.log(transactions)
+
     setIsOpen(true)
 
     //     try {
@@ -350,7 +350,11 @@ const TransactionBuild: FC = () => {
           </div>
         </When>
       </div>
-      <ContractModel isOpen={isOpen} closeModal={closeModal} transaction={transactions&&transactions.length>0?transactions[0]:undefined}></ContractModel>
+      <ContractModel
+        isOpen={isOpen}
+        closeModal={closeModal}
+        transaction={transactions && transactions.length > 0 ? transactions[0] : undefined}
+      ></ContractModel>
     </div>
   )
 }

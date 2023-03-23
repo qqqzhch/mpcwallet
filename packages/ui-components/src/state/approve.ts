@@ -16,7 +16,7 @@ export interface TxApprove {
   Txid?: string
   Reply_status?: string
   Reply_timestamp?: string
-  Signed:number
+  Signed: number
 }
 
 export const txApproveListintial = []

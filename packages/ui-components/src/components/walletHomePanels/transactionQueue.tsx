@@ -3,7 +3,7 @@ import { ArrowUpRightIcon, UsersIcon } from '@heroicons/react/20/solid'
 import { useAppStore } from '../..'
 import { formatTxApprove } from '../../utils'
 import { Link, useParams } from 'react-router-dom'
-import {nowThreshold} from '../../utils/index'
+import { nowThreshold } from '../../utils/index'
 
 const TransactionQueue: FC = () => {
   const needMpcApproves = useAppStore(state => state.getTxApproveListByStatus(0))
@@ -37,7 +37,7 @@ const TransactionQueue: FC = () => {
                   </div>
                   <div className="inline-flex">
                     <UsersIcon className="text-indigo-500 w-6 h-6 flex-shrink-0 mr-4"></UsersIcon>
-                    <span className="title-font font-medium">{nowThreshold(item.Threshold,item.Signed)}</span>
+                    <span className="title-font font-medium">{nowThreshold(item.Threshold, item.Signed)}</span>
                   </div>
                 </div>
               </Link>

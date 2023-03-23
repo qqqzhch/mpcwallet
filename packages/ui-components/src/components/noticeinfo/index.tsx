@@ -21,7 +21,7 @@ const NoticeInfo: FC<Props> = ({ children }) => {
   const txApproveList = useAppStore(state => state.approve.txApproveList)
 
   useEffect(() => {
-    setTxCount(txApproveList.filter(item => item.hiden !== true&&item.Status==0).length)
+    setTxCount(txApproveList.filter(item => item.hiden !== true && item.Status == 0).length)
   }, [txApproveList])
 
   return (
