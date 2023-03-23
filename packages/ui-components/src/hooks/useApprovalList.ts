@@ -26,7 +26,8 @@ export default function useApprovalList() {
   const setWalletApproveList = useAppStore(state => state.setWalletApproveList)
   const { account } = useWeb3React()
 
-  const { data, error, isLoading } = useSWR(account != null && account != undefined ? '/smpc/txApprovelist' : null, () => fetcher(account), {
+  const { data, error, isLoading } = useSWR(account != null && account != undefined ? 
+    ['/smpc/txApprovelist',account] : null, () => fetcher(account), {
     refreshInterval: 1000 * 15
   })
   useEffect(() => {

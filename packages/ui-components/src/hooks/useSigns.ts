@@ -9,6 +9,7 @@ import { getsmpc } from '@monorepo/api/src/web3'
 // import { walletApprove } from '../state/approve'
 import { Unsigedtx } from '../utils/buildMpcTx'
 import { walletaccount } from '../state/walletaccount'
+import { useParams } from 'react-router-dom'
 
 
 interface chainTypes {
@@ -63,6 +64,8 @@ async function getNonce(account: any, rpc: any,evmChainID:number,chainType:strin
 
   // nonceLocal++;
   // return nonceLocal;
+  console.log('account',account)
+  console.log('nonceResult',nonceResult)
   return  ((nonceResult.Data)+1).toString()
 }
 
@@ -282,14 +285,15 @@ export function useGetTxMsgHash(rpc: string | undefined): {
   execute?: (r: Unsigedtx, chainType: string,chainId:number) => Promise<any> | undefined
 } {
   const { account, library } = useWeb3React()
+  const { address:mpcAddress } = useParams<{ address: string }>()
 
   return useMemo(() => {
-    if (!account || !library || !rpc) return {}
+    if (!account || !library || !rpc||!mpcAddress) return {}
     return {
       execute: async (r: Unsigedtx, chainType: string,chainId:number) => {
         console.log('- -')
         web3.setProvider(rpc)
-        const Nonce = await getNonce(account, rpc,chainId,chainType)
+        const Nonce = await getNonce(mpcAddress, rpc,chainId,chainType)
         const data = {
           ...r,
           nonce: parseFloat(Nonce),
@@ -311,7 +315,7 @@ export function useGetTxMsgHash(rpc: string | undefined): {
         return resultData
       }
     }
-  }, [account, library, rpc])
+  }, [account, library, rpc,mpcAddress])
 }
 
 type msgHashType={hash:string,msg:string};

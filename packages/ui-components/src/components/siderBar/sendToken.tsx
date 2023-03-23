@@ -160,17 +160,19 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
   useEffect(() => {
     const run = async () => {
       if (unsigedtx != undefined) {
-        const txforestimateGas = {
-          from: unsigedtx.from,
-          to: unsigedtx.to,
-          data: unsigedtx.assert?.contractaddress ? unsigedtx.data : '',
-          value: unsigedtx.assert?.contractaddress ? '0x' : unsigedtx.value
-        }
-        console.log('gas')
-        const gas: BigNumber = await library.estimateGas(txforestimateGas)
+        // const txforestimateGas = {
+        //   from: unsigedtx.from,
+        //   to: unsigedtx.to,
+        //   data: unsigedtx.assert?.contractaddress ? unsigedtx.data : '',
+        //   value: unsigedtx.assert?.contractaddress ? '0x' : unsigedtx.value
+        // }
+        // console.log('gas')
+        
         const gasprise: BigNumber = await library.getGasPrice()
+        const gas = ethers.utils.parseUnits("0.0001", "gwei");
+        console.log('gas',gas.toString())
 
-        setGas({ gasLimit:'10000000', gasPrise: gasprise.toString() })
+        setGas({ gasLimit:gas.toString(), gasPrise: gasprise.toString() })
         if (unsigedtx) {
           const txinfoInput: Unsigedtx = {
             ...unsigedtx,

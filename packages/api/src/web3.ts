@@ -259,7 +259,16 @@ web3.extend({
       params: 1,
       inputFormatter: [null],
       outputFormatter: undefined,
+    },
+    {
+      name: "getTxHashByKeyId",
+      call: "smw_getTxHashByKeyId",
+      params: 1,
+      inputFormatter: [null],
+      outputFormatter: undefined,
     }
+
+    
   ],
 });
 

@@ -19,7 +19,7 @@ async function fetcher(KeyId: string | null | undefined): Promise<string|undefin
     throw new Error('get Accounts info error ')
   }
 
-  return res.Data
+  return res.Data.toString()
 }
 //0:pending , 1 SUCCESS , 2 FAIL, 3 Timeout, 4 Tx-Pending, 5 Tx-Confirmed, 6 Tx-Failed
 
@@ -37,7 +37,7 @@ const statusCode:{[Key:string]:string}={
 export default function useTxStatusByKeyId(KeyId:string|undefined,refreshInterval:number) {
   
 
-  const { data, error, isLoading } = useSWR(KeyId ? '/smw/getTxStatusByKeyId' : null, () => fetcher(KeyId), {
+  const { data, error, isLoading } = useSWR(KeyId ? ['/smw/getTxStatusByKeyId',KeyId] : null, () => fetcher(KeyId), {
     refreshInterval: refreshInterval||1000 * 15
   })
 

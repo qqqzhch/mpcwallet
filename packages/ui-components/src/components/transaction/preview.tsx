@@ -6,7 +6,7 @@ import Avvvatars from 'avvvatars-react'
 import { useParams } from 'react-router-dom'
 import { cutOut } from '../../utils/index'
 import { TxInput,assertType,Unsigedtx } from '../../utils/buildMpcTx'
-import { formatUnits,formatFromWei } from '../../utils'
+import { formatUnits,formatFromWei,gasFee } from '../../utils'
 import { useWeb3React } from '@web3-react/core'
 
 import Skeleton from 'react-loading-skeleton'
@@ -78,7 +78,7 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next,assert }
                   </div>
                 </Then>
                 <Else>
-                  <span className=" flex-1 "> {userTxInput ? formatUnits(chainId, userTxInput?.gas * userTxInput?.gasPrice) : ''} </span>
+                  <span className=" flex-1 "> {userTxInput ? formatUnits(chainId, gasFee(userTxInput?.gas , userTxInput?.gasPrice)) : ''} </span>
                   <span onClick={openGasModel} className=" underline ">
                     {' '}
                     edit{' '}
