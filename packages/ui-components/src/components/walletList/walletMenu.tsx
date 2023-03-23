@@ -18,6 +18,8 @@ const WalletMenu: FC = props => {
   // const [showwalletMobile, setshowwalletMobile] = useState<boolean>(false)
   const navigate = useNavigate()
   const walletAccounts = useAppStore(state => state.getWalletAccounts(account))
+  const togglesideBar = useAppStore(state => state.togglesideBar)
+  const togglesidewalletMenu = useAppStore(state => state.togglesidewalletMenu)
 
   // const toggle = useCallback(() => {
   //   setshowwalletMobile(!showwalletMobile)
@@ -39,6 +41,8 @@ const WalletMenu: FC = props => {
               <div
                 onClick={() => {
                   navigate(`/dashboard/evm/${item.Mpc_address}`)
+                  togglesideBar()
+                  togglesidewalletMenu()
                 }}
                 key={item.Mpc_address}
                 className="flex flex-wrap  cursor-pointer"
