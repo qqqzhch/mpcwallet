@@ -31,6 +31,7 @@
     "@monorepo/design-tokens": "^1.0.0",
     "@monorepo/eslint-prettier-config": "^1.0.0",
     "@monorepo/ui-components": "^1.0.0",
+    "@rollup/plugin-inject": "^5.0.3",
     "@rsksmart/mock-web3-provider": "^1.0.2-beta1",
     "@tailwindcss/forms": "^0.5.3",
     "add": "^2.0.6",
