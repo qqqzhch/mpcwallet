@@ -17,7 +17,7 @@ type Props = {
 export const Web3Provider: FC<Props> = ({ children }) => {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
-      <ToastProvider autoDismiss={true} autoDismissTimeout={2000}>
+      <ToastProvider autoDismiss={true} autoDismissTimeout={1000 * 10}>
         {children}
       </ToastProvider>
     </Web3ReactProvider>
