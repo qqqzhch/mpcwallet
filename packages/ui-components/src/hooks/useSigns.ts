@@ -19,13 +19,19 @@ const chainTypeName: chainTypes = {
   evm: 0
 }
 
+type metamaskError = {
+  reason: string
+  message: string
+}
+
 export function serverStatusIsSuccess(res: { Status: string }) {
-  if (res.Status.toLowerCase() == 'success') {
+  if (res !== undefined && res.Status.toLowerCase() == 'success') {
     return true
   } else {
     return false
   }
 }
+
 // export function getServerError(data:){
 
 // }
@@ -152,17 +158,18 @@ export function useCreateGroup(
     if (!thresholdmode || nodeArr.length <= 0 || !rpc) return {}
     return {
       execute: async () => {
-        const result = await getsmpc(rpc).getGroupID(thresholdmode, nodeArr)
-
-        let cbData = result
-        if (result && typeof result === 'string') {
-          cbData = JSON.parse(cbData)
+        let errmsg = ''
+        let result
+        try {
+          result = await getsmpc(rpc).getGroupID(thresholdmode, nodeArr)
+        } catch (error: unknown) {
+          errmsg = (error as Error).message
         }
         let data = {}
-        if (cbData.Status !== 'Error') {
-          data = { msg: 'Success', info: cbData.Data }
+        if (serverStatusIsSuccess(result)) {
+          data = { msg: 'success', info: result.Data }
         } else {
-          data = { msg: 'Error', error: cbData.Tip }
+          data = { msg: 'error', error: errmsg || result.Tip }
         }
         return data
       }
@@ -203,22 +210,25 @@ export function useReqSmpcAddress(
           Uuid
         }
         console.info('Sigs', Sigs)
-
+        let errmsg
         const signer = library.getSigner()
-        let rsv = await signer.signMessage(JSON.stringify(data, null, 8))
-        // 如果v是1b换成00 如果v是1c换成01
-        rsv = rsv.slice(0, 130) + (rsv.slice(130) === '1b' ? '00' : '01')
+        let cbData
+        try {
+          let rsv = await signer.signMessage(JSON.stringify(data, null, 8))
+          // 如果v是1b换成00 如果v是1c换成01
+          rsv = rsv.slice(0, 130) + (rsv.slice(130) === '1b' ? '00' : '01')
 
-        let cbData = await getsmpc().reqKeyGen(rsv, JSON.stringify(data, null, 8))
+          cbData = await getsmpc().reqKeyGen(rsv, JSON.stringify(data, null, 8))
+        } catch (error: unknown) {
+          const errinfo = error as metamaskError
+          errmsg = errinfo.reason || errinfo.message
+        }
 
         let resultData: any = {}
-        if (cbData && typeof cbData === 'string') {
-          cbData = JSON.parse(cbData)
-        }
-        if (cbData.Status.toLowerCase() !== 'error') {
-          resultData = { msg: 'Success', info: cbData.Data }
+        if (serverStatusIsSuccess(cbData)) {
+          resultData = { msg: 'success', info: cbData.Data }
         } else {
-          resultData = { msg: 'Error', error: cbData.Tip }
+          resultData = { msg: 'error', error: errmsg || cbData.Tip }
         }
         return resultData
       }

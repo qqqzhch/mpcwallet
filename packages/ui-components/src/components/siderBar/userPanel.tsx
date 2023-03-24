@@ -65,10 +65,9 @@ const UserPanel: FC = () => {
         <button
           onClick={() => {
             togglesidewalletMenu()
-            if(showsideBar==false){
+            if (showsideBar == false) {
               togglesideBar()
             }
-            
           }}
           type="button"
           className="text-blue-700  bg-gray-200

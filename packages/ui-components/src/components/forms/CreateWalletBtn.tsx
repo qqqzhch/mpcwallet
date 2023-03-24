@@ -5,6 +5,8 @@ import { useCreateGroup, useReqSmpcAddress } from '../../hooks/useSigns'
 import { useToasts } from 'react-toast-notifications'
 import { useNavigate } from 'react-router-dom'
 import { rpclist } from '../../constants/rpcConfig'
+import loadingiImg from '../../assets/loading.svg'
+import { Else, If, Then } from 'react-if'
 
 const CreateWalletBtn: FC = () => {
   const createGroup = useAppStore(state => state.createGroup)
@@ -20,6 +22,8 @@ const CreateWalletBtn: FC = () => {
   const [gid, setGid] = useState<string>('')
   const [uuid, setUuid] = useState<string>('')
   const [sigs, setSigs] = useState<string>('')
+  const [btnLoading, setBtnLoading] = useState<boolean>(false)
+
   const { addToast } = useToasts()
   const navigate = useNavigate()
 
@@ -34,17 +38,18 @@ const CreateWalletBtn: FC = () => {
 
   const create = useCallback(() => {
     const run = async () => {
-      if (execute) {
+      if (execute && btnLoading == false) {
+        setBtnLoading(true)
         setGid('')
         setUuid('')
         setSigs('')
         const res = await execute()
 
-        if (res.msg == 'Error') {
+        if (res.msg == 'error') {
           addToast(res.error, { appearance: 'error' })
-          return
+          setBtnLoading(false)
         }
-        if (res.msg === 'Success') {
+        if (res.msg === 'success') {
           setGid(res.info.Gid)
           setUuid(res.info.Uuid)
           setSigs(res.info.Sigs)
@@ -52,37 +57,27 @@ const CreateWalletBtn: FC = () => {
       }
     }
     run()
-  }, [execute, addToast])
+  }, [execute, addToast, btnLoading])
 
   useEffect(() => {
     const run = async () => {
-      if (gid != '' && uuid !== '' && reqSmpcAddr) {
+      if (gid != '' && uuid !== '' && reqSmpcAddr && btnLoading) {
         const res = await reqSmpcAddr()
 
-        if (res.msg == 'Error') {
+        if (res.msg == 'error') {
           addToast(res.error, { appearance: 'error' })
-          return
         }
-        if (res.msg === 'Success') {
+        if (res.msg === 'success') {
           const keyid = res.info
           setcreateGroupWalletKeyID(keyid)
           addToast('Created successfully', { appearance: 'success' })
-          //use res.info and getReqAddrStatus to get adress status
-          // const newPollingPubKeyItem = {
-          //   fn: 'getReqAddrStatus',
-          //   params: [keyid],
-          //   data: {
-          //     GroupID: gid,
-          //     ThresHold: createGroup.threshold.toString() + '/' + createGroup.admins.length
-          //   }
-          // }
-          // setpollingPubKey(newPollingPubKeyItem)
           navigate('/walletApproveState')
         }
+        setBtnLoading(false)
       }
     }
     run()
-  }, [gid, reqSmpcAddr, addToast, setpollingPubKey, createGroup, navigate, uuid, sigs, setcreateGroupWalletKeyID])
+  }, [gid, reqSmpcAddr, addToast, setpollingPubKey, createGroup, navigate, uuid, sigs, setcreateGroupWalletKeyID, btnLoading])
 
   return (
     <button
@@ -91,7 +86,13 @@ const CreateWalletBtn: FC = () => {
       }}
       className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
     >
-      Next
+      <If condition={btnLoading}>
+        <Then>
+          <img className="inline w-4 h-4 mr-3 text-white animate-spin" src={loadingiImg}></img>
+          loading...
+        </Then>
+        <Else>Next</Else>
+      </If>
     </button>
   )
 }

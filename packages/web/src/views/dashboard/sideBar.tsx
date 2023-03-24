@@ -13,11 +13,9 @@ const SideBar = () => {
 
   function onClick() {
     togglesideBar()
-    if(walletMenu){
+    if (walletMenu) {
       togglesidewalletMenu()
     }
-    
-    
   }
 
   return (

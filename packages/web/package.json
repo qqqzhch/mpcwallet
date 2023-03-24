@@ -33,6 +33,7 @@
     "@monorepo/ui-components": "^0.1.16",
     "@rsksmart/mock-web3-provider": "^1.0.2-beta1",
     "@tailwindcss/forms": "^0.5.3",
+    "add": "^2.0.6",
     "dayjs": "^1.11.7",
     "eventemitter3": "^5.0.0",
     "js-sha3": "^0.8.0",
