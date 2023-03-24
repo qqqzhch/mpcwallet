@@ -51,7 +51,10 @@ export function checkThreshold(str: string) {
   }
 }
 
-export function nowThreshold(str: string, Signed: number) {
+export function nowThreshold(str: string, Signed: number, issignHIstory: boolean) {
+  if (issignHIstory) {
+    return str
+  }
   const list = str.split('/')
   return Signed + '/' + list[1]
 }

@@ -26,14 +26,14 @@ const Asserts = () => {
           >
             Tokens
           </Tab>
-          <Tab
+          {/* <Tab
             key={'Nfts'}
             className={({ selected }) =>
               classNames('inline-flex p-4 border-b-2 border-transparent rounded-t-lg outline-none group', selected ? 'text-blue-600  border-blue-600' : '')
             }
           >
             Nfts
-          </Tab>
+          </Tab> */}
         </Tab.List>
         <Tab.Panels>
           <Tab.Panel key={'Tokens'}>

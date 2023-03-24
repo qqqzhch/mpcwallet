@@ -386,27 +386,38 @@ export function useTxApproveAccept(rpc: string | undefined): {
     return {
       execute: async (keyid: string, chainType: string, MsgHash: string[], MsgContext: string[], Accept: string, chainId: number) => {
         web3.setProvider(rpc)
-        // const Nonce = await getNonce(account, rpc,chainId,chainType)
-        const Nonce = await library.getTransactionCount(account)
-        const data = {
-          TxType: 'ACCEPTSIGN',
-          Account: account,
-          Nonce: Nonce.toString(),
-          Key: keyid,
-          Accept,
-          MsgHash,
-          MsgContext,
-          TimeStamp: Date.now().toString(),
-          ChainType: chainTypeName[chainType]
+        let cbData, errmsg
+        try {
+          const Nonce = await library.getTransactionCount(account)
+          const data = {
+            TxType: 'ACCEPTSIGN',
+            Account: account,
+            Nonce: Nonce.toString(),
+            Key: keyid,
+            Accept,
+            MsgHash,
+            MsgContext,
+            TimeStamp: Date.now().toString(),
+            ChainType: chainTypeName[chainType]
+          }
+
+          const signer = library.getSigner()
+          let rsv = await signer.signMessage(JSON.stringify(data, null, 8))
+          // 如果v是1b换成00 如果v是1c换成01
+          rsv = rsv.slice(0, 130) + (rsv.slice(130) === '1b' ? '00' : '01')
+          cbData = await getsmpc().acceptSign(rsv, JSON.stringify(data, null, 8))
+        } catch (error: unknown) {
+          const errinfo = error as metamaskError
+          errmsg = errinfo.reason || errinfo.message
+        }
+        let resultData
+        if (serverStatusIsSuccess(cbData)) {
+          resultData = { msg: 'success', info: cbData.Data }
+        } else {
+          resultData = { msg: 'error', error: errmsg || cbData.Tip }
         }
 
-        const signer = library.getSigner()
-        let rsv = await signer.signMessage(JSON.stringify(data, null, 8))
-        // 如果v是1b换成00 如果v是1c换成01
-        rsv = rsv.slice(0, 130) + (rsv.slice(130) === '1b' ? '00' : '01')
-        const cbData = await getsmpc().acceptSign(rsv, JSON.stringify(data, null, 8))
-
-        return cbData
+        return resultData
       }
     }
   }, [account, library, rpc])
