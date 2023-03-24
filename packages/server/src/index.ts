@@ -7,6 +7,9 @@ const app = express()
 app.use(express.json())
 const port = 3004
 
+function wait(ms:number) {
+  return new Promise(resolve =>setTimeout(() =>resolve(ms), ms));
+};
 
 export interface QueryPayload {
   payload: string
@@ -50,13 +53,18 @@ app.post('/api', async (_req: any, res: any) => {
     jsondata = await response.text();
     jsondata=JSON.parse(jsondata)
   }
-
-
+  if(method=="smw_getGroupId"){
+    // res.status(500);
+    // jsondata.result.Status="error"
+    wait(1000*10)
+  }
+  
 
 
 
 
   res.json(jsondata)
+  
 })
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
