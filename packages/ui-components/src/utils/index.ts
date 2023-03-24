@@ -61,3 +61,16 @@ export function gasFee(gas: number | string, gasPrise: number | string): string 
   const gasPriseBN = BigNumber.from(gasPrise.toString())
   return gasBN.mul(gasPriseBN).toString()
 }
+
+export function serverStatusIsSuccess(res: { Status: string }) {
+  if (res !== undefined && res.Status.toLowerCase() == 'success') {
+    return true
+  } else {
+    return false
+  }
+}
+
+export type metamaskError = {
+  reason: string
+  message: string
+}
