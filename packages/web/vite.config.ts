@@ -13,9 +13,10 @@ import type * as http from 'node:http'
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
+    host:"192.168.0.100",
     proxy: {
       "/api": {
-        target: "http://localhost:3004",
+        target: "http://192.168.0.100:3004/",
         changeOrigin: true
       },
     },

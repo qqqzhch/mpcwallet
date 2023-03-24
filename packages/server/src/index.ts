@@ -67,4 +67,4 @@ app.post('/api', async (_req: any, res: any) => {
   
 })
 
-app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
+app.listen(port,'0.0.0.0',() => console.log(`Example app listening at http://localhost:${port}`))
