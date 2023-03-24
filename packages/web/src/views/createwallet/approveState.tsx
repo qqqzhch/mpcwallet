@@ -24,7 +24,7 @@ const ApproveState = () => {
 
   return (
     <div className="flex flex-col lg:flex-row  xl:mx-40 2xl:mx-80 ">
-      <div className="felx flex-col w-full xl:w-2/3 p-10">
+      <div className="felx flex-col w-full xl:w-2/3 p-10 bg-white">
         <h1 className="font-semibold text-3xl mb-4 pb-4  border-b ">Your wallet has been created successfully</h1>
         <div className="mb-4 pb-4  border-b  px-4">
           <h3 className="font-semibold text-xl pb-4 ">Status</h3>

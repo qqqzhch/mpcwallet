@@ -65,28 +65,28 @@ const ChainList: FC<Props> = ({ children }) => {
     <Popover className="relative">
       <Popover.Button className="flex flex-row items-center justify-center  focus:outline-none  ">
         <When condition={unsupported === true}>
-          <div className="px-6 py-1 mx-2 font-semibold  rounded  bg-red-600 font-thin">Error</div>
+          <div className="px-3 py-1 mx-2   rounded  bg-red-600 font-thin">Error</div>
           <div>
             <FontAwesomeIcon icon={icon({ name: 'chevron-down', style: 'solid' })} />
           </div>
         </When>
         <When condition={unsupported !== true && chainId != undefined}>
-          <div className="px-8 py-1 mx-2 font-semibold  rounded  bg-yellow-300 font-thin text-sm">{chianName}</div>
-          <div className="hidden lg:flex">
+          <div className="px-4 py-1 mx-2   rounded  bg-yellow-300 font-thin text-sm">{chianName}</div>
+          <div className="lg:flex">
             <FontAwesomeIcon icon={icon({ name: 'chevron-down', style: 'solid' })} />
           </div>
         </When>
         <When condition={unsupported !== true && chainId === undefined}>
-          <div className="px-6 py-1 mx-2 font-semibold  rounded  bg-yellow-300 font-thin text-sm  max-w-[110px] sm:max-w-lg  truncate">Network</div>
+          <div className="px-3 py-1 mx-2   rounded  bg-yellow-300 font-thin text-sm  max-w-[110px] sm:max-w-lg  truncate">Network</div>
           <div>
             <FontAwesomeIcon icon={icon({ name: 'chevron-down', style: 'solid' })} />
           </div>
         </When>
       </Popover.Button>
 
-      <Popover.Panel className="absolute  z-10 mt-4   max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl left-1/2 ">
-        <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-          <div className="relative grid gap-4 bg-white p-6 flex flex-col">
+      <Popover.Panel className="absolute left-1/4  z-10 mt-4   max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl  ">
+        <div className="overflow-hidden  rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
+          <div className="relative   bg-white p-6 flex flex-col space-y-4">
             {chains?.map(({ item, chainId }) => {
               return (
                 <a

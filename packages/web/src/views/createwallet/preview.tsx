@@ -7,7 +7,7 @@ const Preview = () => {
   const navigate = useNavigate()
   return (
     <div className="flex flex-col lg:flex-row  xl:mx-40 2xl:mx-80 ">
-      <div className="felx flex-col w-full xl:w-2/3 p-10">
+      <div className="felx flex-col w-full xl:w-2/3 p-10 bg-white">
         <h1 className="font-semibold text-3xl mb-4 pb-4  border-b ">Create new Wallet</h1>
         <div className="mb-4 pb-4  border-b  px-4">
           <h3 className="font-semibold text-xl pb-4 ">Review</h3>
@@ -39,7 +39,7 @@ const Preview = () => {
               {createGroup.threshold} out of {createGroup.admins.length} owner(s)
             </div>
           </div>
-          <div className="flex flex-col   lg:flex-row  justify-around gap-8">
+          <div className="flex  flex-col-reverse   lg:flex-row  justify-around space-y-reverse space-y-8 sm:gap-8">
             <button
               onClick={() => {
                 navigate('/creatwallet')

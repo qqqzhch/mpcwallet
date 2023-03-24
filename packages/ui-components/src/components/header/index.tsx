@@ -34,12 +34,12 @@ export const Header: FC = () => {
           onClick={() => {
             onClick()
           }}
-          className="flex  sm:hidden pl-2"
+          className="flex  sm:hidden  p-3"
         >
           <FontAwesomeIcon icon={icon({ name: 'bars', style: 'solid' })} />
         </div>
 
-        <nav className="  flex-1  flex flex-wrap items-center text-base justify-end ">
+        <nav className="  flex-1  flex flex-row items-center text-base justify-end ">
           {/* <div className="pr-4 pl-4    hover:text-gray-900 border-r border-gray-400 last:border-r-0 hidden lg:block">
             <button type="button" className="px-6 py-2 font-semibold border rounded border-gray-800 text-gray-800">
               Switch to bnb BNB Smart Chain
@@ -51,7 +51,7 @@ export const Header: FC = () => {
           <div className="pr-2 pl-2 flex flex-row   hover:text-gray-900 border-r border-gray-400 last:border-r-0  items-center justify-center">
             <Connectwallet></Connectwallet>
           </div>
-          <div className="flex pr-4 pl-4 items-center justify-center   hover:text-gray-900 border-r border-gray-400 last:border-r-0">
+          <div className="flex pr-2 pl-2 items-center justify-center   hover:text-gray-900 border-r border-gray-400 last:border-r-0">
             <ChainList></ChainList>
           </div>
         </nav>
