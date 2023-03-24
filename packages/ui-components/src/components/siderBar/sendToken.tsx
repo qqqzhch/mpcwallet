@@ -81,6 +81,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
   const [isOpen, setIsOpen] = useState(false)
 
   const mpcGroupAccount = useAccount(address)
+  const [btnLoading, setBtnLoading] = useState<boolean>(false)
 
   const {
     register,
@@ -184,7 +185,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
       }
     }
     run()
-  }, [unsigedtx, library, chainType, getUnsigedTransactionHash])
+  }, [unsigedtx, library, chainType])
 
   useEffect(() => {
     const run = async () => {
@@ -203,7 +204,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
           gasPrice: gas.gasPrise as unknown as number
         }
         const data = await getUnsigedTransactionHash(txinfo, chainType, chainId)
-        if (data.msg == 'Success') {
+        if (data.msg == 'success') {
           setMsgHash(data.info)
           setMsgHash({ hash: data.info, msg: data.msgContext })
         } else {
@@ -225,14 +226,15 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
       gas.gasLimit != undefined &&
       gas.gasPrise != undefined
     ) {
+      setBtnLoading(true)
       const data = await TransactionSigner(mpcGroupAccount, chainType, msgHash, chainId)
-      if (data.msg == 'Success') {
+      if (data.msg == 'success') {
         addToast('Transactions have been sent', { appearance: 'success' })
+        closeTokenModal()
       } else {
         addToast(data.error, { appearance: 'error' })
       }
-
-      closeTokenModal()
+      setBtnLoading(false)
     }
   }, [TransactionSigner, mpcGroupAccount, chainType, msgHash, unsigedtx, addToast, closeTokenModal, gas, chainId])
 
@@ -425,6 +427,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                       previous={previous}
                       next={sendSigner}
                       assert={userTxInput?.assert}
+                      btnLoading={btnLoading}
                     ></Preview>
                   </When>
                 </div>

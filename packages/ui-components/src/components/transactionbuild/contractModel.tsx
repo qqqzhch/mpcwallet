@@ -89,7 +89,14 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
                 leaveTo="opacity-0 scale-95"
               >
                 <div>
-                  <Preview userTxInput={userTxInputReview} openGasModel={openGasModel} previous={previous} next={sendSigner} assert={assert}></Preview>
+                  <Preview
+                    btnLoading={false}
+                    userTxInput={userTxInputReview}
+                    openGasModel={openGasModel}
+                    previous={previous}
+                    next={sendSigner}
+                    assert={assert}
+                  ></Preview>
                 </div>
               </Transition.Child>
             </div>
