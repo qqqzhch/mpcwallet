@@ -40,8 +40,8 @@ const Overview: FC = () => {
           <div className=" text-2xl font-semibold ">1</div>
         </div>
         <div className=" flex  flex-col w-1/4 sm:w-1/3 gap-2">
-          <div className=" text-blue-500">nfts</div>
-          <div className=" text-2xl font-semibold ">1</div>
+          {/* <div className=" text-blue-500">nfts</div>
+          <div className=" text-2xl font-semibold ">1</div> */}
         </div>
         <div className=" flex  flex-col w-1/2 sm:w-1/3  pt-8">
           <button

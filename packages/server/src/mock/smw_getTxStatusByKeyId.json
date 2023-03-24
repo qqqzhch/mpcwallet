@@ -1,0 +1,10 @@
+{
+    "jsonrpc": "2.0",
+    "id": 67,
+    "result": {
+        "Data": 0,
+        "Error": "",
+        "Status": "success",
+        "Tip": ""
+    }
+}

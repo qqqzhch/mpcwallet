@@ -16,6 +16,8 @@ import { useWeb3React } from '@web3-react/core'
 import { nowThreshold, gasFee, formatUnits } from '../../utils/index'
 import useTxStatusByKeyId from '../../hooks/useTxStatusByKeyId'
 import useTxHashByKeyId from '../../hooks/useTxHashByKeyId'
+import loadingiImg from '../../assets/loading.svg'
+import ScanTxUrl from '../mpcinfo/scanTxUrl'
 
 function checkThreshold(str: string) {
   const list = str.split('/')
@@ -55,20 +57,23 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
   const { data: txhashInfo } = useTxHashByKeyId(txApprove?.Key_id)
 
   const [showBtn, setShowBtn] = useState<boolean>(!issignHIstory)
+  const [btnLoading, setBtnLoading] = useState<boolean>(false)
 
   const Agree = useCallback(
     async (nameType: string) => {
       if (execute != undefined && chainType != undefined && txApprove != undefined && chainId != undefined) {
+        setBtnLoading(true)
         const result = await execute(txApprove.Key_id, chainType, txApprove?.Msg_hash, txApprove?.Msg_context, nameType, chainId)
 
         //"Status": "success",
-        if (result.Status == 'success') {
+        if (result.msg == 'success') {
           addToast(nameType + ' Operation succeeded', { appearance: 'success' })
           setRefreshInterval(1000 * 5)
           setShowBtn(false)
         } else {
-          addToast(result.Tip, { appearance: 'error' })
+          addToast(result.error, { appearance: 'error' })
         }
+        setBtnLoading(false)
       }
     },
     [execute, chainType, txApprove, addToast, chainId]
@@ -103,7 +108,8 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                 </div>
                 <div className=" w-full sm:w-1/5 ">
                   <UsersIcon className="text-indigo-500 w-6 h-6 flex-shrink-0 mr-4 inline-block"></UsersIcon>
-                  {nowThreshold(item.Threshold, item.Signed)}
+
+                  {nowThreshold(item.Threshold, item.Signed, issignHIstory)}
                 </div>
                 <div className=" w-full sm:w-1/5 text-right sm:text-left text-indigo-500">
                   <If condition={item.Status == 0 && issignHIstory === false}>
@@ -141,7 +147,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                         </div>
                       )
                     })}
-                    <div className="flex flex-col gap-2 p-4">
+                    <div className="flex flex-col px-4 py-1">
                       <When condition={item.Timestamp !== undefined && item.Timestamp !== ''}>
                         <div className="flex flex-row">
                           <div className="w-1/3">Created:</div>
@@ -158,7 +164,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                       </When>
                     </div>
                     <When condition={item.Reply_status !== undefined && item.Reply_status !== ''}>
-                      <div className="flex flex-col gap-2 p-4">
+                      <div className="flex flex-col px-4 py-1">
                         <div className="flex flex-row">
                           <div className="w-1/3">Reply status:</div>
                           <div className="w-2/3">{item.Reply_status} </div>
@@ -166,10 +172,13 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                       </div>
                     </When>
                     <When condition={txhashInfo !== undefined && txhashInfo !== ''}>
-                      <div className="flex flex-col gap-2 p-4">
+                      <div className="flex flex-col px-4 py-1">
                         <div className="flex flex-row">
                           <div className="w-1/3">Transaction Hash:</div>
-                          <div className="w-2/3 break-words">{txhashInfo} </div>
+                          <div className="w-2/3">
+                            {/* {txhashInfo} */}
+                            <ScanTxUrl txhash={txhashInfo}></ScanTxUrl>
+                          </div>
                         </div>
                       </div>
                     </When>
@@ -199,7 +208,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                         </div>
                         <div className="flex-grow pl-4">
                           <h2 className="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">
-                            Confirmations {nowThreshold(item.Threshold, item.Signed)}
+                            Confirmations {nowThreshold(item.Threshold, item.Signed, issignHIstory)}
                           </h2>
                           <p className="leading-relaxed">{/* xx */}</p>
                         </div>
@@ -221,24 +230,34 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                       </div>
                     </div>
                     <When condition={showBtn == true && txStatus.data.code == '0' && issignHIstory === false}>
-                      <div className="lg:w-3/5 md:w-2/3 flex  flex-row justify-between ">
-                        <button
-                          onClick={() => {
-                            Agree('DISAGREE')
-                          }}
-                          className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                        >
-                          Disagree
-                        </button>
-                        <button
-                          onClick={() => {
-                            Agree('AGREE')
-                          }}
-                          className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                        >
-                          Agree
-                        </button>
-                      </div>
+                      <If condition={btnLoading}>
+                        <Then>
+                          <div className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 text-center justify-center">
+                            <img className="inline w-4 h-4 mr-3 text-white animate-spin" src={loadingiImg}></img>
+                            loading...
+                          </div>
+                        </Then>
+                        <Else>
+                          <div className="lg:w-3/5 md:w-2/3 flex  flex-row justify-between ">
+                            <button
+                              onClick={() => {
+                                Agree('DISAGREE')
+                              }}
+                              className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                            >
+                              Disagree
+                            </button>
+                            <button
+                              onClick={() => {
+                                Agree('AGREE')
+                              }}
+                              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                            >
+                              Agree
+                            </button>
+                          </div>
+                        </Else>
+                      </If>
                     </When>
                     <When condition={showBtn == false && txStatus && txStatus.data.code !== undefined && ['5', '6', '7'].includes(txStatus.data.code) == false}>
                       <div className="flex items-center justify-center   bg-gray-50 dark:bg-gray-800 dark:border-gray-700">

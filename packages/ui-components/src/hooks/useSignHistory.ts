@@ -36,9 +36,10 @@ export default function useSignHistory() {
     if (data == undefined) {
       return
     }
+
     const result = data
       .filter(tx => {
-        tx.Mpc_address == mpcaddress
+        return tx.Mpc_address == mpcaddress
       })
       .sort((a, b) => {
         if (b.Reply_timestamp !== undefined && a.Reply_timestamp !== undefined) {
