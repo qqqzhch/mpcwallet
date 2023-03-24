@@ -1,15 +1,17 @@
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 // import { WalletLinkConnector } from "@web3-react/walletlink-connector";
-// import { ALL_SUPPORTED_CHAIN_IDS } from '../constants/chains'
-
+import { ALL_SUPPORTED_CHAIN_IDS } from '../constants/chains'
+import  {RPC_URLS} from '../constants/networks'
+import { SupportedChainId } from '../constants/chains'
 interface RPCURLSTYPE {
   [propName: number]: string
 }
 
-const RPC_URLS: RPCURLSTYPE = {
-  1: `https://mainnet.infura.io/v3/f784c0c448844cce856d62a06f66a52d`,
-  4: `https://rinkeby.infura.io/v3/f784c0c448844cce856d62a06f66a52d`
+const RPC_URLS_info: RPCURLSTYPE = {
+  [SupportedChainId.MAINNET]: RPC_URLS[SupportedChainId.MAINNET][0],
+  [SupportedChainId.GOERLI]: RPC_URLS[SupportedChainId.GOERLI][0],
+  
 }
 
 // MetaMask
@@ -47,7 +49,7 @@ export const Injected = new InjectedConnector({
 
 // wallet connect
 const WalletConnect = new WalletConnectConnector({
-  rpc: RPC_URLS,
+  rpc: RPC_URLS_info,
   bridge: 'https://bridge.walletconnect.org',
   qrcode: true
 })
