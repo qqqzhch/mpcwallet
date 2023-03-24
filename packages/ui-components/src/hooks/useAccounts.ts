@@ -7,6 +7,7 @@ import { useWeb3React } from '@web3-react/core'
 import { walletaccount } from '../state/walletaccount'
 import { useEffect, useState } from 'react'
 import { rpclist } from '../constants/rpcConfig'
+import { serverStatusIsSuccess } from '../utils/index'
 
 async function fetcher(account: string | null | undefined): Promise<Array<walletaccount> | undefined> {
   if (account == null || account == undefined) {
@@ -15,12 +16,11 @@ async function fetcher(account: string | null | undefined): Promise<Array<wallet
   web3.setProvider(rpclist[0])
 
   const res = await getsmpc().getAccounts(account)
-
-  if (res.Status === 'Error') {
+  if (serverStatusIsSuccess(res)) {
+    return res.Data
+  } else {
     throw new Error('get Accounts info error ')
   }
-
-  return res.Data
 }
 
 export default function useAccounts() {
