@@ -31,7 +31,7 @@ const NoticeInfo: FC<Props> = ({ children }) => {
 
       <Popover.Panel className="absolute   left-28 md:left-1/2 z-10 mt-3  w-screen  max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-1xl">
         <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-          <div className="relative  bg-white p-7 flex flex-col gap-8">
+          <div className="relative  bg-white p-7 flex flex-col  space-y-8">
             {txApproveWallet.map((item, index) => {
               return (
                 <div

@@ -9,7 +9,7 @@ const TransactionQueue: FC = () => {
   const { address, chainType } = useParams<{ address: string; chainType: string }>()
   const needMpcApproves = useAppStore(state => state.getTxApproveListByStatus(0, address))
   return (
-    <div className="flex  min-h-80 rounded bg-gray-50 flex-col  gap-6 p-8">
+    <div className="flex  min-h-80 rounded bg-gray-50 flex-col  space-y-6 p-8">
       <h1 className=" border-b border-blue-300 pb-4 flex  flex-row">
         <span className=" flex-1 ">Transaction queue ({needMpcApproves.length})</span>
         <Link to={`/dashboard/${chainType}/${address}/transactions`}>

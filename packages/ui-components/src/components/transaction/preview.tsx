@@ -34,8 +34,8 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
         const txforestimateGas = {
           from: userTxInput?.from,
           to: userTxInput?.to,
-          data: userTxInput.assert?.contractaddress ? userTxInput.data : '',
-          value: userTxInput.assert?.contractaddress ? '0x' : userTxInput.value
+          data: assert?.contractaddress ? userTxInput.data : '',
+          value: assert?.contractaddress ? '' : userTxInput.value
         }
 
         try {
@@ -60,8 +60,8 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
             <ChainName></ChainName>
           </div>
         </Dialog.Title>
-        <div className="mt-4 flex flex-col  gap-1    w-96 ">
-          <div className="mb-6 flex flex-row gap-2  items-center  justify-between text-center">
+        <div className="mt-4 flex flex-col   space-y-1    w-80 sm:w-96 ">
+          <div className="mb-6 flex flex-row  space-x-2  items-center  justify-between text-center">
             <div>
               <label htmlFor="sendingfrom" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 Sending from
@@ -83,7 +83,7 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
           </div>
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Assert </label>
-            <div className=" flex flex-row items-center gap-1">
+            <div className=" flex flex-row items-center space-x-1">
               <img width={20} src={assert?.img}></img>
               <span>
                 {userTxInput && assert ? userTxInput?.originValue : ''} {assert?.name}
@@ -121,7 +121,7 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
                           <div>Simulate</div>
                         </div> */}
 
-          <div className="mb-6 flex flex-col sm:flex-row justify-between gap-8">
+          <div className="mb-6 flex flex-col sm:flex-row justify-between space-y-8">
             <button
               onClick={previous}
               className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"

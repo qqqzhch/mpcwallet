@@ -30,13 +30,13 @@ const WalletList: FC = props => {
           onClick={() => {
             toggle()
           }}
-          className="block sm:hidden  cursor-pointer"
+          className="block sm:hidden  cursor-pointer p-2"
         >
           <When condition={showwalletMobile == false}>
-            <ChevronDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true"></ChevronDownIcon>
+            <ChevronDownIcon className="h-5 w-5  text-gray-400" aria-hidden="true"></ChevronDownIcon>
           </When>
           <When condition={showwalletMobile == true}>
-            <ChevronUpIcon className="h-5 w-5 text-gray-400" aria-hidden="true"></ChevronUpIcon>
+            <ChevronUpIcon className="h-5 w-5  text-gray-400" aria-hidden="true"></ChevronUpIcon>
           </When>
         </div>
       </div>
