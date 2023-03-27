@@ -235,6 +235,15 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
         addToast(data.error, { appearance: 'error' })
       }
       setBtnLoading(false)
+    } else {
+      console.info('mpcGroupAccount', mpcGroupAccount)
+      console.info('chainType', chainType)
+      console.info('msgHash', msgHash)
+      console.info('unsigedtx', unsigedtx)
+      console.info('TransactionSigner', TransactionSigner)
+      console.info('chainId', chainId)
+      console.info('gas.gasLimit', gas.gasLimit)
+      console.info('gas.gasPrise', gas.gasPrise)
     }
   }, [TransactionSigner, mpcGroupAccount, chainType, msgHash, unsigedtx, addToast, closeTokenModal, gas, chainId])
 
@@ -352,10 +361,10 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                                             >
                                               {({ selected }) => (
                                                 <div className="flex flex-row  ">
-                                                  <span className='block truncate'>
-                                                  <img width={16} src={Assert.img} className="m-1"></img>
+                                                  <span className="block truncate">
+                                                    <img width={16} src={Assert.img} className="m-1"></img>
                                                   </span>
-                                                  
+
                                                   <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>{Assert.name}</span>
                                                   {selected ? (
                                                     <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
@@ -407,17 +416,21 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                             />
                           </div>
                           {errors.toAddressRequired && <span>This field is required</span>}
-                          <div className="mb-6 flex  flex-col-reverse sm:flex-row justify-between space-y-8 space-y-reverse">
-                            <button className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                              Previous
-                            </button>
-                            <button
-                              type="submit"
-                              // onClick={next}
-                              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 "
-                            >
-                              next
-                            </button>
+                          <div className="mb-6 flex  flex-col-reverse sm:flex-row justify-between  space-y-reverse   space-y-8 pt-8">
+                            <div className=" text-center">
+                              <button className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                                Previous
+                              </button>
+                            </div>
+                            <div className=" text-center">
+                              <button
+                                type="submit"
+                                // onClick={next}
+                                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 "
+                              >
+                                next
+                              </button>
+                            </div>
                           </div>
                         </form>
                       </div>

@@ -18,7 +18,8 @@ export interface QueryPayload {
 app.use((_req: any, res: { setHeader: (arg0: string, arg1: string) => void }, next: () => void) => {
   // Allow any website to connect
   res.setHeader('Access-Control-Allow-Origin', '*')
-
+  
+  console.log("- -")
   // Continue to next middleware
   next()
 })
@@ -67,4 +68,5 @@ app.post('/api', async (_req: any, res: any) => {
   
 })
 
-app.listen(port,'0.0.0.0',() => console.log(`Example app listening at http://localhost:${port}`))
+// app.listen(port,'0.0.0.0',() => console.log(`Example app listening at http://localhost:${port}`))
+app.listen(port,() => console.log(`Example app listening at http://localhost:${port}`))
