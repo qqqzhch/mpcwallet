@@ -175,30 +175,18 @@ const CreatWallet: FC = props => {
             <div className="divide-y divide-gray--200 -my-9">
               <div className="py-9">
                 <p className="text-xl font-semibold text-black">How to create an account?</p>
-                <p className="mt-3 text-base text-gray-600">
-                  Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim velit mollit. Exercitation veniam
-                  consequat sunt nostrud amet.
-                </p>
-                <p className="mt-3 text-base text-gray-600">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                </p>
+                <p className="mt-3 text-base text-gray-600">**</p>
+                <p className="mt-3 text-base text-gray-600">**</p>
               </div>
 
               <div className="py-9">
                 <p className="text-xl font-semibold text-black">What payment method do you support?</p>
-                <p className="mt-3 text-base text-gray-600">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. sed do eiusmod
-                  tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam.
-                </p>
+                <p className="mt-3 text-base text-gray-600">**</p>
               </div>
 
               <div className="py-9">
                 <p className="text-xl font-semibold text-black">What payment method do you support?</p>
-                <p className="mt-3 text-base text-gray-600">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                  veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                </p>
+                <p className="mt-3 text-base text-gray-600">***</p>
               </div>
             </div>
           </div>
