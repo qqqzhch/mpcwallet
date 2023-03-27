@@ -7,7 +7,7 @@ export type assertType = {
   name: string
   img: string
   contractaddress?: string
-  balance: string
+  balance?: string
   decimals: number
 }
 

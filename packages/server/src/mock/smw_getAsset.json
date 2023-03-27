@@ -1,0 +1,17 @@
+{
+    "jsonrpc": "2.0",
+    "id": 67,
+    "result": {
+        "Data":  [
+            {
+                "Symbol": "weth",
+                "Contract": "0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e",
+                "Name": "weth coin",
+                "Decimal": 18
+            }
+        ],
+        "Error": "",
+        "Status": "success",
+        "Tip": ""
+    }
+}

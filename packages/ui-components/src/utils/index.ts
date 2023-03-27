@@ -10,10 +10,25 @@ export function cutOut(str: string, start: number, end: number) {
   return (str = str1 + '…' + str2)
 }
 
-export function formatUnits(chainId: number | undefined, value: string | number) {
+export function formatUnits(chainId: number | undefined, value: string | number|undefined) {
   const chainInfo = getChainInfo(chainId)
-  if (chainInfo) {
-    return ethers.utils.formatUnits(value.toString(), chainInfo?.nativeCurrency.decimals) + ' ' + chainInfo?.nativeCurrency.symbol
+  if (chainInfo&&value!==undefined) {
+    const num = ethers.utils.formatUnits(value.toString(), chainInfo?.nativeCurrency.decimals);
+    const result = parseFloat(num)
+    
+    return result.toFixed(4) + ' ' + chainInfo?.nativeCurrency.symbol
+  } else {
+    return '...'
+  }
+}
+
+export function formatUnitsErc20(value: string | number|undefined,symbol:string,decimals:number) {
+  
+  if (value!==undefined&&decimals) {
+    const num = ethers.utils.formatUnits(value.toString(), decimals);
+    const result = parseFloat(num)
+    
+    return result.toFixed(4) + ' ' + symbol
   } else {
     return '...'
   }

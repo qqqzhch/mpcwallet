@@ -15,6 +15,8 @@ import { useWeb3React } from '@web3-react/core'
 import { formatUnits } from '../../utils'
 import ScanUrl from '../mpcinfo/scanUrl'
 import { useAppStore } from '../..'
+import useNativeBalance from '../../hooks/useNativeBalance'
+
 
 const UserPanel: FC = () => {
   const { address } = useParams<{ address: string; chainType: string }>()
@@ -23,6 +25,7 @@ const UserPanel: FC = () => {
   const togglesidewalletMenu = useAppStore(state => state.togglesidewalletMenu)
   const togglesideBar = useAppStore(state => state.togglesideBar)
   const showsideBar = useAppStore(state => state.sideBar)
+  const nativeBalance = useNativeBalance(address)
 
   return (
     <>
@@ -33,7 +36,7 @@ const UserPanel: FC = () => {
         </div>
         <div className=" flex-1  flex flex-col ">
           <div className=" break-all">{address ? cutOut(address, 8, 8) : ''}</div>
-          <div>{formatUnits(chainId, '1000000000000000000')}</div>
+          <div>{formatUnits(chainId, nativeBalance.balance)}</div>
         </div>
       </div>
       <div className="pl-2.5 mb-5 flex flex-row justify-between">
