@@ -28,8 +28,8 @@ const MpcType: FC = () => {
             setcreateGroupKeytype(e)
           }}
         >
-          <RadioGroup.Label className="sr-only">Server size</RadioGroup.Label>
-          <div className="space-y-2 flex flex-row gap-4 justify-around">
+          {/* <RadioGroup.Label className="sr-only">Server size</RadioGroup.Label> */}
+          <div className="space-y-2 flex flex-row  justify-around">
             {plans.map(plan => (
               <RadioGroup.Option
                 key={plan.name}

@@ -48,7 +48,7 @@ const SendNft: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBack 
                   <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
                     Send NFT
                   </Dialog.Title>
-                  <div className="mt-4 flex flex-col  gap-1 ">
+                  <div className="mt-4 flex flex-col   space-y-1 ">
                     <div className="mb-6">
                       <label htmlFor="sendingfrom" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                         Sending from{' '}
@@ -89,7 +89,7 @@ const SendNft: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBack 
                       />
                     </div>
 
-                    <div className="mb-6 flex flex-col sm:flex-row justify-between gap-8">
+                    <div className="mb-6 flex flex-col sm:flex-row justify-between  space-y-8">
                       <button className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                         Cancel
                       </button>

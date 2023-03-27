@@ -11,9 +11,9 @@ const FetchDataGlobal: FC = () => {
     if (error1) {
       addToast(error1.message, { appearance: 'error' })
     }
-    if (error2) {
-      addToast(error2.message, { appearance: 'error' })
-    }
+    // if (error2) {
+    //   addToast(error2.message, { appearance: 'error' })
+    // }
   }, [error1, error2, addToast])
 
   return <></>
