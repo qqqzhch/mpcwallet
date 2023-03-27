@@ -18,10 +18,13 @@ export enum SupportedChainId {
   POLYGON_MUMBAI = 80001,
 
   CELO = 42220,
-  CELO_ALFAJORES = 44787
+  CELO_ALFAJORES = 44787,
+  BNB = 56,
+  BNBTEST = 97,
+
 }
 
-export const appSupportedChainId = [SupportedChainId.MAINNET, SupportedChainId.GOERLI]
+export const appSupportedChainId = [SupportedChainId.MAINNET, SupportedChainId.GOERLI,SupportedChainId.BNBTEST]
 
 export const CHAIN_IDS_TO_NAMES = {
   [SupportedChainId.MAINNET]: 'mainnet',
@@ -36,7 +39,9 @@ export const CHAIN_IDS_TO_NAMES = {
   [SupportedChainId.ARBITRUM_ONE]: 'arbitrum',
   [SupportedChainId.ARBITRUM_RINKEBY]: 'arbitrum_rinkeby',
   [SupportedChainId.OPTIMISM]: 'optimism',
-  [SupportedChainId.OPTIMISM_GOERLI]: 'optimism_goerli'
+  [SupportedChainId.OPTIMISM_GOERLI]: 'optimism_goerli',
+  [SupportedChainId.BNB]: 'bsc',
+  [SupportedChainId.BNBTEST]: 'bsc_test'
 }
 
 export function getNameBychainId(chainId: number | null | undefined) {
@@ -61,7 +66,8 @@ export declare type Networks =
   | 'ENERGY_WEB_CHAIN'
   | 'VOLTA'
   | 'UNKNOWN'
-  | 'BSC_MAINNET'
+  | 'BSC'
+  | 'BSC_TEST'
 
 /**
  * Array of all the supported chain IDs
@@ -77,7 +83,9 @@ export const SUPPORTED_GAS_ESTIMATE_CHAIN_IDS = [
   SupportedChainId.POLYGON,
   SupportedChainId.CELO,
   SupportedChainId.OPTIMISM,
-  SupportedChainId.ARBITRUM_ONE
+  SupportedChainId.ARBITRUM_ONE,
+  SupportedChainId.BNB,
+  SupportedChainId.BNBTEST
 ]
 
 /**
@@ -92,7 +100,8 @@ export const TESTNET_CHAIN_IDS = [
   SupportedChainId.KOVAN,
   SupportedChainId.POLYGON_MUMBAI,
   SupportedChainId.ARBITRUM_RINKEBY,
-  SupportedChainId.OPTIMISM_GOERLI
+  SupportedChainId.OPTIMISM_GOERLI,
+  SupportedChainId.BNBTEST
 ] as const
 
 export type SupportedTestnetChainId = typeof TESTNET_CHAIN_IDS[number]

@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import { useAppStore } from '../state/index'
+
 import { web3 } from '@monorepo/api'
 import { getsmpc } from '@monorepo/api/src/web3'
 
@@ -66,7 +66,7 @@ export default function useAsserts() {
 
             })
         setAsserts(list);
-        console.log(list)
+        
     
 
         }

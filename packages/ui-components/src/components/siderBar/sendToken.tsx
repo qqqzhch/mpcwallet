@@ -22,7 +22,7 @@ import { useToasts } from 'react-toast-notifications'
 import GasModel from '../transaction/gasmodel'
 import Preview from '../transaction/preview'
 import metamask from '../../assets/icon/metamask.svg'
-import { formatFromWei ,formatUnitsErc20,formatUnits} from '../../utils/index'
+import { formatUnitsErc20,formatUnits} from '../../utils/index'
 import { BigNumber } from 'ethers'
 
 
@@ -31,11 +31,11 @@ import useNativeBalance from '../../hooks/useNativeBalance'
 import useErc20Balance from '../../hooks/useErc20Balance'
 
 
-// const assertList: Array<assertType> = [
-//   { name: 'eth', img: metamask, balance: '100000000000000000', decimals: 18 },
-//   { name: 'weth', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e', balance: '100000000000000000', decimals: 18 },
-//   { name: 'weth1', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e', balance: '100000000000000000', decimals: 18 }
-// ]
+const assertList: Array<assertType> = [
+  { name: 'eth', img: metamask, decimals: 18 },
+  { name: 'weth', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e',  decimals: 18 },
+  { name: 'weth1', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e', decimals: 18 }
+]
 
 type Inputs = {
   toAddress: string
@@ -88,7 +88,7 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
 
   const mpcGroupAccount = useAccount(address)
   const [btnLoading, setBtnLoading] = useState<boolean>(false)
-  const {data:assertList} =useAsserts()
+  // const {data:assertList} =useAsserts()
   const {balance:NativeBalance}= useNativeBalance(address);
   const {balance:erc20Balance} = useErc20Balance(address,selectedAssert?.contractaddress)
 

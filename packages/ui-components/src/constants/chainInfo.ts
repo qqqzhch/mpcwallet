@@ -5,11 +5,12 @@ import { default as arbitrumCircleLogoUrl, default as arbitrumLogoUrl } from '..
 import celoLogo from '../assets/icon/celo_logo.svg'
 import optimismLogoUrl from '../assets/icon/optimistic_ethereum.svg'
 import polygonMaticLogo from '../assets/icon/polygon-matic-logo.svg'
+import bnbLogo from '../assets/icon/bnb_logo.svg'
 // import { darkTheme } from 'theme/colors'
 // import ms from 'ms.macro'
 
 import { SupportedChainId, SupportedL1ChainId, SupportedL2ChainId } from './chains'
-import { ARBITRUM_LIST, CELO_LIST, OPTIMISM_LIST } from './lists'
+import { ARBITRUM_LIST, CELO_LIST, OPTIMISM_LIST,PLASMA_BNB_LIST } from './lists'
 
 // export const AVERAGE_L1_BLOCK_TIME = ms`12s`
 
@@ -216,6 +217,30 @@ const CHAIN_INFO: ChainInfoMap = {
     logoUrl: celoLogo,
     nativeCurrency: { name: 'Celo', symbol: 'CELO', decimals: 18 },
     defaultListUrl: CELO_LIST
+  },
+  [SupportedChainId.BNB]: {
+    networkType: NetworkType.L1,
+    // blockWaitMsBeforeWarning: ms`10m`,
+    bridge: 'https://cbridge.celer.network/1/56',
+    docs: 'https://docs.bnbchain.org/',
+    explorer: 'https://bscscan.com/',
+    infoLink: 'https://info.uniswap.org/#/bnb/',
+    label: 'BNB Chain',
+    logoUrl: bnbLogo,
+    nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+    defaultListUrl: PLASMA_BNB_LIST,
+  },
+  [SupportedChainId.BNBTEST]: {
+    networkType: NetworkType.L1,
+    // blockWaitMsBeforeWarning: ms`10m`,
+    bridge: 'https://cbridge.celer.network/1/56',
+    docs: 'https://docs.bnbchain.org/',
+    explorer: 'https://testnet.bscscan.com/',
+    infoLink: 'https://info.uniswap.org/#/bnb/',
+    label: 'BNB Test',
+    logoUrl: bnbLogo,
+    nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+    defaultListUrl: PLASMA_BNB_LIST,
   }
 }
 

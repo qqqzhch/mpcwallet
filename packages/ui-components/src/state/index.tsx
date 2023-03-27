@@ -217,14 +217,22 @@ const createMyStore = (state: typeof intialState = intialState) => {
             },
             addWalletAccounts: (list: Array<walletaccount>) => {
               set(state => {
-                list.forEach(item => {
-                  const havefind = state.walletAccounts.find(it => {
-                    return it.Mpc_address == item.Mpc_address && it.User_account == item.User_account
+                if(list.length==0){
+                  state.walletAccounts=[];
+
+                }else{
+
+                  list.forEach(item => {
+                    const havefind = state.walletAccounts.find(it => {
+                      return it.Mpc_address == item.Mpc_address && it.User_account == item.User_account
+                    })
+                    if (havefind == undefined) {
+                      state.walletAccounts.push(item)
+                    }
                   })
-                  if (havefind == undefined) {
-                    state.walletAccounts.push(item)
-                  }
-                })
+
+                }
+                
               })
             },
             togglesideBar: () => {
