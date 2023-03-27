@@ -244,6 +244,19 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
       console.info('chainId', chainId)
       console.info('gas.gasLimit', gas.gasLimit)
       console.info('gas.gasPrise', gas.gasPrise)
+      if (msgHash === undefined) {
+        addToast('get Unsiged TransactionHash error', { appearance: 'error' })
+        return
+      }
+      if (TransactionSigner === undefined) {
+        addToast('get Transaction Signer error', { appearance: 'error' })
+        return
+      }
+
+      if (gas.gasLimit === undefined || gas.gasLimit == undefined) {
+        addToast('get gas error', { appearance: 'error' })
+        return
+      }
     }
   }, [TransactionSigner, mpcGroupAccount, chainType, msgHash, unsigedtx, addToast, closeTokenModal, gas, chainId])
 

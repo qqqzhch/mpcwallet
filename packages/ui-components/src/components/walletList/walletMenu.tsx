@@ -9,7 +9,7 @@ import { useWeb3React } from '@web3-react/core'
 // import { Transition } from '@headlessui/react'
 import { useAppStore } from '../../state/index'
 
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { cutOut } from '../../utils/index'
 
 const WalletMenu: FC = props => {
@@ -26,12 +26,28 @@ const WalletMenu: FC = props => {
   // }, [setshowwalletMobile, showwalletMobile])
 
   return (
-    <div className="fixed z-40 top-14 left-0  bg-white  h-screen">
-      <div className="flex flex-row border-b items-center py-1 mx-2 text-center ">
-        <h1 className="  border-gray-300 flex-1 ">My MPC Wallets</h1>
+    <div className="fixed flex flex-col z-40 top-14 left-0  bg-white  h-screen">
+      {/* <div className=" flex-1 flex   flex-col">
+        <div className="flex flex-row border-b items-center py-1 mx-2 text-center ">
+          <h1 className="  border-gray-300 flex-1 ">My MPC Wallets</h1>
+        </div>
+          <button
+            type="button"
+            className="text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+          >
+            <Link to={'/creatwallet'}>Create a wallet</Link>
+          </button>
+        </div> */}
+      <div className=" pb-4 sm:pb-8">
+        <div className="flex flex-row border-b items-center py-1 mx-2  text-center ">
+          <h1 className="  border-gray-300 flex-1   ">My MPC Wallets</h1>
+          <Link className="text-yellow-600" to={'/creatwallet'}>
+            {' '}
+            add new
+          </Link>
+        </div>
       </div>
-
-      <div className="block sm:block w-64 overflow-hidden ">
+      <div className="block sm:block w-64  h-5/6   overflow-x-hidden  overflow-y-auto">
         {/* <When condition={isLoading}>
           <Skeleton count={10} height={100} />
         </When> */}
