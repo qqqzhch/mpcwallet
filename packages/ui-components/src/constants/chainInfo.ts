@@ -10,7 +10,7 @@ import bnbLogo from '../assets/icon/bnb_logo.svg'
 // import ms from 'ms.macro'
 
 import { SupportedChainId, SupportedL1ChainId, SupportedL2ChainId } from './chains'
-import { ARBITRUM_LIST, CELO_LIST, OPTIMISM_LIST,PLASMA_BNB_LIST } from './lists'
+import { ARBITRUM_LIST, CELO_LIST, OPTIMISM_LIST, PLASMA_BNB_LIST } from './lists'
 
 // export const AVERAGE_L1_BLOCK_TIME = ms`12s`
 
@@ -228,7 +228,7 @@ const CHAIN_INFO: ChainInfoMap = {
     label: 'BNB Chain',
     logoUrl: bnbLogo,
     nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
-    defaultListUrl: PLASMA_BNB_LIST,
+    defaultListUrl: PLASMA_BNB_LIST
   },
   [SupportedChainId.BNBTEST]: {
     networkType: NetworkType.L1,
@@ -240,7 +240,7 @@ const CHAIN_INFO: ChainInfoMap = {
     label: 'BNB Test',
     logoUrl: bnbLogo,
     nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
-    defaultListUrl: PLASMA_BNB_LIST,
+    defaultListUrl: PLASMA_BNB_LIST
   }
 }
 

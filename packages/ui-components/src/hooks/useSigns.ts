@@ -10,7 +10,7 @@ import { getsmpc } from '@monorepo/api/src/web3'
 import { Unsigedtx } from '../utils/buildMpcTx'
 import { walletaccount } from '../state/walletaccount'
 import { useParams } from 'react-router-dom'
-import {chainTypeName} from '../constants/chainTypeName'
+import { chainTypeName } from '../constants/chainTypeName'
 
 // interface chainTypes {
 //   [key: string]: number

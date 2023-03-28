@@ -8,7 +8,7 @@ import { useWeb3React } from '@web3-react/core'
 import { useEffect, useCallback } from 'react'
 import EventBus from '../../EventEmitter/index'
 import metamask from '../../assets/icon/metamask.svg'
-import walletconnect from '../../assets/icon/walletconnect.svg'
+// import walletconnect from '../../assets/icon/walletconnect.svg'
 
 interface componentprops {
   isOpen: boolean
@@ -68,7 +68,7 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
   //   // setAccountData(null)
   // }
   const walletsToDisplay = [
-    { id: 1, title: 'Connect with MetaMask', imgSrc: metamask, fn: connectMetaMask },
+    { id: 1, title: 'Connect with MetaMask', imgSrc: metamask, fn: connectMetaMask }
     // { id: 3, title: 'Connect with WalletConnect', imgSrc: walletconnect, fn: connectWalletConnect }
   ]
   // connect on load

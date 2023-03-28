@@ -10,7 +10,7 @@ import { formatUnits, gasFee } from '../../utils'
 import { useWeb3React } from '@web3-react/core'
 
 import Skeleton from 'react-loading-skeleton'
-import { If, Then, Else } from 'react-if'
+import { If, Then, Else, When } from 'react-if'
 import loadingiImg from '../../assets/loading.svg'
 //Skeleton
 
@@ -21,9 +21,10 @@ type Props = {
   next: () => void
   assert?: assertType | undefined
   btnLoading: boolean
+  isTxBuild?: boolean
 }
 
-const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert, btnLoading }) => {
+const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert, btnLoading, isTxBuild }) => {
   const { address } = useParams<{ address: string; chainType: string }>()
   const { chainId, library } = useWeb3React()
   const [gasError, setGasError] = useState<string | undefined>()
@@ -35,11 +36,12 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
           from: userTxInput?.from,
           to: userTxInput?.to,
           data: assert?.contractaddress ? userTxInput.data : '',
-          value: assert?.contractaddress ? '' : userTxInput.value
+          value: userTxInput.value
         }
 
         try {
           await library.estimateGas(txforestimateGas)
+
           setGasError(undefined)
         } catch (error: unknown) {
           const errorinfo = error as { reason: string }
@@ -81,15 +83,18 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
               </div>
             </div>
           </div>
-          <div className="mb-6">
-            <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Assert </label>
-            <div className=" flex flex-row items-center space-x-1">
-              <img width={20} src={assert?.img}></img>
-              <span>
-                {userTxInput && assert ? userTxInput?.originValue : ''} {assert?.name}
-              </span>
+          <When condition={isTxBuild == false}>
+            <div className="mb-6">
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Assert </label>
+              <div className=" flex flex-row items-center space-x-1">
+                <img width={20} src={assert?.img}></img>
+                <span>
+                  {userTxInput && assert ? userTxInput?.originValue : ''} {assert?.name}
+                </span>
+              </div>
             </div>
-          </div>
+          </When>
+
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estimated fee </label>
             <div className=" flex flex-row ">

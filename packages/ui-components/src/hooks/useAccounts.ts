@@ -12,8 +12,7 @@ async function fetcher(account: string | null | undefined): Promise<Array<wallet
   if (account == null || account == undefined) {
     return
   }
-  
-  
+
   const res = await getsmpc(rpclist[0]).getAccounts(account)
   if (serverStatusIsSuccess(res)) {
     return res.Data
