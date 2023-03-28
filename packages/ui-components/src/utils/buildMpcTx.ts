@@ -7,7 +7,7 @@ export type assertType = {
   name: string
   img: string
   contractaddress?: string
-  balance: string
+  balance?: string
   decimals: number
 }
 
@@ -28,6 +28,7 @@ export type Unsigedtx = TxInput & {
 }
 
 export function buidTransactionJson(chainType: string, chainId: number, data: TxInput): Unsigedtx | undefined {
+  
   const havecontractaddress = data.assert?.contractaddress === '' ? false : true
   if (data.assert == undefined) {
     return undefined
@@ -47,7 +48,7 @@ export function buidTransactionJson(chainType: string, chainId: number, data: Tx
     originValue: data.originValue,
     name: data.name,
     chainId: ethers.utils.hexValue(chainId),
-    value: data.assert?.contractaddress == undefined ? ethers.utils.hexValue(BigNumber.from(formatToWei(data.originValue, data.assert.decimals))) : '0x',
+    value: data.assert?.contractaddress == undefined ? ethers.utils.hexValue(BigNumber.from(formatToWei(data.originValue, data.assert.decimals))) : '0x0',
     data: encodeFunctionData
   }
 }

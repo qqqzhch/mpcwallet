@@ -266,6 +266,13 @@ web3.extend({
       params: 1,
       inputFormatter: [null],
       outputFormatter: undefined,
+    },
+    {
+      name: "getAssetList",
+      call: "smw_getAsset",
+      params: 3,
+      inputFormatter: [null,null,null],
+      outputFormatter: undefined,
     }
 
     

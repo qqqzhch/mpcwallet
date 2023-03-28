@@ -93,6 +93,14 @@ export const FALLBACK_URLS: { [key in SupportedChainId]: string[] } = {
   [SupportedChainId.CELO_ALFAJORES]: [
     // "Safe" URLs
     `https://alfajores-forno.celo-testnet.org`
+  ],
+  [SupportedChainId.BNB]: [
+    // "Safe" URLs
+    "https://bsc-dataseed.binance.org"
+  ],
+  [SupportedChainId.BNBTEST]: [
+    // "Safe" URLs
+    "https://data-seed-prebsc-1-s3.binance.org:8545"
   ]
 }
 
@@ -113,5 +121,7 @@ export const RPC_URLS: { [key in SupportedChainId]: string[] } = {
   [SupportedChainId.POLYGON]: [`https://polygon-mainnet.infura.io/v3/${INFURA_KEY}`, ...FALLBACK_URLS[SupportedChainId.POLYGON]],
   [SupportedChainId.POLYGON_MUMBAI]: [`https://polygon-mumbai.infura.io/v3/${INFURA_KEY}`, ...FALLBACK_URLS[SupportedChainId.POLYGON_MUMBAI]],
   [SupportedChainId.CELO]: FALLBACK_URLS[SupportedChainId.CELO],
-  [SupportedChainId.CELO_ALFAJORES]: FALLBACK_URLS[SupportedChainId.CELO_ALFAJORES]
+  [SupportedChainId.CELO_ALFAJORES]: FALLBACK_URLS[SupportedChainId.CELO_ALFAJORES],
+  [SupportedChainId.BNB]: ["https://bsc-dataseed.binance.org"],
+  [SupportedChainId.BNBTEST]: ["https://data-seed-prebsc-1-s3.binance.org:8545"],
 }

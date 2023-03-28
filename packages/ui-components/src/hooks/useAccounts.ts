@@ -1,6 +1,5 @@
 import useSWR from 'swr'
 import { useAppStore } from '../state/index'
-import { web3 } from '@monorepo/api'
 import { getsmpc } from '@monorepo/api/src/web3'
 
 import { useWeb3React } from '@web3-react/core'
@@ -13,9 +12,9 @@ async function fetcher(account: string | null | undefined): Promise<Array<wallet
   if (account == null || account == undefined) {
     return
   }
-  web3.setProvider(rpclist[0])
-
-  const res = await getsmpc().getAccounts(account)
+  
+  
+  const res = await getsmpc(rpclist[0]).getAccounts(account)
   if (serverStatusIsSuccess(res)) {
     return res.Data
   } else {

@@ -15,6 +15,7 @@ const WRAPPED_LIST = 'wrapped.tokensoft.eth'
 export const OPTIMISM_LIST = 'https://static.optimism.io/optimism.tokenlist.json'
 export const ARBITRUM_LIST = 'https://bridge.arbitrum.io/token-list-42161.json'
 export const CELO_LIST = 'https://celo-org.github.io/celo-token-list/celo.tokenlist.json'
+export const PLASMA_BNB_LIST = 'https://raw.githubusercontent.com/plasmadlt/plasma-finance-token-list/master/bnb.json'
 
 export const UNSUPPORTED_LIST_URLS: string[] = [BA_LIST, UNI_UNSUPPORTED_LIST]
 
