@@ -13,6 +13,6 @@ export const rpcUrlGetterByNetwork: {
   // ENERGY_WEB_CHAIN: () => 'https://rpc.energyweb.org',
   // VOLTA: () => 'https://volta-rpc.energyweb.org',
   // UNKNOWN: null,
-  "bsc": () => 'https://bsc-dataseed.binance.org',
-  "bsc_test": () => 'https://data-seed-prebsc-1-s3.binance.org:8545'
+  bsc: () => 'https://bsc-dataseed.binance.org',
+  bsc_test: () => 'https://data-seed-prebsc-1-s3.binance.org:8545'
 }

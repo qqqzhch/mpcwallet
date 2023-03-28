@@ -6,7 +6,7 @@ import { TxInput, assertType, Unsigedtx, buidTransactionForTxbuild } from '../..
 import { useParams } from 'react-router-dom'
 import { useWeb3React } from '@web3-react/core'
 import useChainInfo from '../../hooks/useChainInfo'
-import { BigNumber,ethers } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
 import { useGetTxMsgHash, useTransactionSigner } from '../../hooks/useSigns'
 import { rpclist } from '../../constants/rpcConfig'
 import { useToasts } from 'react-toast-notifications'
@@ -21,7 +21,7 @@ type Props = {
 const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
   const [userTxInputReview, setUsertTxInputReview] = useState<Unsigedtx>()
   const { address, chainType } = useParams<{ address: string; chainType: string }>()
-  const { chainId,library } = useWeb3React()
+  const { chainId, library } = useWeb3React()
   const [assert, setAssert] = useState<assertType>()
   const ChainInfo = useChainInfo()
   const [gas, setGas] = useState<{ gasLimit?: string; gasPrise?: string }>({})
@@ -31,10 +31,9 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
   const { execute: TransactionSigner } = useTransactionSigner(rpclist[0])
   const [msgHash, setMsgHash] = useState<{ hash: string; msg: string }>()
   const [btnLoading, setBtnLoading] = useState<boolean>(false)
-  
 
   const mpcGroupAccount = useAccount(address)
-  
+
   const { addToast } = useToasts()
 
   function openGasModel() {
@@ -42,47 +41,38 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
   }
 
   useEffect(() => {
-    console.log(transaction, ChainInfo, chainId, chainType,library,isOpen)
     if (transaction != undefined) {
       const item: ProposedTransaction = transaction
-      if (chainType != undefined && chainId != undefined&&isOpen) {
-        console.log('- -')
+      if (chainType != undefined && chainId != undefined && isOpen) {
         const txinfo: TxInput = {
           from: item.raw.from,
           to: item.raw.to,
           gas: 0,
           gasPrice: 0,
           originValue: item.raw.value.toString(),
-          name: "wei contract interaction"
+          name: 'wei contract interaction'
         }
         const haveNative = item.raw.haveNative
-        try {
-          const dataUnsigedtx = buidTransactionForTxbuild(chainType, chainId, txinfo, transaction.raw.data, haveNative)
 
-          if (haveNative && ChainInfo && ChainInfo.logoUrl) {
-            setAssert({
-              name: ChainInfo.nativeCurrency.name,
-              img: ChainInfo.logoUrl,
-              balance: '',
-              decimals: ChainInfo?.nativeCurrency.decimals,
-              contractaddress:item.raw.to
-            })
-          }
-          setUsertTxInputReview(dataUnsigedtx)  
+        const dataUnsigedtx = buidTransactionForTxbuild(chainType, chainId, txinfo, transaction.raw.data, haveNative)
 
-          
-        } catch (error) {
-          console.log(error)
-          
+        if (haveNative && ChainInfo && ChainInfo.logoUrl) {
+          setAssert({
+            name: ChainInfo.nativeCurrency.name,
+            img: ChainInfo.logoUrl,
+            balance: '',
+            decimals: ChainInfo?.nativeCurrency.decimals,
+            contractaddress: item.raw.to
+          })
         }
-        
+        setUsertTxInputReview(dataUnsigedtx)
       }
     }
-  }, [transaction, ChainInfo, chainId, chainType,library,isOpen])
+  }, [transaction, ChainInfo, chainId, chainType, library, isOpen])
 
-  useEffect(()=>{
-    const run = async ()=>{
-      if(userTxInputReview&&isOpen){
+  useEffect(() => {
+    const run = async () => {
+      if (userTxInputReview && isOpen) {
         const gasprise: BigNumber = await library.getGasPrice()
         const gas = ethers.utils.parseUnits('0.0001', 'gwei')
         setGas({ gasLimit: gas.toString(), gasPrise: gasprise.toString() })
@@ -92,21 +82,17 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
           gas: gas.toNumber(),
           gasPrice: gasprise.toNumber()
         }
-        setUsertTxInputReviewnew(txinfoInput)  
-        setIsShow(true);
-
+        setUsertTxInputReviewnew(txinfoInput)
+        setIsShow(true)
       }
-        
     }
     run()
-
-  },[userTxInputReview,library,isOpen])
-  useEffect(()=>{
-    if(isOpen==false){
-      setIsShow(false);
+  }, [userTxInputReview, library, isOpen])
+  useEffect(() => {
+    if (isOpen == false) {
+      setIsShow(false)
     }
-    
-  },[isOpen])
+  }, [isOpen])
 
   useEffect(() => {
     const run = async () => {
@@ -136,10 +122,6 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
     run()
   }, [userTxInputReviewnew, gas, chainType, getUnsigedTransactionHash, chainId, addToast])
 
-
-
-
-  
   const previous = useCallback(() => {
     openGasModel()
   }, [])
@@ -186,7 +168,6 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
       }
     }
   }, [TransactionSigner, mpcGroupAccount, chainType, msgHash, addToast, closeModal, gas, chainId])
-
 
   return (
     <div>

@@ -20,7 +20,7 @@ export default function useServices(network: SupportedChainNames): Services {
     if (!network) {
       return
     }
-  console.log('- -')
+
     const rpcUrlGetter = rpcUrlGetterByNetwork[network]
     if (!rpcUrlGetter) {
       throw Error(`RPC URL not defined for network ${network}`)

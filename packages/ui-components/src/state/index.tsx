@@ -217,7 +217,7 @@ const createMyStore = (state: typeof intialState = intialState) => {
             },
             addWalletAccounts: (list: Array<walletaccount>) => {
               set(state => {
-                state.walletAccounts=list;
+                state.walletAccounts = list
                 // if (list.length == 0) {
                 //   state.walletAccounts = []
                 // } else {

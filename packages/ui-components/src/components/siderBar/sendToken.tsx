@@ -25,13 +25,13 @@ import metamask from '../../assets/icon/metamask.svg'
 import { formatUnitsErc20, formatUnits } from '../../utils/index'
 import { BigNumber } from 'ethers'
 
-import useAsserts from '../../hooks/useAsserts'
+// import useAsserts from '../../hooks/useAsserts'
 import useNativeBalance from '../../hooks/useNativeBalance'
 import useErc20Balance from '../../hooks/useErc20Balance'
 
 const assertList: Array<assertType> = [
   { name: 'eth', img: metamask, decimals: 18 },
-  { name: 'weth', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e',  decimals: 18 },
+  { name: 'weth', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e', decimals: 18 },
   { name: 'weth1', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e', decimals: 18 }
 ]
 
@@ -65,13 +65,13 @@ const isAddress = (address: string) => {
   }
 }
 
-type props ={
-  open?: boolean; 
-  callBack: () => void,
-  selectAssert?:assertType 
+type props = {
+  open?: boolean
+  callBack: () => void
+  selectAssert?: assertType
 }
 
-const SendToken: FC<props> = ({ open, callBack,selectAssert }) => {
+const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
   const [isTokenOpen, setIsTokenOpen] = useState(open || false)
   const [isPreviewStep, setIsPreviewStep] = useState(false)
   const { address, chainType } = useParams<{ address: string; chainType: string }>()
@@ -123,13 +123,12 @@ const SendToken: FC<props> = ({ open, callBack,selectAssert }) => {
     }
   }, [open])
 
-  useEffect(()=>{
-    if(selectAssert!=undefined){
+  useEffect(() => {
+    if (selectAssert != undefined) {
       setSelectedAssert(selectAssert)
-      setValue("assert",selectAssert)
+      setValue('assert', selectAssert)
     }
-  },[selectAssert,setValue])
-
+  }, [selectAssert, setValue])
 
   const onSubmit: SubmitHandler<Inputs> = useCallback(
     data => {

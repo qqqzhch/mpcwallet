@@ -1,7 +1,7 @@
 // import { useState } from 'react'
 import { Tab } from '@headlessui/react'
 import { useState } from 'react'
-import SendToken from '@monorepo/ui-components/src/components/siderBar/sendToken'
+// import SendToken from '@monorepo/ui-components/src/components/siderBar/sendToken'
 import SendNft from '@monorepo/ui-components/src/components/siderBar/sendNft'
 
 import AssertList from '@monorepo/ui-components/src/components/assert/assertList'
@@ -87,7 +87,7 @@ const Asserts = () => {
           </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>
-    
+
       <SendNft
         open={isNFTOpen}
         callBack={() => {

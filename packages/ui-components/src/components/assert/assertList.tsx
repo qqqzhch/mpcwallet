@@ -1,4 +1,4 @@
-import { FC, useCallback,useState } from 'react'
+import { FC, useCallback, useState } from 'react'
 import useAsserts from '../../hooks/useAsserts'
 //https://etherscan.io/address/0xb1f8e55c7f64d203c1400b9d8555d050f94adf39#code
 import useAssertListBalance from '../../hooks/useAssertListBalance'
@@ -46,8 +46,8 @@ const AssertList: FC = () => {
             <div className="flex w-48 px-2 py-3 text-right sm:p-3 sm:block text-gray-600 items-center ">
               <button
                 onClick={() => {
-                    setIsTokenOpen(true)
-                    setSelectedAssert(item)
+                  setIsTokenOpen(true)
+                  setSelectedAssert(item)
                 }}
                 type="button"
                 className="invisible group-hover:visible text-white  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"

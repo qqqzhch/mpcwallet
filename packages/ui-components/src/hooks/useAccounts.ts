@@ -34,7 +34,6 @@ export default function useAccounts() {
     if (data == undefined) {
       return
     }
-    console.log('--')
 
     setwalletAccounts(data)
     setList(data)

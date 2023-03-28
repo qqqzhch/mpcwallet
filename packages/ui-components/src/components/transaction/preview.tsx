@@ -20,11 +20,11 @@ type Props = {
   previous: () => void
   next: () => void
   assert?: assertType | undefined
-  btnLoading: boolean,
-  isTxBuild?:boolean
+  btnLoading: boolean
+  isTxBuild?: boolean
 }
 
-const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert, btnLoading,isTxBuild }) => {
+const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert, btnLoading, isTxBuild }) => {
   const { address } = useParams<{ address: string; chainType: string }>()
   const { chainId, library } = useWeb3React()
   const [gasError, setGasError] = useState<string | undefined>()
@@ -32,7 +32,6 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
   useEffect(() => {
     const run = async () => {
       if (userTxInput != undefined) {
-        console.log('- -')
         const txforestimateGas = {
           from: userTxInput?.from,
           to: userTxInput?.to,
@@ -41,8 +40,8 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
         }
 
         try {
-          let ss = await library.estimateGas(txforestimateGas)
-          console.log(ss)
+          await library.estimateGas(txforestimateGas)
+
           setGasError(undefined)
         } catch (error: unknown) {
           const errorinfo = error as { reason: string }
@@ -84,7 +83,7 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
               </div>
             </div>
           </div>
-          <When condition={isTxBuild==false}>
+          <When condition={isTxBuild == false}>
             <div className="mb-6">
               <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Assert </label>
               <div className=" flex flex-row items-center space-x-1">
@@ -94,9 +93,8 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
                 </span>
               </div>
             </div>
-
           </When>
-          
+
           <div className="mb-6">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estimated fee </label>
             <div className=" flex flex-row ">
