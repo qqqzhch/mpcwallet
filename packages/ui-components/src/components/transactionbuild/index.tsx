@@ -86,7 +86,7 @@ const TransactionBuild: FC = () => {
   const addTransaction = useCallback(async () => {
     let description = ''
     let data = ''
-
+    console.log('- -')
     const web3 = services.web3
 
     if (!web3) {
@@ -110,6 +110,7 @@ const TransactionBuild: FC = () => {
       description += ')'
 
       try {
+        
         data = web3.eth.abi.encodeFunctionCall(method as AbiItem, cleanInputs)
       } catch (error) {
         setAddTxError((error as Error).message)

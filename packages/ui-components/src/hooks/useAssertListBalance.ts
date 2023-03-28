@@ -1,47 +1,39 @@
-
 import { useWeb3React } from '@web3-react/core'
 import { useEffect, useState } from 'react'
 // import { BigNumber,Contract,ethers,utils } from 'ethers'
-import {  assertType } from '../utils/buildMpcTx'
-import { getAddressBalances } from '../eth-balance-checker';
+import { assertType } from '../utils/buildMpcTx'
+import { getAddressBalances } from '../eth-balance-checker'
 
 import BalanceMap from 'eth-balance-checker'
-import checkBalanceAddress from '../constants/checkBalanceAddress';
-import {SupportedChainId} from '../constants/chains';
+import checkBalanceAddress from '../constants/checkBalanceAddress'
+import { SupportedChainId } from '../constants/chains'
 
+export default function useAssertListBalance(mpcAddress: string | undefined, list: assertType[]) {
+  const { library, chainId } = useWeb3React()
 
+  const [balance, setBalance] = useState<BalanceMap.BalanceMap>({})
 
-export default function useAssertListBalance(mpcAddress: string | undefined,
-    list:assertType[]) {
-  const { library,chainId } = useWeb3React()
-
-  
-  const [balance,setBalance]= useState<BalanceMap.BalanceMap>({})
-  
-  useEffect(()=>{
-      const run =async () => {
-          if(mpcAddress&&list&&list.length>0&&chainId!==undefined){
-              
-            const tokens:string[]=list.map((item)=>{
-                return item.contractaddress||"0x0"
-            })
-            .filter((item)=>{
-                return item!=="0x0"
-            });
-            const id = chainId as SupportedChainId
-            const checkAddress  =checkBalanceAddress[id];
-            getAddressBalances(library, mpcAddress, tokens,{
-                contractAddress:checkAddress
-            }).then(balances => {
-                setBalance(balances)
-              });
-            
-          }
-        
+  useEffect(() => {
+    const run = async () => {
+      if (mpcAddress && list && list.length > 0 && chainId !== undefined) {
+        const tokens: string[] = list
+          .map(item => {
+            return item.contractaddress || '0x0'
+          })
+          .filter(item => {
+            return item !== '0x0'
+          })
+        const id = chainId as SupportedChainId
+        const checkAddress = checkBalanceAddress[id]
+        getAddressBalances(library, mpcAddress, tokens, {
+          contractAddress: checkAddress
+        }).then(balances => {
+          setBalance(balances)
+        })
       }
-      run();
-
-  },[mpcAddress,library,list,chainId])
+    }
+    run()
+  }, [mpcAddress, library, list, chainId])
 
   return {
     balance

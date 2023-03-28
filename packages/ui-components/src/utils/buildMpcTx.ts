@@ -28,7 +28,6 @@ export type Unsigedtx = TxInput & {
 }
 
 export function buidTransactionJson(chainType: string, chainId: number, data: TxInput): Unsigedtx | undefined {
-  
   const havecontractaddress = data.assert?.contractaddress === '' ? false : true
   if (data.assert == undefined) {
     return undefined
@@ -62,7 +61,7 @@ export function buidTransactionForTxbuild(chainType: string, chainId: number, da
     originValue: data.originValue,
     name: data.name,
     chainId: ethers.utils.hexValue(chainId),
-    value: havenative ? ethers.utils.hexValue(BigNumber.from(data.originValue)) : '0x',
+    value: havenative ? ethers.utils.hexValue(BigNumber.from(data.originValue)) : '0x0',
     data: encodeFunctionData
   }
 }

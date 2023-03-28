@@ -21,21 +21,19 @@ import { useToasts } from 'react-toast-notifications'
 
 import GasModel from '../transaction/gasmodel'
 import Preview from '../transaction/preview'
-// import metamask from '../../assets/icon/metamask.svg'
-import { formatUnitsErc20,formatUnits} from '../../utils/index'
+import metamask from '../../assets/icon/metamask.svg'
+import { formatUnitsErc20, formatUnits } from '../../utils/index'
 import { BigNumber } from 'ethers'
-
 
 import useAsserts from '../../hooks/useAsserts'
 import useNativeBalance from '../../hooks/useNativeBalance'
 import useErc20Balance from '../../hooks/useErc20Balance'
 
-
-// const assertList: Array<assertType> = [
-//   { name: 'eth', img: metamask, decimals: 18 },
-//   { name: 'weth', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e',  decimals: 18 },
-//   { name: 'weth1', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e', decimals: 18 }
-// ]
+const assertList: Array<assertType> = [
+  { name: 'eth', img: metamask, decimals: 18 },
+  { name: 'weth', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e',  decimals: 18 },
+  { name: 'weth1', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e', decimals: 18 }
+]
 
 type Inputs = {
   toAddress: string
@@ -67,7 +65,13 @@ const isAddress = (address: string) => {
   }
 }
 
-const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBack }) => {
+type props ={
+  open?: boolean; 
+  callBack: () => void,
+  selectAssert?:assertType 
+}
+
+const SendToken: FC<props> = ({ open, callBack,selectAssert }) => {
   const [isTokenOpen, setIsTokenOpen] = useState(open || false)
   const [isPreviewStep, setIsPreviewStep] = useState(false)
   const { address, chainType } = useParams<{ address: string; chainType: string }>()
@@ -88,16 +92,17 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
 
   const mpcGroupAccount = useAccount(address)
   const [btnLoading, setBtnLoading] = useState<boolean>(false)
-  const {data:assertList} =useAsserts()
-  const {balance:NativeBalance}= useNativeBalance(address);
-  const {balance:erc20Balance} = useErc20Balance(address,selectedAssert?.contractaddress)
+  // const { data: assertList } = useAsserts()
+  const { balance: NativeBalance } = useNativeBalance(address)
+  const { balance: erc20Balance } = useErc20Balance(address, selectedAssert?.contractaddress)
 
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-    control
+    control,
+    setValue
   } = useForm<Inputs>()
 
   const closeTokenModal = useCallback(
@@ -118,9 +123,14 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
     }
   }, [open])
 
-  // const onSubmit: SubmitHandler<Inputs> = data =>{
-  //   setIsPreviewStep(true)
-  // };
+  useEffect(()=>{
+    if(selectAssert!=undefined){
+      setSelectedAssert(selectAssert)
+      setValue("assert",selectAssert)
+    }
+  },[selectAssert,setValue])
+
+
   const onSubmit: SubmitHandler<Inputs> = useCallback(
     data => {
       setIsPreviewStep(true)
@@ -425,17 +435,13 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                                 Amount{' '}
                               </label>
                               <label htmlFor="Amount" className="block mb-2 text-sm font-medium text-gray-600 dark:text-white">
-                                <If condition={selectedAssert?.contractaddress==undefined}>
-                                  <Then>
-                                    Balance:{NativeBalance&&selectedAssert ? formatUnits(chainId ,NativeBalance) : ''}
-                                  </Then>
+                                <If condition={selectedAssert?.contractaddress == undefined}>
+                                  <Then>Balance:{NativeBalance && selectedAssert ? formatUnits(chainId, NativeBalance) : ''}</Then>
                                   <Else>
-                                  Balance:{erc20Balance&&selectedAssert ? formatUnitsErc20(erc20Balance, selectedAssert?.name,selectedAssert?.decimals) : ''}
+                                    Balance:
+                                    {erc20Balance && selectedAssert ? formatUnitsErc20(erc20Balance, selectedAssert?.name, selectedAssert?.decimals) : ''}
                                   </Else>
-
                                 </If>
-                                
-                                
                               </label>
                             </div>
 
@@ -453,14 +459,14 @@ const SendToken: FC<{ open?: boolean; callBack: () => void }> = ({ open, callBac
                                 Previous
                               </button>
                             </div> */}
-                            
-                              <button
-                                type="submit"
-                                // onClick={next}
-                                className="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 "
-                              >
-                                next
-                              </button>
+
+                            <button
+                              type="submit"
+                              // onClick={next}
+                              className="text-white w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 "
+                            >
+                              next
+                            </button>
                             {/* </div> */}
                           </div>
                         </form>

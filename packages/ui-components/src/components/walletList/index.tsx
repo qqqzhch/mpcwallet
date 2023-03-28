@@ -41,7 +41,11 @@ const WalletList: FC = props => {
         </div>
       </div>
 
-      <div className={showwalletMobile ? 'block sm:block  min-h-[90%]  overflow-x-hidden  overflow-y-auto' : 'hidden sm:block min-h-[90%] overflow-x-hidden overflow-y-auto'}>
+      <div
+        className={
+          showwalletMobile ? 'block sm:block  min-h-[90%]  overflow-x-hidden  overflow-y-auto' : 'hidden sm:block min-h-[90%] overflow-x-hidden overflow-y-auto'
+        }
+      >
         {/* <When condition={isLoading}>
           <Skeleton count={10} height={100} />
         </When> */}

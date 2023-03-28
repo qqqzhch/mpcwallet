@@ -6,6 +6,11 @@ import { TxInput, assertType, Unsigedtx, buidTransactionForTxbuild } from '../..
 import { useParams } from 'react-router-dom'
 import { useWeb3React } from '@web3-react/core'
 import useChainInfo from '../../hooks/useChainInfo'
+import { BigNumber,ethers } from 'ethers'
+import { useGetTxMsgHash, useTransactionSigner } from '../../hooks/useSigns'
+import { rpclist } from '../../constants/rpcConfig'
+import { useToasts } from 'react-toast-notifications'
+import useAccount from '../../hooks/useAccount'
 
 type Props = {
   isOpen: boolean
@@ -15,55 +20,177 @@ type Props = {
 
 const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
   const [userTxInputReview, setUsertTxInputReview] = useState<Unsigedtx>()
-  const { chainType } = useParams<{ address: string; chainType: string }>()
-  const { chainId } = useWeb3React()
+  const { address, chainType } = useParams<{ address: string; chainType: string }>()
+  const { chainId,library } = useWeb3React()
   const [assert, setAssert] = useState<assertType>()
   const ChainInfo = useChainInfo()
+  const [gas, setGas] = useState<{ gasLimit?: string; gasPrise?: string }>({})
+  const [isShow, setIsShow] = useState(false)
+  const [userTxInputReviewnew, setUsertTxInputReviewnew] = useState<Unsigedtx>()
+  const { execute: getUnsigedTransactionHash } = useGetTxMsgHash(rpclist[0])
+  const { execute: TransactionSigner } = useTransactionSigner(rpclist[0])
+  const [msgHash, setMsgHash] = useState<{ hash: string; msg: string }>()
+  const [btnLoading, setBtnLoading] = useState<boolean>(false)
+  
+
+  const mpcGroupAccount = useAccount(address)
+  
+  const { addToast } = useToasts()
 
   function openGasModel() {
     // setIsOpen(true)
   }
 
   useEffect(() => {
+    console.log(transaction, ChainInfo, chainId, chainType,library,isOpen)
     if (transaction != undefined) {
       const item: ProposedTransaction = transaction
-      if (chainType != undefined && chainId != undefined) {
+      if (chainType != undefined && chainId != undefined&&isOpen) {
+        console.log('- -')
         const txinfo: TxInput = {
           from: item.raw.from,
           to: item.raw.to,
           gas: 0,
           gasPrice: 0,
           originValue: item.raw.value.toString(),
-          name: ''
+          name: "wei contract interaction"
         }
         const haveNative = item.raw.haveNative
-        const dataUnsigedtx = buidTransactionForTxbuild(chainType, chainId, txinfo, transaction.raw.data, haveNative)
+        try {
+          const dataUnsigedtx = buidTransactionForTxbuild(chainType, chainId, txinfo, transaction.raw.data, haveNative)
 
-        if (haveNative && ChainInfo && ChainInfo.logoUrl) {
-          setAssert({
-            name: ChainInfo.nativeCurrency.name,
-            img: ChainInfo.logoUrl,
-            balance: '',
-            decimals: ChainInfo?.nativeCurrency.decimals
-          })
+          if (haveNative && ChainInfo && ChainInfo.logoUrl) {
+            setAssert({
+              name: ChainInfo.nativeCurrency.name,
+              img: ChainInfo.logoUrl,
+              balance: '',
+              decimals: ChainInfo?.nativeCurrency.decimals,
+              contractaddress:item.raw.to
+            })
+          }
+          setUsertTxInputReview(dataUnsigedtx)  
+
+          
+        } catch (error) {
+          console.log(error)
+          
         }
-
-        setUsertTxInputReview(dataUnsigedtx)
+        
       }
     }
-  }, [transaction, ChainInfo, chainId, chainType])
+  }, [transaction, ChainInfo, chainId, chainType,library,isOpen])
 
+  useEffect(()=>{
+    const run = async ()=>{
+      if(userTxInputReview&&isOpen){
+        const gasprise: BigNumber = await library.getGasPrice()
+        const gas = ethers.utils.parseUnits('0.0001', 'gwei')
+        setGas({ gasLimit: gas.toString(), gasPrise: gasprise.toString() })
+
+        const txinfoInput: Unsigedtx = {
+          ...userTxInputReview,
+          gas: gas.toNumber(),
+          gasPrice: gasprise.toNumber()
+        }
+        setUsertTxInputReviewnew(txinfoInput)  
+        setIsShow(true);
+
+      }
+        
+    }
+    run()
+
+  },[userTxInputReview,library,isOpen])
+  useEffect(()=>{
+    if(isOpen==false){
+      setIsShow(false);
+    }
+    
+  },[isOpen])
+
+  useEffect(() => {
+    const run = async () => {
+      if (
+        getUnsigedTransactionHash != undefined &&
+        chainType != undefined &&
+        userTxInputReviewnew != undefined &&
+        gas != undefined &&
+        gas.gasLimit != undefined &&
+        gas.gasPrise != undefined &&
+        chainId != undefined
+      ) {
+        const txinfo: Unsigedtx = {
+          ...userTxInputReviewnew,
+          gas: gas.gasLimit as unknown as number,
+          gasPrice: gas.gasPrise as unknown as number
+        }
+        const data = await getUnsigedTransactionHash(txinfo, chainType, chainId)
+        if (data.msg == 'success') {
+          setMsgHash(data.info)
+          setMsgHash({ hash: data.info, msg: data.msgContext })
+        } else {
+          addToast(data.error, { appearance: 'error' })
+        }
+      }
+    }
+    run()
+  }, [userTxInputReviewnew, gas, chainType, getUnsigedTransactionHash, chainId, addToast])
+
+
+
+
+  
   const previous = useCallback(() => {
     openGasModel()
   }, [])
 
-  const sendSigner = useCallback(() => {
-    openGasModel()
-  }, [])
+  const sendSigner = useCallback(async () => {
+    if (
+      mpcGroupAccount != undefined &&
+      chainType != undefined &&
+      msgHash != undefined &&
+      TransactionSigner != undefined &&
+      chainId != undefined &&
+      gas.gasLimit != undefined &&
+      gas.gasPrise != undefined
+    ) {
+      setBtnLoading(true)
+      const data = await TransactionSigner(mpcGroupAccount, chainType, msgHash, chainId)
+      if (data.msg == 'success') {
+        addToast('Transactions have been sent', { appearance: 'success' })
+        closeModal()
+      } else {
+        addToast(data.error, { appearance: 'error' })
+      }
+      setBtnLoading(false)
+    } else {
+      console.info('mpcGroupAccount', mpcGroupAccount)
+      console.info('chainType', chainType)
+      console.info('msgHash', msgHash)
+      console.info('TransactionSigner', TransactionSigner)
+      console.info('chainId', chainId)
+      console.info('gas.gasLimit', gas.gasLimit)
+      console.info('gas.gasPrise', gas.gasPrise)
+      if (msgHash === undefined) {
+        addToast('get Unsiged TransactionHash error', { appearance: 'error' })
+        return
+      }
+      if (TransactionSigner === undefined) {
+        addToast('get Transaction Signer error', { appearance: 'error' })
+        return
+      }
+
+      if (gas.gasLimit === undefined || gas.gasLimit == undefined) {
+        addToast('get gas error', { appearance: 'error' })
+        return
+      }
+    }
+  }, [TransactionSigner, mpcGroupAccount, chainType, msgHash, addToast, closeModal, gas, chainId])
+
 
   return (
     <div>
-      <Transition appear show={isOpen} as={Fragment}>
+      <Transition appear show={isShow} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child
             as={Fragment}
@@ -90,12 +217,13 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
               >
                 <div>
                   <Preview
-                    btnLoading={false}
-                    userTxInput={userTxInputReview}
+                    btnLoading={btnLoading}
+                    userTxInput={userTxInputReviewnew}
                     openGasModel={openGasModel}
                     previous={previous}
                     next={sendSigner}
                     assert={assert}
+                    isTxBuild={true}
                   ></Preview>
                 </div>
               </Transition.Child>

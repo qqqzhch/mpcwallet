@@ -6,16 +6,12 @@ import SendNft from '@monorepo/ui-components/src/components/siderBar/sendNft'
 
 import AssertList from '@monorepo/ui-components/src/components/assert/assertList'
 
-
-
-
 function classNames(...classes: Array<string>) {
   return classes.filter(Boolean).join(' ')
 }
 const Asserts = () => {
-  const [isTokenOpen, setIsTokenOpen] = useState(false)
   const [isNFTOpen, setIsNFTOpen] = useState(false)
-  
+
   return (
     <div className="p-4 ">
       <div className="space-y-2">
@@ -50,7 +46,7 @@ const Asserts = () => {
 
                 <div className=" w-48 px-2 py-3 text-right sm:p-3 sm:block"></div>
               </div>
-              
+
               <AssertList></AssertList>
             </div>
           </Tab.Panel>
@@ -91,12 +87,7 @@ const Asserts = () => {
           </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>
-      <SendToken
-        open={isTokenOpen}
-        callBack={() => {
-          setIsTokenOpen(false)
-        }}
-      ></SendToken>
+    
       <SendNft
         open={isNFTOpen}
         callBack={() => {

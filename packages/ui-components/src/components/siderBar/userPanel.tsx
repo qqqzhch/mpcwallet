@@ -17,7 +17,6 @@ import ScanUrl from '../mpcinfo/scanUrl'
 import { useAppStore } from '../..'
 import useNativeBalance from '../../hooks/useNativeBalance'
 
-
 const UserPanel: FC = () => {
   const { address } = useParams<{ address: string; chainType: string }>()
 

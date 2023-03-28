@@ -2,7 +2,7 @@
 import memoize from 'lodash/memoize'
 import { SupportedChainNames } from '../../constants/chains'
 import { api } from '@monorepo/api'
-import { SCAN_KEY } from '../../constants/networks'
+import { SCAN_KEY,BSC_SCAN_KEY } from '../../constants/networks'
 
 interface ContractMethod {
   inputs: any[]
@@ -33,14 +33,16 @@ const abiUrlGetterByNetwork: {
   ROPSTEN: null,
   goerli: (address: string) => `https://api-goerli.etherscan.io/api?module=contract&action=getabi&address=${address}&apikey=${SCAN_KEY}`,
   KOVAN: null,
-  xdai: (address: string) => `https://blockscout.com/poa/xdai/api?module=contract&action=getabi&address=${address}&apikey=${SCAN_KEY}`
+  xdai: (address: string) => `https://blockscout.com/poa/xdai/api?module=contract&action=getabi&address=${address}&apikey=${SCAN_KEY}`,
   // ENERGY_WEB_CHAIN: (address: string) =>
   //   `https://explorer.energyweb.org/api?module=contract&action=getabi&address=${address}&apikey=${SCAN_KEY}`,
   // VOLTA: (address: string) =>
   //   `https://volta-explorer.energyweb.org/api?module=contract&action=getabi&address=${address}&apikey=${SCAN_KEY}`,
   // UNKNOWN: null,
-  // BSC_MAINNET: (address: string) =>
-  // `https://api.bscscan.com/api?module=contract&action=getabi&address=${address}&apikey=${SCAN_KEY}`,
+  bsc: (address: string) =>
+  `https://api.bscscan.com/api?module=contract&action=getabi&address=${address}&apikey=${BSC_SCAN_KEY}`,
+  bsc_test: (address: string) =>
+  `https://api.bscscan.com/api?module=contract&action=getabi&address=${address}&apikey=${BSC_SCAN_KEY}`,
 }
 
 class InterfaceRepository {

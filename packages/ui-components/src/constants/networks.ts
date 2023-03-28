@@ -8,8 +8,14 @@ if (typeof INFURA_KEY === 'undefined') {
 
 export const SCAN_KEY = import.meta.env.VITE_REACT_APP_SCAN_KEY
 
-if (typeof INFURA_KEY === 'undefined') {
-  throw new Error(`REACT_APP_SCAN_KEY must be a defined environment variable`)
+if (typeof SCAN_KEY === 'undefined') {
+  throw new Error(`VITE_REACT_APP_SCAN_KEY must be a defined environment variable`)
+}
+
+export const BSC_SCAN_KEY = import.meta.env.VITE_REACT_BSC_APP_SCAN_KEY
+
+if (typeof BSC_SCAN_KEY === 'undefined') {
+  throw new Error(`VITE_REACT_BSC_APP_SCAN_KEY must be a defined environment variable`)
 }
 
 /**
@@ -96,11 +102,11 @@ export const FALLBACK_URLS: { [key in SupportedChainId]: string[] } = {
   ],
   [SupportedChainId.BNB]: [
     // "Safe" URLs
-    "https://bsc-dataseed.binance.org"
+    'https://bsc-dataseed.binance.org'
   ],
   [SupportedChainId.BNBTEST]: [
     // "Safe" URLs
-    "https://data-seed-prebsc-1-s3.binance.org:8545"
+    'https://data-seed-prebsc-1-s3.binance.org:8545'
   ]
 }
 
@@ -122,6 +128,6 @@ export const RPC_URLS: { [key in SupportedChainId]: string[] } = {
   [SupportedChainId.POLYGON_MUMBAI]: [`https://polygon-mumbai.infura.io/v3/${INFURA_KEY}`, ...FALLBACK_URLS[SupportedChainId.POLYGON_MUMBAI]],
   [SupportedChainId.CELO]: FALLBACK_URLS[SupportedChainId.CELO],
   [SupportedChainId.CELO_ALFAJORES]: FALLBACK_URLS[SupportedChainId.CELO_ALFAJORES],
-  [SupportedChainId.BNB]: ["https://bsc-dataseed.binance.org"],
-  [SupportedChainId.BNBTEST]: ["https://data-seed-prebsc-1-s3.binance.org:8545"],
+  [SupportedChainId.BNB]: ['https://bsc-dataseed.binance.org'],
+  [SupportedChainId.BNBTEST]: ['https://data-seed-prebsc-1-s3.binance.org:8545']
 }
