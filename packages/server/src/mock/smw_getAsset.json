@@ -8,6 +8,18 @@
                 "Contract": "0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e",
                 "Name": "weth coin",
                 "Decimal": 18
+            },
+            {
+                "Symbol": "weth2",
+                "Contract": "0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e",
+                "Name": "weth coin",
+                "Decimal": 18
+            },
+            {
+                "Symbol": "weth3",
+                "Contract": "0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e",
+                "Name": "weth coin",
+                "Decimal": 18
             }
         ],
         "Error": "",

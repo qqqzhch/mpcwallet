@@ -8,7 +8,7 @@ import { useWeb3React } from '@web3-react/core'
 import { useEffect, useCallback } from 'react'
 import EventBus from '../../EventEmitter/index'
 import metamask from '../../assets/icon/metamask.svg'
-import walletconnect from '../../assets/icon/walletconnect.svg'
+// import walletconnect from '../../assets/icon/walletconnect.svg'
 
 interface componentprops {
   isOpen: boolean

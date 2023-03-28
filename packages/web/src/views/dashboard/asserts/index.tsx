@@ -4,12 +4,18 @@ import { useState } from 'react'
 import SendToken from '@monorepo/ui-components/src/components/siderBar/sendToken'
 import SendNft from '@monorepo/ui-components/src/components/siderBar/sendNft'
 
+import AssertList from '@monorepo/ui-components/src/components/assert/assertList'
+
+
+
+
 function classNames(...classes: Array<string>) {
   return classes.filter(Boolean).join(' ')
 }
 const Asserts = () => {
   const [isTokenOpen, setIsTokenOpen] = useState(false)
   const [isNFTOpen, setIsNFTOpen] = useState(false)
+  
   return (
     <div className="p-4 ">
       <div className="space-y-2">
@@ -44,24 +50,8 @@ const Asserts = () => {
 
                 <div className=" w-48 px-2 py-3 text-right sm:p-3 sm:block"></div>
               </div>
-              <div className="flex border-b border-opacity-20 border-gray-300  group">
-                <div className="flex w-32 px-2 py-3 sm:p-3 items-center">
-                  <p>ETH</p>
-                </div>
-                <div className="flex-1 flex px-2 py-3 truncate sm:p-3 sm:w-auto items-center">1 111eth</div>
-
-                <div className="flex w-48 px-2 py-3 text-right sm:p-3 sm:block text-gray-600 items-center ">
-                  <button
-                    onClick={() => {
-                      setIsTokenOpen(true)
-                    }}
-                    type="button"
-                    className="invisible group-hover:visible text-white  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                  >
-                    send
-                  </button>
-                </div>
-              </div>
+              
+              <AssertList></AssertList>
             </div>
           </Tab.Panel>
           <Tab.Panel key={'Nfts'}>

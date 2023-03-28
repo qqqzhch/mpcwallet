@@ -41,7 +41,7 @@ const WalletList: FC = props => {
         </div>
       </div>
 
-      <div className={showwalletMobile ? 'block sm:block  overflow-x-hidden overflow-y-scroll' : 'hidden sm:block overflow-x-hidden overflow-y-scroll'}>
+      <div className={showwalletMobile ? 'block sm:block  min-h-[90%]  overflow-x-hidden  overflow-y-auto' : 'hidden sm:block min-h-[90%] overflow-x-hidden overflow-y-auto'}>
         {/* <When condition={isLoading}>
           <Skeleton count={10} height={100} />
         </When> */}
@@ -63,7 +63,7 @@ const WalletList: FC = props => {
                     </div>
 
                     <div className="flex-1 ">
-                      <p className="text-gray-500  w-80 md:w-full text-ellipsis overflow-hidden">{item.Mpc_address}</p>
+                      <p className="text-gray-500  w-60 sm:w-80 md:w-full   text-ellipsis overflow-hidden">{item.Mpc_address}</p>
                     </div>
                   </div>
                 </div>

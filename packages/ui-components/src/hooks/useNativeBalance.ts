@@ -18,6 +18,9 @@ export default function useNativeBalance(mpcAddress: string | undefined) {
   const [nativeCurrency ,setNativeCurrency]= useState<Currency>()
   
   useEffect(()=>{
+    if(library==undefined){
+      return 
+    }
       const run =async () => {
           if(mpcAddress&&ChainInfo?.nativeCurrency){
             const result:BigNumber = await library.getBalance(mpcAddress)
@@ -28,6 +31,12 @@ export default function useNativeBalance(mpcAddress: string | undefined) {
         
       }
       run();
+      library.on("newBlockHeaders",()=>{
+        run();
+      })
+      return ()=>{
+        library.off("newBlockHeaders")
+      }
 
   },[mpcAddress,library,ChainInfo])
 
