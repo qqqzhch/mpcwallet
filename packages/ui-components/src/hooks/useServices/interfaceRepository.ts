@@ -40,7 +40,7 @@ const abiUrlGetterByNetwork: {
   //   `https://volta-explorer.energyweb.org/api?module=contract&action=getabi&address=${address}&apikey=${SCAN_KEY}`,
   // UNKNOWN: null,
   bsc: (address: string) => `https://api.bscscan.com/api?module=contract&action=getabi&address=${address}&apikey=${BSC_SCAN_KEY}`,
-  bsc_test: (address: string) => `https://api.bscscan.com/api?module=contract&action=getabi&address=${address}&apikey=${BSC_SCAN_KEY}`
+  bsc_test: (address: string) => `https://api-testnet.bscscan.com/api?module=contract&action=getabi&address=${address}&apikey=${BSC_SCAN_KEY}`
 }
 
 class InterfaceRepository {

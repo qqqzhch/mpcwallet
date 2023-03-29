@@ -25,6 +25,7 @@ export type Unsigedtx = TxInput & {
   value: string
   data: string
   nonce?: number
+  toReview?:string
 }
 
 export function buidTransactionJson(chainType: string, chainId: number, data: TxInput): Unsigedtx | undefined {
@@ -38,7 +39,7 @@ export function buidTransactionJson(chainType: string, chainId: number, data: Tx
     //  erc20Contract.transfer(data.from,data.to,formatToWei(data.originValue,18))
     encodeFunctionData = erc20Contract.encodeFunctionData('transferFrom', [data.from, data.to, formatToWei(data.originValue, data.assert.decimals)])
   }
-
+ 
   return {
     from: data.from,
     to: data.assert?.contractaddress || data.to,

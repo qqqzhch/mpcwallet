@@ -11,6 +11,7 @@ import { useGetTxMsgHash, useTransactionSigner } from '../../hooks/useSigns'
 import { rpclist } from '../../constants/rpcConfig'
 import { useToasts } from 'react-toast-notifications'
 import useAccount from '../../hooks/useAccount'
+import GasModel from '../transaction/gasmodel'
 
 type Props = {
   isOpen: boolean
@@ -31,13 +32,15 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
   const { execute: TransactionSigner } = useTransactionSigner(rpclist[0])
   const [msgHash, setMsgHash] = useState<{ hash: string; msg: string }>()
   const [btnLoading, setBtnLoading] = useState<boolean>(false)
+  
+  const [isgasOpen, setGasIsOpen] = useState(false)
 
   const mpcGroupAccount = useAccount(address)
 
   const { addToast } = useToasts()
 
   function openGasModel() {
-    // setIsOpen(true)
+    setGasIsOpen(true)
   }
 
   useEffect(() => {
@@ -123,8 +126,8 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
   }, [userTxInputReviewnew, gas, chainType, getUnsigedTransactionHash, chainId, addToast])
 
   const previous = useCallback(() => {
-    openGasModel()
-  }, [])
+    closeModal()
+  }, [closeModal])
 
   const sendSigner = useCallback(async () => {
     if (
@@ -169,6 +172,20 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
     }
   }, [TransactionSigner, mpcGroupAccount, chainType, msgHash, addToast, closeModal, gas, chainId])
 
+  function editGas({ gasLimit, gasPrise }: { gasLimit?: string; gasPrise?: string }) {
+    setGas({ gasLimit, gasPrise })
+    setGasIsOpen(false)
+    if (gasLimit != undefined && gasPrise != undefined) {
+      // setUsertTxInputReviewnew(txinfoInput)
+      setUsertTxInputReviewnew((prevState: Unsigedtx|undefined) => {
+        return {
+          ...(prevState || {}),
+          gas: parseInt(gasLimit),
+          gasPrice: parseInt(gasPrise)
+        } as Unsigedtx
+      })
+    }
+  }
   return (
     <div>
       <Transition appear show={isShow} as={Fragment}>
@@ -206,12 +223,14 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
                     assert={assert}
                     isTxBuild={true}
                   ></Preview>
+                  <GasModel isOpen={isgasOpen} closeModal={editGas} gasPrise={gas.gasPrise} gasLimit={gas.gasLimit}></GasModel>
                 </div>
               </Transition.Child>
             </div>
           </div>
         </Dialog>
       </Transition>
+      
     </div>
   )
 }

@@ -51,14 +51,14 @@ const CreatWallet: FC = props => {
       return item.address !== ''
     })
     if (isempty == false) {
-      setadminserror('admin address cannot be isempty')
+      setadminserror('Owner address cannot be isempty')
       return
     }
     const repeat = createGroup.admins.every(item => {
       return createGroup.admins.filter(it => item.address == it.address).length == 1
     })
     if (repeat == false) {
-      setadminserror('admin address cannot be repeated')
+      setadminserror('Owner address cannot be repeated')
       return
     }
     const formatcheck = createGroup.admins.every(item => {
@@ -66,7 +66,7 @@ const CreatWallet: FC = props => {
     })
 
     if (formatcheck == false) {
-      setadminserror('admin address Incorrect format')
+      setadminserror('Owner address Incorrect format')
       return
     }
 

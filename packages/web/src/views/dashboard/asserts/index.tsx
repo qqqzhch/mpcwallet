@@ -5,12 +5,23 @@ import { useState } from 'react'
 import SendNft from '@monorepo/ui-components/src/components/siderBar/sendNft'
 
 import AssertList from '@monorepo/ui-components/src/components/assert/assertList'
+import AddAssert from '@monorepo/ui-components/src/components/assert/addAssert'
 
 function classNames(...classes: Array<string>) {
   return classes.filter(Boolean).join(' ')
 }
 const Asserts = () => {
   const [isNFTOpen, setIsNFTOpen] = useState(false)
+  const [isaddAsertOpen, setIsaddAsertOpen] = useState(false)
+
+  function closeModal() {
+    setIsaddAsertOpen(false)
+  }
+
+  function openModal() {
+    setIsaddAsertOpen(true)
+  }
+
 
   return (
     <div className="p-4 ">
@@ -19,6 +30,10 @@ const Asserts = () => {
         {/* <p className="font-serif text-sm text-gray-600">xxx.</p> */}
       </div>
       <Tab.Group>
+        <div className=" flex flex-row  items-center ">
+
+        
+        <div>
         <Tab.List>
           <Tab
             key={'Tokens'}
@@ -27,6 +42,8 @@ const Asserts = () => {
             }
           >
             Tokens
+            
+
           </Tab>
           {/* <Tab
             key={'Nfts'}
@@ -37,6 +54,15 @@ const Asserts = () => {
             Nfts
           </Tab> */}
         </Tab.List>
+
+        </div>
+        <div className=" flex-1 flex flex-row  justify-end ">
+        <button onClick={()=>{openModal()}} type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+          add 
+        </button>
+        </div>
+        </div>
+        
         <Tab.Panels>
           <Tab.Panel key={'Tokens'}>
             <div className="flex flex-col overflow-x-auto text-xs p-2">
@@ -94,6 +120,7 @@ const Asserts = () => {
           setIsNFTOpen(false)
         }}
       ></SendNft>
+      <AddAssert isOpen={isaddAsertOpen} closeModal={closeModal} openModal={openModal}></AddAssert>
     </div>
   )
 }

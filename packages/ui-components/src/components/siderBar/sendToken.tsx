@@ -84,7 +84,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
   const { chainId, library } = useWeb3React()
   const [msgHash, setMsgHash] = useState<{ hash: string; msg: string }>()
   const { addToast } = useToasts()
-  const [gas, setGas] = useState<{ gasLimit?: string; gasPrise?: string }>({})
+  const [gas, setGas] = useState<{ gasLimit?: string; gasPrise?: string;gasCustom?:boolean }>({})
 
   const [selectedAssert, setSelectedAssert] = useState<assertType>()
 
@@ -114,6 +114,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
       }
       reset()
       setSelectedAssert(undefined)
+      setGas({gasCustom:false})
     },
     [callBack, reset]
   )
@@ -187,23 +188,28 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
         //   addToast(errorinfo.reason, { appearance: 'error' })
         //   return;
         // }
+       
+        if(gas.gasCustom==undefined||gas.gasCustom==false){
+          const gasprise: BigNumber = await library.getGasPrice()
+          const gasETH = ethers.utils.parseUnits('0.0001', 'gwei')
 
-        const gasprise: BigNumber = await library.getGasPrice()
-        const gas = ethers.utils.parseUnits('0.0001', 'gwei')
-
-        setGas({ gasLimit: gas.toString(), gasPrise: gasprise.toString() })
-        if (unsigedtx) {
-          const txinfoInput: Unsigedtx = {
-            ...unsigedtx,
-            gas: gas.toNumber(),
-            gasPrice: gasprise.toNumber()
+          setGas({ gasLimit: gasETH.toString(), gasPrise: gasprise.toString() })
+          if (unsigedtx) {
+            const txinfoInput: Unsigedtx = {
+              ...unsigedtx,
+              gas: gasETH.toNumber(),
+              gasPrice: gasprise.toNumber()
+            }
+            setUsertTxInputReview(txinfoInput)
           }
-          setUsertTxInputReview(txinfoInput)
+
         }
+        
+        
       }
     }
     run()
-  }, [unsigedtx, library, chainType])
+  }, [unsigedtx, library, chainType,gas.gasCustom])
 
   useEffect(() => {
     const run = async () => {
@@ -280,13 +286,14 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
 
   const previous = useCallback(() => {
     setIsPreviewStep(false)
+    setGas({gasCustom:false})
   }, [setIsPreviewStep])
 
   function openGasModel() {
     setIsOpen(true)
   }
   function editGas({ gasLimit, gasPrise }: { gasLimit?: string; gasPrise?: string }) {
-    setGas({ gasLimit, gasPrise })
+    setGas({ gasLimit, gasPrise,gasCustom:true })
     setIsOpen(false)
     if (gasLimit != undefined && gasPrise != undefined) {
       setUsertTxInput((prevState: TxInput | undefined) => {
@@ -480,6 +487,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
                       next={sendSigner}
                       assert={userTxInput?.assert}
                       btnLoading={btnLoading}
+                      userTxInputShow={userTxInput}
                     ></Preview>
                   </When>
                 </div>

@@ -4,11 +4,11 @@ import MpcAvvvatar from '../mpcAvvvatar'
 import { useWeb3React } from '@web3-react/core'
 import CopyAddress from '../mpcinfo/copyAddress'
 import ScanUrl from '../mpcinfo/scanUrl'
-
+import useAsserts from '../../hooks/useAsserts'
 const Overview: FC = () => {
   const { address } = useParams<{ address: string; chainType: string }>()
   const { chainId } = useWeb3React()
-
+  const Asserts = useAsserts()
   return (
     <div className="flex  min-h-80 rounded bg-gray-50 flex-col  space-y-6 p-8" title={address}>
       <h1 className=" border-b border-blue-300 pb-4">Overview</h1>
@@ -37,7 +37,7 @@ const Overview: FC = () => {
       <div className=" flex flex-row">
         <div className=" flex  flex-col w-1/4 sm:w-1/3  space-y-2">
           <div className=" text-blue-500">tokens</div>
-          <div className=" text-2xl font-semibold ">1</div>
+          <div className=" text-2xl font-semibold ">{Asserts.data.length}</div>
         </div>
         <div className=" flex  flex-col w-1/4 sm:w-1/3 space-y-2">
           {/* <div className=" text-blue-500">nfts</div>

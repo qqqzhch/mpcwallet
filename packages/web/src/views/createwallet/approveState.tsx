@@ -7,7 +7,7 @@ import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/20/solid'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { useToasts } from 'react-toast-notifications'
 import { ClipboardDocumentListIcon } from '@heroicons/react/20/solid'
-import dayjs from 'dayjs'
+
 import Avvvatars from 'avvvatars-react'
 import { Link } from 'react-router-dom'
 
@@ -25,16 +25,20 @@ const ApproveState = () => {
   return (
     <div className="flex flex-col lg:flex-row  xl:mx-40 2xl:mx-80 ">
       <div className="felx flex-col w-full xl:w-2/3 p-10 bg-white">
-        <h1 className="font-semibold text-3xl mb-4 pb-4  border-b ">Your wallet has been created successfully</h1>
+        <h1 className="font-semibold text-3xl mb-4 pb-4  border-b ">
+        Your Vault has been created successfully
+</h1>
         <div className="mb-4 pb-4  border-b  px-4">
-          <h3 className="font-semibold text-xl pb-4 ">Status</h3>
-          <p>View the creation status of wallet</p>
+          <h3 className="font-semibold text-xl pb-4 ">
+          Please do not close this page before you create the vault
+          </h3>
+          <p>View the creation status of vault</p>
         </div>
         <div className="mb-4 pb-4  border-b  px-4">
           <div className="relative mb-4">
             <span className="leading-7 text-sm text-gray-600 inline-block w-40 ">Wallet Status:</span>
             <When condition={data?.status == 0}>
-              <div className="px-3 py-1 w-20 inline-block text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">
+              <div className="px-3 py-1 w-40 inline-block text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">
                 pending...
               </div>
             </When>
@@ -48,12 +52,12 @@ const ApproveState = () => {
               timeout <XCircleIcon className="h-5 w-5 text-gray-400 inline-block text-red-500" aria-hidden="true"></XCircleIcon>
             </When>
           </div>
-          <div className="relative mb-4">
+          {/* <div className="relative mb-4">
             <span className="leading-7 text-sm text-gray-600 inline-block w-40">Mpc Type:</span>
             {createGroup.keytype}
-          </div>
+          </div> */}
           <div className="relative mb-4 flex  flex-col">
-            <span className="leading-7 text-sm text-gray-600 inline-block w-40 ">Wallet Address:</span>
+            <span className="leading-7 text-sm text-gray-600 inline-block w-40 ">Vault address:</span>
 
             <When condition={data != undefined && data.mpcAddress != undefined}>
               <CopyToClipboard text={data?.mpcAddress ? data?.mpcAddress : ''} onCopy={() => onCopy()}>
@@ -70,12 +74,12 @@ const ApproveState = () => {
           {data?.list.map((item, index) => {
             return (
               <div className="relative mb-4" key={item.User_account}>
-                <div className="leading-7 text-sm text-gray-600  w-40">User account {index + 1}:</div>
+                <div className="leading-7 text-sm text-gray-600  w-40">Owner address {index + 1}:</div>
                 <div className="break-all ">{item.User_account}</div>
-                <div className="leading-7 text-sm text-gray-600  w-40">Reply status:</div>
+                {/* <div className="leading-7 text-sm text-gray-600  w-40">Reply status:</div>
                 <div className="break-all">{item.Reply_status}</div>
                 <div className="leading-7 text-sm text-gray-600  w-40">Reply time:</div>
-                <div className="break-all">{dayjs(Number(item.Reply_timestamp)).format('DD/MM/YYYY:HH:MM')}</div>
+                <div className="break-all">{dayjs(Number(item.Reply_timestamp)).format('DD/MM/YYYY:HH:MM')}</div> */}
               </div>
             )
           })}
@@ -85,21 +89,21 @@ const ApproveState = () => {
               <h2 className="font-semibold text-xl">Threshold</h2>
             </div>
             <div className="flex items-center">
-              {createGroup.threshold} out of {createGroup.admins.length} owner(s)
+              {createGroup.threshold} out of {createGroup.admins.length} owners
             </div>
           </div>
 
           <div className="flex flex-col   lg:flex-row  mb-20">
             <div className="w-2/3">
               <h2 className="font-semibold text-xl">Recharge</h2>
-              <p>After approval, you can recharge your wallet</p>
+              <p>You can deposit assets to your Vault now. Before you send assets from the Vault, please deposit gas coin to the Vault first. </p>
             </div>
           </div>
           <div className="flex flex-col   lg:flex-row  justify-around gap-8">
             <When condition={data !== undefined && data != null}>
               <Link to={`/dashboard/evm/${data?.mpcAddress}`}>
                 <button className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                  Open wallet
+                Open Vault
                 </button>
               </Link>
             </When>

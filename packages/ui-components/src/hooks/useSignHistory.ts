@@ -2,13 +2,13 @@ import useSWR from 'swr'
 import { web3 } from '@monorepo/api'
 import { getsmpc } from '@monorepo/api/src/web3'
 
-import { TxApprove } from '../state/approve'
+import { TxtxSignHistory } from '../state/txSignHistory'
 import { useEffect, useState } from 'react'
 import { rpclist } from '../constants/rpcConfig'
 import { useWeb3React } from '@web3-react/core'
 import { useParams } from 'react-router-dom'
 
-async function fetcher(account: string | null | undefined): Promise<Array<TxApprove> | undefined> {
+async function fetcher(account: string | null | undefined): Promise<Array<TxtxSignHistory> | undefined> {
   if (account == null || account == undefined) {
     return
   }
@@ -25,7 +25,7 @@ async function fetcher(account: string | null | undefined): Promise<Array<TxAppr
 
 export default function useSignHistory() {
   const { account } = useWeb3React()
-  const [list, setList] = useState<Array<TxApprove>>([])
+  const [list, setList] = useState<Array<TxtxSignHistory>>([])
   const { address: mpcaddress } = useParams<{ address: string; chainType: string }>()
 
   const { data, error, isLoading } = useSWR(account ? ['/smw/SignHistory', account] : null, () => fetcher(account), {
@@ -42,12 +42,9 @@ export default function useSignHistory() {
         return tx.Mpc_address == mpcaddress
       })
       .sort((a, b) => {
-        if (b.Reply_timestamp !== undefined && a.Reply_timestamp !== undefined) {
-          return parseInt(b.Reply_timestamp || '943891200') - parseInt(a.Reply_timestamp || '943891200')
-        } else {
-          return 0
-        }
+        return parseInt(b.Local_timestamp) - parseInt(a.Local_timestamp)
       })
+    
     setList(result)
   }, [data, mpcaddress])
 

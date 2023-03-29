@@ -40,7 +40,7 @@ const WalletMenu: FC = props => {
         </div> */}
       <div className=" pb-4 sm:pb-8">
         <div className="flex flex-row border-b items-center py-1 mx-2  text-center ">
-          <h1 className="  border-gray-300 flex-1   ">My MPC Wallets</h1>
+          <h1 className="  border-gray-300 flex-1   ">My Vaults</h1>
           <Link className="text-yellow-600" to={'/creatwallet'}>
             {' '}
             add new
@@ -84,7 +84,7 @@ const WalletMenu: FC = props => {
             <span>
               <Squares2X2Icon className="h-52 w-52 text-gray-200 mt-32"></Squares2X2Icon>
             </span>
-            <span className="text-gray-400 my-10 ">Create a wallet or import a wallet</span>
+            <span className="text-gray-400 my-10 ">Create a Vault or import a Vault</span>
           </div>
         </When>
       </div>
