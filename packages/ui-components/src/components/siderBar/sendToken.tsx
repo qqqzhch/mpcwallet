@@ -21,19 +21,19 @@ import { useToasts } from 'react-toast-notifications'
 
 import GasModel from '../transaction/gasmodel'
 import Preview from '../transaction/preview'
-import metamask from '../../assets/icon/metamask.svg'
+// import metamask from '../../assets/icon/metamask.svg'
 import { formatUnitsErc20, formatUnits } from '../../utils/index'
 import { BigNumber } from 'ethers'
 
-// import useAsserts from '../../hooks/useAsserts'
+import useAsserts from '../../hooks/useAssets'
 import useNativeBalance from '../../hooks/useNativeBalance'
 import useErc20Balance from '../../hooks/useErc20Balance'
 
-const assertList: Array<assertType> = [
-  { name: 'eth', img: metamask, decimals: 18 },
-  { name: 'weth', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e', decimals: 18 },
-  { name: 'weth1', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e', decimals: 18 }
-]
+// const assertList: Array<assertType> = [
+//   { name: 'eth', img: metamask, decimals: 18 },
+//   { name: 'weth', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e', decimals: 18 },
+//   { name: 'weth1', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e', decimals: 18 }
+// ]
 
 type Inputs = {
   toAddress: string
@@ -84,7 +84,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
   const { chainId, library } = useWeb3React()
   const [msgHash, setMsgHash] = useState<{ hash: string; msg: string }>()
   const { addToast } = useToasts()
-  const [gas, setGas] = useState<{ gasLimit?: string; gasPrise?: string;gasCustom?:boolean }>({})
+  const [gas, setGas] = useState<{ gasLimit?: string; gasPrise?: string; gasCustom?: boolean }>({})
 
   const [selectedAssert, setSelectedAssert] = useState<assertType>()
 
@@ -92,7 +92,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
 
   const mpcGroupAccount = useAccount(address)
   const [btnLoading, setBtnLoading] = useState<boolean>(false)
-  // const { data: assertList } = useAsserts()
+  const { data: assertList } = useAsserts()
   const { balance: NativeBalance } = useNativeBalance(address)
   const { balance: erc20Balance } = useErc20Balance(address, selectedAssert?.contractaddress)
 
@@ -114,7 +114,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
       }
       reset()
       setSelectedAssert(undefined)
-      setGas({gasCustom:false})
+      setGas({ gasCustom: false })
     },
     [callBack, reset]
   )
@@ -173,43 +173,35 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
   useEffect(() => {
     const run = async () => {
       if (unsigedtx != undefined) {
-        // const txforestimateGas = {
-        //   from: unsigedtx.from,
-        //   to: unsigedtx.to,
-        //   data: unsigedtx.assert?.contractaddress ? unsigedtx.data : '',
-        //   value: unsigedtx.assert?.contractaddress ? '0x' : unsigedtx.value
-        // }
-        // console.log('gas')
-        // try {
-        //   await library.estimateGas(txforestimateGas)
-        // } catch (error:unknown) {
-        //   console.log(error)
-        //   const errorinfo=error as {reason:string}
-        //   addToast(errorinfo.reason, { appearance: 'error' })
-        //   return;
-        // }
-       
-        if(gas.gasCustom==undefined||gas.gasCustom==false){
-          const gasprise: BigNumber = await library.getGasPrice()
-          const gasETH = ethers.utils.parseUnits('0.0001', 'gwei')
-
-          setGas({ gasLimit: gasETH.toString(), gasPrise: gasprise.toString() })
-          if (unsigedtx) {
-            const txinfoInput: Unsigedtx = {
-              ...unsigedtx,
-              gas: gasETH.toNumber(),
-              gasPrice: gasprise.toNumber()
-            }
-            setUsertTxInputReview(txinfoInput)
-          }
-
+        const txforestimateGas = {
+          from: unsigedtx.from,
+          to: unsigedtx.to,
+          data: unsigedtx.assert?.contractaddress ? unsigedtx.data : '',
+          value: unsigedtx.assert?.contractaddress ? '0x' : unsigedtx.value
         }
-        
-        
+        // console.log('gas')
+
+        if (gas.gasCustom == undefined || gas.gasCustom == false) {
+          try {
+            const gasEstimate: BigNumber = await library.estimateGas(txforestimateGas)
+            const gasprise: BigNumber = await library.getGasPrice()
+            setGas({ gasLimit: gasEstimate.toString(), gasPrise: gasprise.toString() })
+            if (unsigedtx) {
+              const txinfoInput: Unsigedtx = {
+                ...unsigedtx,
+                gas: gasEstimate.toNumber(),
+                gasPrice: gasprise.toNumber()
+              }
+              setUsertTxInputReview(txinfoInput)
+            }
+          } catch (error: unknown) {
+            return
+          }
+        }
       }
     }
     run()
-  }, [unsigedtx, library, chainType,gas.gasCustom])
+  }, [unsigedtx, library, chainType, gas.gasCustom])
 
   useEffect(() => {
     const run = async () => {
@@ -286,14 +278,14 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
 
   const previous = useCallback(() => {
     setIsPreviewStep(false)
-    setGas({gasCustom:false})
+    setGas({ gasCustom: false })
   }, [setIsPreviewStep])
 
   function openGasModel() {
     setIsOpen(true)
   }
   function editGas({ gasLimit, gasPrise }: { gasLimit?: string; gasPrise?: string }) {
-    setGas({ gasLimit, gasPrise,gasCustom:true })
+    setGas({ gasLimit, gasPrise, gasCustom: true })
     setIsOpen(false)
     if (gasLimit != undefined && gasPrise != undefined) {
       setUsertTxInput((prevState: TxInput | undefined) => {

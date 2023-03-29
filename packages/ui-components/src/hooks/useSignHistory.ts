@@ -44,7 +44,7 @@ export default function useSignHistory() {
       .sort((a, b) => {
         return parseInt(b.Local_timestamp) - parseInt(a.Local_timestamp)
       })
-    
+
     setList(result)
   }, [data, mpcaddress])
 

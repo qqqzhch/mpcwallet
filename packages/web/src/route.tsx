@@ -12,7 +12,7 @@ import { ProtectedRoute } from '@monorepo/ui-components'
 import ApproveState from './views/createwallet/approveState'
 import Dashboard from './views/dashboard'
 import WalletHome from './views/dashboard/walletHome'
-import Asserts from './views/dashboard/asserts'
+import Assets from './views/dashboard/assets'
 import Transactions from './views/dashboard/transactions'
 import Txbuild from './views/dashboard/txbuilder'
 import TxInfo from './views/dashboard/transactions/txInfo'
@@ -79,10 +79,10 @@ const router = createBrowserRouter(
           }
         ></Route>
         <Route
-          path="asserts"
+          path="assets"
           element={
             <ProtectedRoute>
-              <Asserts></Asserts>
+              <Assets></Assets>
             </ProtectedRoute>
           }
         ></Route>

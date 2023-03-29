@@ -1,7 +1,7 @@
 import { FC, useCallback, useState } from 'react'
-import useAsserts from '../../hooks/useAsserts'
+import useAsserts from '../../hooks/useAssets'
 //https://etherscan.io/address/0xb1f8e55c7f64d203c1400b9d8555d050f94adf39#code
-import useAssertListBalance from '../../hooks/useAssertListBalance'
+import useAssertListBalance from '../../hooks/useAssetListBalance'
 import { useParams } from 'react-router-dom'
 import useNativeBalance from '../../hooks/useNativeBalance'
 import { formatUnitsErc20 } from '../../utils/index'
@@ -9,7 +9,7 @@ import SendToken from '../siderBar/sendToken'
 
 import { assertType } from '../../utils/buildMpcTx'
 
-const AssertList: FC = () => {
+const AssetList: FC = () => {
   const { data: assertList } = useAsserts()
   const { address } = useParams<{ address: string; chainType: string }>()
   const { balance } = useAssertListBalance(address, assertList)
@@ -69,4 +69,4 @@ const AssertList: FC = () => {
   )
 }
 
-export default AssertList
+export default AssetList

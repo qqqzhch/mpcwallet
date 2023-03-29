@@ -11,6 +11,7 @@ import { Unsigedtx } from '../utils/buildMpcTx'
 import { walletaccount } from '../state/walletaccount'
 import { useParams } from 'react-router-dom'
 import { chainTypeName } from '../constants/chainTypeName'
+import addAssertType from '../state/addAssert'
 
 // interface chainTypes {
 //   [key: string]: number
@@ -322,6 +323,7 @@ export function useGetTxMsgHash(rpc: string | undefined): {
 }
 
 type msgHashType = { hash: string; msg: string }
+
 export function useTransactionSigner(rpc: string | undefined): {
   execute?: (wallet: walletaccount, chainType: string, MsgHash: msgHashType, chainId: number) => Promise<any> | undefined
 } {
@@ -418,6 +420,53 @@ export function useTxApproveAccept(rpc: string | undefined): {
           resultData = { msg: 'error', error: errmsg || cbData.Tip }
         }
 
+        return resultData
+      }
+    }
+  }, [account, library, rpc])
+}
+
+export function useAddAssetSigner(rpc: string | undefined): {
+  execute?: (wallet: walletaccount, chainType: string, Msg: addAssertType, chainId: number) => Promise<any> | undefined
+} {
+  const { account, library } = useWeb3React()
+
+  return useMemo(() => {
+    if (!account || !library || !rpc) return {}
+    return {
+      execute: async (wallet: walletaccount, chainType: string, Msg: addAssertType, chainId: number) => {
+        web3.setProvider(rpc)
+        let cbData, errmsg
+        try {
+          const Nonce = await library.getTransactionCount(account)
+          const data = {
+            ...Msg,
+            TxType: 'ADDASSET',
+            Account: account,
+            Nonce: Nonce.toString(),
+
+            TimeStamp: Date.now().toString(),
+            ChainId: chainId,
+            ChainType: chainTypeName[chainType]
+          }
+
+          const signer = library.getSigner()
+          let rsv = await signer.signMessage(JSON.stringify(data, null, 8))
+          // 如果v是1b换成00 如果v是1c换成01
+          rsv = rsv.slice(0, 130) + (rsv.slice(130) === '1b' ? '00' : '01')
+          cbData = await getsmpc().addAsset(rsv, JSON.stringify(data, null, 8))
+        } catch (error: unknown) {
+          const errinfo = error as metamaskError
+          errmsg = errinfo.reason || errinfo.message
+        }
+
+        let resultData: any = {}
+
+        if (serverStatusIsSuccess(cbData)) {
+          resultData = { msg: 'success', info: cbData.Data }
+        } else {
+          resultData = { msg: 'error', error: errmsg || cbData.Tip }
+        }
         return resultData
       }
     }

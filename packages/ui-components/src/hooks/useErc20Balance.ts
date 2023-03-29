@@ -18,13 +18,23 @@ export default function useErc20Balance(mpcAddress: string | undefined, contract
 
   useEffect(() => {
     const run = async () => {
-      if (mpcAddress && contractAddress) {
+      if (mpcAddress && contractAddress&&library!=undefined) {
         const contract = new Contract(contractAddress, erc20ABI, library)
         const result: BigNumber = await contract.balanceOf(mpcAddress)
         setBalance(result.toString())
+        library.on('newBlockHeaders', () => {
+          run()
+        })
       }
     }
     run()
+    
+    return () => {
+      if(library){
+        library.off('newBlockHeaders')
+      }
+      
+    }
   }, [mpcAddress, library, contractAddress])
 
   return {

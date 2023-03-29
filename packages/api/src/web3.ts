@@ -273,7 +273,16 @@ web3.extend({
       params: 3,
       inputFormatter: [null,null,null],
       outputFormatter: undefined,
+    },
+    {
+      name: "addAsset",
+      call: "smw_addAsset",
+      params: 2,
+      inputFormatter: [null,null],
+      outputFormatter: undefined,
     }
+
+    
 
     
   ],

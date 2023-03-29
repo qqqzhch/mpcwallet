@@ -80,7 +80,7 @@ const WalletList: FC = props => {
             <span>
               <Squares2X2Icon className="h-52 w-52 text-gray-200 mt-32"></Squares2X2Icon>
             </span>
-            <span className="text-gray-400 my-10 ">Create a  Vault or import a Vault</span>
+            <span className="text-gray-400 my-10 ">Create a Vault or import a Vault</span>
           </div>
         </When>
       </div>

@@ -25,13 +25,9 @@ const ApproveState = () => {
   return (
     <div className="flex flex-col lg:flex-row  xl:mx-40 2xl:mx-80 ">
       <div className="felx flex-col w-full xl:w-2/3 p-10 bg-white">
-        <h1 className="font-semibold text-3xl mb-4 pb-4  border-b ">
-        Your Vault has been created successfully
-</h1>
+        <h1 className="font-semibold text-3xl mb-4 pb-4  border-b ">Your Vault has been created successfully</h1>
         <div className="mb-4 pb-4  border-b  px-4">
-          <h3 className="font-semibold text-xl pb-4 ">
-          Please do not close this page before you create the vault
-          </h3>
+          <h3 className="font-semibold text-xl pb-4 ">Please do not close this page before you create the vault</h3>
           <p>View the creation status of vault</p>
         </div>
         <div className="mb-4 pb-4  border-b  px-4">
@@ -103,7 +99,7 @@ const ApproveState = () => {
             <When condition={data !== undefined && data != null}>
               <Link to={`/dashboard/evm/${data?.mpcAddress}`}>
                 <button className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                Open Vault
+                  Open Vault
                 </button>
               </Link>
             </When>

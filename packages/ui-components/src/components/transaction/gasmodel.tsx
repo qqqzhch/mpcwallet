@@ -17,24 +17,23 @@ type Inputs = {
 }
 
 const GsaModel: FC<Props> = ({ isOpen, closeModal, gasPrise, gasLimit }) => {
-  const { register, handleSubmit,setValue } = useForm<Inputs>()
+  const { register, handleSubmit, setValue } = useForm<Inputs>()
 
   const onSubmit: SubmitHandler<Inputs> = data => {
-    
     const { gasLimit, gasPrise } = data
 
     closeModal({ gasLimit, gasPrise })
     // reset()
   }
 
-  useEffect(()=>{
-  if(gasPrise!==undefined){
-    setValue('gasPrise',gasPrise)
-  }
-  if(gasLimit!==undefined){
-    setValue('gasLimit',gasLimit)
-  }
-  },[gasPrise, gasLimit,setValue])
+  useEffect(() => {
+    if (gasPrise !== undefined) {
+      setValue('gasPrise', gasPrise)
+    }
+    if (gasLimit !== undefined) {
+      setValue('gasLimit', gasLimit)
+    }
+  }, [gasPrise, gasLimit, setValue])
 
   function close() {
     // reset()
@@ -82,7 +81,6 @@ const GsaModel: FC<Props> = ({ isOpen, closeModal, gasPrise, gasLimit }) => {
                           <input
                             type="number"
                             id="gaslimit"
-                            
                             {...register('gasLimit', { required: true, min: 1 })}
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           />
@@ -94,7 +92,6 @@ const GsaModel: FC<Props> = ({ isOpen, closeModal, gasPrise, gasLimit }) => {
                           <input
                             type="number"
                             id="gasprise"
-                            
                             {...register('gasPrise', { required: true, min: 1 })}
                             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           />
