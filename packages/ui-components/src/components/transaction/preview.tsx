@@ -5,7 +5,7 @@ import Avvvatars from 'avvvatars-react'
 
 import { useParams } from 'react-router-dom'
 import { cutOut } from '../../utils/index'
-import { assertType, Unsigedtx } from '../../utils/buildMpcTx'
+import { assertType, Unsigedtx, TxInput } from '../../utils/buildMpcTx'
 import { formatUnits, gasFee } from '../../utils'
 import { useWeb3React } from '@web3-react/core'
 
@@ -21,10 +21,11 @@ type Props = {
   next: () => void
   assert?: assertType | undefined
   btnLoading: boolean
-  isTxBuild?: boolean
+  isTxBuild?: boolean,
+  userTxInputShow?: TxInput | undefined
 }
 
-const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert, btnLoading, isTxBuild }) => {
+const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert, btnLoading, isTxBuild=false,userTxInputShow }) => {
   const { address } = useParams<{ address: string; chainType: string }>()
   const { chainId, library } = useWeb3React()
   const [gasError, setGasError] = useState<string | undefined>()
@@ -38,7 +39,7 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
           data: assert?.contractaddress ? userTxInput.data : '',
           value: userTxInput.value
         }
-
+      console.log('- -')
         try {
           await library.estimateGas(txforestimateGas)
 
@@ -74,13 +75,31 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
               </div>
             </div>
             <div>
-              <label htmlFor="sendingfrom" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              
+              <If condition={userTxInputShow?.to}>
+                <Then>
+                <label htmlFor="Recipient" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 Recipient
               </label>
-              <div className="flex flex-row items-center">
+                <div className="flex flex-row items-center">
+                <Avvvatars value={userTxInputShow?.to ? userTxInputShow?.to : ''} style="shape" size={40} />
+                <div className="break-all pl-2">{userTxInputShow?.to ? cutOut(userTxInputShow?.to, 6, 6) : ''}</div>
+              </div>
+
+                </Then>
+                <Else>
+                <label htmlFor="Recipient" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                Contract interaction
+              </label>
+                <div className="flex flex-row items-center">
                 <Avvvatars value={userTxInput?.to ? userTxInput?.to : ''} style="shape" size={40} />
                 <div className="break-all pl-2">{userTxInput?.to ? cutOut(userTxInput?.to, 6, 6) : ''}</div>
               </div>
+
+                </Else>
+              </If>
+              
+
             </div>
           </div>
           <When condition={isTxBuild == false}>
