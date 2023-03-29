@@ -20,7 +20,7 @@ const GsaModel: FC<Props> = ({ isOpen, closeModal, gasPrise, gasLimit }) => {
   const { register, handleSubmit,setValue } = useForm<Inputs>()
 
   const onSubmit: SubmitHandler<Inputs> = data => {
-    console.log('--')
+    
     const { gasLimit, gasPrise } = data
 
     closeModal({ gasLimit, gasPrise })

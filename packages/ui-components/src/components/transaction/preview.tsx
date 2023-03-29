@@ -39,7 +39,7 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
           data: assert?.contractaddress ? userTxInput.data : '',
           value: userTxInput.value
         }
-      console.log('- -')
+    
         try {
           await library.estimateGas(txforestimateGas)
 

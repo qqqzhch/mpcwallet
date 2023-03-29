@@ -188,7 +188,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
         //   addToast(errorinfo.reason, { appearance: 'error' })
         //   return;
         // }
-       console.log('- -')
+       
         if(gas.gasCustom==undefined||gas.gasCustom==false){
           const gasprise: BigNumber = await library.getGasPrice()
           const gasETH = ethers.utils.parseUnits('0.0001', 'gwei')
@@ -209,7 +209,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
       }
     }
     run()
-  }, [unsigedtx, library, chainType])
+  }, [unsigedtx, library, chainType,gas.gasCustom])
 
   useEffect(() => {
     const run = async () => {

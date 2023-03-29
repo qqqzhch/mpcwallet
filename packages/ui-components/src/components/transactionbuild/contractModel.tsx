@@ -127,7 +127,7 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
 
   const previous = useCallback(() => {
     closeModal()
-  }, [])
+  }, [closeModal])
 
   const sendSigner = useCallback(async () => {
     if (

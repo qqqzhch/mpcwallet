@@ -100,7 +100,9 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                   <ArrowUpRightIcon className="text-indigo-500 w-6 h-6 flex-shrink-0 mr-4 inline-block"></ArrowUpRightIcon>
                   sent
                 </div>
-                <div className=" w-full sm:w-1/5 ">{dayjs(Number(item.Timestamp || item.Reply_timestamp)).fromNow()}</div>
+                <div className=" w-full sm:w-1/5 ">
+                  {dayjs(Number(item.Timestamp || (item as TxtxSignHistory).Local_timestamp)).fromNow()}
+                </div>
                 <div className=" w-full sm:w-1/5 ">
                   {txList.map(tx => {
                     return tx.originValue + ' ' + tx.name + ' '

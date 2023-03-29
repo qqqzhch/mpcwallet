@@ -39,7 +39,7 @@ export function buidTransactionJson(chainType: string, chainId: number, data: Tx
     //  erc20Contract.transfer(data.from,data.to,formatToWei(data.originValue,18))
     encodeFunctionData = erc20Contract.encodeFunctionData('transferFrom', [data.from, data.to, formatToWei(data.originValue, data.assert.decimals)])
   }
- console.log('--')
+ 
   return {
     from: data.from,
     to: data.assert?.contractaddress || data.to,
