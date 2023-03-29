@@ -61,8 +61,8 @@ export default function useAssets() {
             balance: ''
           })
         })
-        setAsserts(list)
       }
+      setAsserts(list)
     }
     run()
   }, [data])
