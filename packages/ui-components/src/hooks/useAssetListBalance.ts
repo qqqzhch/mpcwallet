@@ -15,7 +15,7 @@ export default function useAssetListBalance(mpcAddress: string | undefined, list
 
   useEffect(() => {
     const run = async () => {
-      if (mpcAddress && list && list.length > 0 && chainId !== undefined&&library!==undefined) {
+      if (mpcAddress && list && list.length > 0 && chainId !== undefined && library !== undefined) {
         const tokens: string[] = list
           .map(item => {
             return item.contractaddress || '0x0'
@@ -36,12 +36,11 @@ export default function useAssetListBalance(mpcAddress: string | undefined, list
       }
     }
     run()
-    
+
     return () => {
-      if(library){
+      if (library) {
         library.off('newBlockHeaders')
       }
-      
     }
   }, [mpcAddress, library, list, chainId])
 
