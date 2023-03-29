@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import MpcType from '@monorepo/ui-components/src/components/mpctype'
+// import MpcType from '@monorepo/ui-components/src/components/mpctype'
 import Threshold from '@monorepo/ui-components/src/components/threshold'
 import { useAppStore } from '@monorepo/ui-components'
 import InputeMinus from '@monorepo/ui-components/src/components/forms/index'
@@ -15,19 +15,21 @@ const CreatWallet: FC = props => {
 
   const createGroup = useAppStore(state => state.createGroup)
   // const [walletnameerror, setwalletnameerror] = useState<string>('')
-  const [keytypeerror, setkeytypeerror] = useState<string>('')
+  // const [keytypeerror, setkeytypeerror] = useState<string>('')
   const [adminserror, setadminserror] = useState<string>('')
 
   // const setcreateGroupWalletName = useAppStore(state => state.setcreateGroupWalletName)
   const addcreateGroupAdmin = useAppStore(state => state.addcreateGroupAdmin)
   const editcreateGroupAdmin = useAppStore(state => state.editcreateGroupAdmin)
   const resetCreateGroupAdmin = useAppStore(state => state.resetCreateGroupAdmin)
+  const setcreateGroupKeytype = useAppStore(state => state.setcreateGroupKeytype)
 
   const navigate = useNavigate()
 
   useEffect(() => {
     if (account) editcreateGroupAdmin(0, account)
-  }, [editcreateGroupAdmin, account])
+    setcreateGroupKeytype('EC256K1')
+  }, [editcreateGroupAdmin, account, setcreateGroupKeytype])
 
   function reset() {
     if (account) {
@@ -41,10 +43,10 @@ const CreatWallet: FC = props => {
     //   setwalletnameerror('wallet name required')
     //   return
     // }
-    if (createGroup.keytype == '') {
-      setkeytypeerror('keytype required')
-      return
-    }
+    // if (createGroup.keytype == '') {
+    //   setkeytypeerror('keytype required')
+    //   return
+    // }
     const isempty = createGroup.admins.every(item => {
       return item.address !== ''
     })
@@ -69,15 +71,15 @@ const CreatWallet: FC = props => {
     }
 
     navigate('/preview')
-  }, [navigate, createGroup.admins, createGroup.keytype])
+  }, [navigate, createGroup.admins])
 
   useEffect(() => {
     // if (createGroup.walletname !== '') {
     //   setwalletnameerror('')
     // }
-    if (createGroup.keytype != '') {
-      setkeytypeerror('')
-    }
+    // if (createGroup.keytype != '') {
+    //   setkeytypeerror('')
+    // }
     const repeat = createGroup.admins.every(item => {
       return createGroup.admins.filter(it => item.address == it.address).length == 1
     })
@@ -93,10 +95,10 @@ const CreatWallet: FC = props => {
   return (
     <div className="flex flex-col lg:flex-row  xl:mx-40 2xl:mx-80 ">
       <div className="felx flex-col w-full xl:w-2/3 p-0 sm:p-10 bg-white ">
-        <h1 className="font-semibold text-3xl mb-4 pb-4  border-b ">Create new Wallet</h1>
+        <h1 className="font-semibold text-3xl mb-4 pb-4  border-b ">Create New Vault</h1>
         <div className="mb-4 pb-4  border-b  px-4">
-          <h3 className="font-semibold text-xl pb-4 ">Owners and confirmations</h3>
-          <p>Set the owner wallets of your wallet and how many need to confirm to execute a valid transaction.</p>
+          <h3 className="font-semibold text-xl pb-4 ">Owners and threshold</h3>
+          <p>Set the owner wallets of your Vault and the threshold to execute a valid transaction.</p>
         </div>
         <div className="mb-4 pb-4  border-b  px-4">
           <div className=" bg-white flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0">
@@ -117,11 +119,11 @@ const CreatWallet: FC = props => {
               <div className="text-red-400">{walletnameerror ? walletnameerror : null}</div>
             </div> */}
 
-            <div className="relative mb-4">
+            {/* <div className="relative mb-4">
               <label className="leading-7 text-sm text-gray-600">MpcType</label>
               <MpcType></MpcType>
               <div className="text-red-400">{keytypeerror ? keytypeerror : null}</div>
-            </div>
+            </div> */}
 
             {createGroup.admins.map((item, index) => {
               return <InputeMinus key={item.key} index={index} value={item}></InputeMinus>
@@ -136,7 +138,7 @@ const CreatWallet: FC = props => {
             <div className="flex flex-col   lg:flex-row  mb-20">
               <div className="w-2/3">
                 <h2 className="font-semibold text-xl">Threshold</h2>
-                <p>Any transaction requires the confirmation </p>
+                <p>How many owners are needed to execute a valid transaction.</p>
               </div>
               <div className="flex items-center">
                 <Threshold></Threshold>
