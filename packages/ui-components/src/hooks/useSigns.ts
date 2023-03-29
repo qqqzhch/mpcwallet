@@ -426,7 +426,6 @@ export function useTxApproveAccept(rpc: string | undefined): {
   }, [account, library, rpc])
 }
 
-
 export function useAddAssetSigner(rpc: string | undefined): {
   execute?: (wallet: walletaccount, chainType: string, Msg: addAssertType, chainId: number) => Promise<any> | undefined
 } {
@@ -441,13 +440,13 @@ export function useAddAssetSigner(rpc: string | undefined): {
         try {
           const Nonce = await library.getTransactionCount(account)
           const data = {
-            ...Msg,      
+            ...Msg,
             TxType: 'ADDASSET',
             Account: account,
             Nonce: Nonce.toString(),
-             
+
             TimeStamp: Date.now().toString(),
-            ChainId:chainId,
+            ChainId: chainId,
             ChainType: chainTypeName[chainType]
           }
 
@@ -473,4 +472,3 @@ export function useAddAssetSigner(rpc: string | undefined): {
     }
   }, [account, library, rpc])
 }
-

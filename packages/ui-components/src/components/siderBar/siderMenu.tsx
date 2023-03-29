@@ -28,7 +28,7 @@ const SiderMenu: FC = () => {
       </li>
       <li>
         <Link
-          to={`/dashboard/${chainType}/${address}/asserts`}
+          to={`/dashboard/${chainType}/${address}/assets`}
           className={classNames(
             'flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700  ',
             pathname === `/dashboard/${chainType}/${address}/asserts` ? 'bg-gray-200' : ''
@@ -38,7 +38,7 @@ const SiderMenu: FC = () => {
             className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
             src={coinssolid}
           ></img>
-          <span className="flex-1 ml-3 whitespace-nowrap">Asserts</span>
+          <span className="flex-1 ml-3 whitespace-nowrap">Assets</span>
         </Link>
       </li>
       <li>

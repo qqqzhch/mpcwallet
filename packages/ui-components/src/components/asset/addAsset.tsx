@@ -1,17 +1,16 @@
-import { FC,useCallback,useEffect } from 'react'
+import { FC, useCallback, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment } from 'react'
-import { useForm,SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler } from 'react-hook-form'
 import { useWeb3React } from '@web3-react/core'
-import { ethers } from 'ethers';
+import { ethers } from 'ethers'
 import erc20ABI from '../../constants/ABI/ERC20.json'
-import {useAddAssetSigner} from '../../hooks/useSigns'
+import { useAddAssetSigner } from '../../hooks/useSigns'
 import { rpclist } from '../../constants/rpcConfig'
 import { useParams } from 'react-router-dom'
 import useAccount from '../../hooks/useAccount'
-import addAssertType from '../../state/addAssert';
+import addAssertType from '../../state/addAssert'
 import { useToasts } from 'react-toast-notifications'
-
 
 type Props = {
   isOpen: boolean
@@ -19,64 +18,53 @@ type Props = {
   openModal: () => void
 }
 
-const AddAssert: FC<Props> = ({ isOpen, closeModal, openModal }) => {
-  const { register,reset, handleSubmit, watch,setValue } = useForm<addAssertType>();
-  const { library,chainId } = useWeb3React()
-  const {execute:AddAssetSigner} = useAddAssetSigner(rpclist[0])
+const AddAsset: FC<Props> = ({ isOpen, closeModal, openModal }) => {
+  const { register, reset, handleSubmit, watch, setValue } = useForm<addAssertType>()
+  const { library, chainId } = useWeb3React()
+  const { execute: AddAssetSigner } = useAddAssetSigner(rpclist[0])
   const { address, chainType } = useParams<{ address: string; chainType: string }>()
   const mpcGroupAccount = useAccount(address)
   const { addToast } = useToasts()
 
-  
-  const onSubmit: SubmitHandler<addAssertType> = useCallback(data => {
-    const run =async ()=>{
-      if(AddAssetSigner!=undefined&&mpcGroupAccount!=undefined&&chainType!=undefined&&chainId!=undefined){
-         const result = await AddAssetSigner(mpcGroupAccount,chainType,data as addAssertType,chainId)
-         if (result.msg == 'success') {
-          addToast("Added successfully", { appearance: 'success' })
-          closeModal()
-        } else {
-          addToast(result.error, { appearance: 'error' })
+  const onSubmit: SubmitHandler<addAssertType> = useCallback(
+    data => {
+      const run = async () => {
+        if (AddAssetSigner != undefined && mpcGroupAccount != undefined && chainType != undefined && chainId != undefined) {
+          const result = await AddAssetSigner(mpcGroupAccount, chainType, data as addAssertType, chainId)
+          if (result.msg == 'success') {
+            addToast('Added successfully', { appearance: 'success' })
+            closeModal()
+          } else {
+            addToast(result.error, { appearance: 'error' })
+          }
         }
       }
+
+      run()
+    },
+    [AddAssetSigner, chainId, chainType, mpcGroupAccount, addToast, closeModal]
+  )
+
+  const contractAddress: string = watch('Contract')
+  useEffect(() => {
+    const run = async () => {
+      if (contractAddress == undefined) {
+        return
+      }
+      const addr = contractAddress.trim()
+      const isAddress = ethers.utils.isAddress(addr)
+      if (isAddress) {
+        const Contract = new ethers.Contract(addr, erc20ABI, library)
+        const name = await Contract.name()
+        const symbol = await Contract.symbol()
+        const decimals = await Contract.decimals()
+        setValue('Symbol', symbol)
+        setValue('Decimal', decimals)
+        setValue('Name', name)
+      }
     }
-
-    run();
-
-
-  },[AddAssetSigner,chainId,chainType,mpcGroupAccount,addToast,closeModal]) ;
-  
-
-  
- const contractAddress:string = watch("Contract");
- useEffect(()=>{
-   
-   const run = async()=>{
-     console.log('- -')
-     if(contractAddress==undefined){
-       return ;
-     }
-    const addr =contractAddress.trim();
-    const  isAddress = ethers.utils.isAddress(addr)
-    if(isAddress){
-     const Contract =new ethers.Contract(addr,erc20ABI,library)
-     const name= await Contract.name()
-     const symbol= await Contract.symbol()
-     const decimals= await Contract.decimals()
-     setValue("Symbol",symbol)
-     setValue("Decimal",decimals)
-     setValue("Name",name)
-     
-    }
-
-   }
-   run();
-   
-
- },[contractAddress,library,setValue])
-
-  
-  
+    run()
+  }, [contractAddress, library, setValue])
 
   return (
     <div>
@@ -118,9 +106,8 @@ const AddAssert: FC<Props> = ({ isOpen, closeModal, openModal }) => {
                         <input
                           type="text"
                           id="Contract"
-                          {...register("Contract",{ required: true })} 
+                          {...register('Contract', { required: true })}
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          
                         ></input>
                       </div>
                       <div className="mb-6">
@@ -130,9 +117,8 @@ const AddAssert: FC<Props> = ({ isOpen, closeModal, openModal }) => {
                         <input
                           type="text"
                           id="Symbol"
-                          {...register("Symbol",{ required: true })} 
+                          {...register('Symbol', { required: true })}
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          
                         ></input>
                       </div>
                       <div className="mb-6">
@@ -142,9 +128,8 @@ const AddAssert: FC<Props> = ({ isOpen, closeModal, openModal }) => {
                         <input
                           type="text"
                           id="Decimal"
-                          {...register("Decimal",{ required: true })} 
+                          {...register('Decimal', { required: true })}
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          
                         ></input>
                       </div>
                       <div className="mb-6">
@@ -154,25 +139,24 @@ const AddAssert: FC<Props> = ({ isOpen, closeModal, openModal }) => {
                         <input
                           type="text"
                           id="Name"
-                          {...register("Name",{ required: true })} 
+                          {...register('Name', { required: true })}
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                          
                         ></input>
                       </div>
-                      
+
                       <div className="mt-4 flex flex-col sm:flex-row-reverse justify-around">
                         <button
                           type="submit"
                           className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                          
                         >
                           Submit
                         </button>
                         <button
                           type="button"
-                          onClick={()=>{reset()}}
+                          onClick={() => {
+                            reset()
+                          }}
                           className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                          
                         >
                           Reset
                         </button>
@@ -189,4 +173,4 @@ const AddAssert: FC<Props> = ({ isOpen, closeModal, openModal }) => {
   )
 }
 
-export default AddAssert
+export default AddAsset

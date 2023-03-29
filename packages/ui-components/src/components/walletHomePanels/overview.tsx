@@ -4,7 +4,7 @@ import MpcAvvvatar from '../mpcAvvvatar'
 import { useWeb3React } from '@web3-react/core'
 import CopyAddress from '../mpcinfo/copyAddress'
 import ScanUrl from '../mpcinfo/scanUrl'
-import useAsserts from '../../hooks/useAsserts'
+import useAsserts from '../../hooks/useAssets'
 const Overview: FC = () => {
   const { address } = useParams<{ address: string; chainType: string }>()
   const { chainId } = useWeb3React()

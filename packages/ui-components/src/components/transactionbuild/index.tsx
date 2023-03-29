@@ -35,6 +35,7 @@ const TransactionBuild: FC = () => {
 
   function closeModal() {
     setIsOpen(false)
+    setTransactions([])
   }
 
   const handleAddressOrABI = async (e: React.ChangeEvent<HTMLInputElement>): Promise<ContractInterface | void> => {

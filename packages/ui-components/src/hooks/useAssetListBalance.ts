@@ -8,14 +8,14 @@ import BalanceMap from 'eth-balance-checker'
 import checkBalanceAddress from '../constants/checkBalanceAddress'
 import { SupportedChainId } from '../constants/chains'
 
-export default function useAssertListBalance(mpcAddress: string | undefined, list: assertType[]) {
+export default function useAssetListBalance(mpcAddress: string | undefined, list: assertType[]) {
   const { library, chainId } = useWeb3React()
 
   const [balance, setBalance] = useState<BalanceMap.BalanceMap>({})
 
   useEffect(() => {
     const run = async () => {
-      if (mpcAddress && list && list.length > 0 && chainId !== undefined) {
+      if (mpcAddress && list && list.length > 0 && chainId !== undefined&&library!==undefined) {
         const tokens: string[] = list
           .map(item => {
             return item.contractaddress || '0x0'
@@ -30,9 +30,19 @@ export default function useAssertListBalance(mpcAddress: string | undefined, lis
         }).then(balances => {
           setBalance(balances)
         })
+        library.on('newBlockHeaders', () => {
+          run()
+        })
       }
     }
     run()
+    
+    return () => {
+      if(library){
+        library.off('newBlockHeaders')
+      }
+      
+    }
   }, [mpcAddress, library, list, chainId])
 
   return {

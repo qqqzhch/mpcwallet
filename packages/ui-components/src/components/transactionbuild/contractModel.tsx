@@ -6,7 +6,7 @@ import { TxInput, assertType, Unsigedtx, buidTransactionForTxbuild } from '../..
 import { useParams } from 'react-router-dom'
 import { useWeb3React } from '@web3-react/core'
 import useChainInfo from '../../hooks/useChainInfo'
-import { BigNumber, ethers } from 'ethers'
+import { BigNumber } from 'ethers'
 import { useGetTxMsgHash, useTransactionSigner } from '../../hooks/useSigns'
 import { rpclist } from '../../constants/rpcConfig'
 import { useToasts } from 'react-toast-notifications'
@@ -32,7 +32,7 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
   const { execute: TransactionSigner } = useTransactionSigner(rpclist[0])
   const [msgHash, setMsgHash] = useState<{ hash: string; msg: string }>()
   const [btnLoading, setBtnLoading] = useState<boolean>(false)
-  
+
   const [isgasOpen, setGasIsOpen] = useState(false)
 
   const mpcGroupAccount = useAccount(address)
@@ -53,7 +53,7 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
           gas: 0,
           gasPrice: 0,
           originValue: item.raw.value.toString(),
-          name: 'wei contract interaction'
+          name: 'wei'
         }
         const haveNative = item.raw.haveNative
 
@@ -76,17 +76,23 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
   useEffect(() => {
     const run = async () => {
       if (userTxInputReview && isOpen) {
+        const txforestimateGas = {
+          from: userTxInputReview.from,
+          to: userTxInputReview.to,
+          data: userTxInputReview.assert?.contractaddress ? userTxInputReview.data : '',
+          value: userTxInputReview.assert?.contractaddress ? '0x' : userTxInputReview.value
+        }
+        setIsShow(true)
         const gasprise: BigNumber = await library.getGasPrice()
-        const gas = ethers.utils.parseUnits('0.0001', 'gwei')
-        setGas({ gasLimit: gas.toString(), gasPrise: gasprise.toString() })
+        const gasEstimate: BigNumber = await library.estimateGas(txforestimateGas)
+        setGas({ gasLimit: gasEstimate.toString(), gasPrise: gasprise.toString() })
 
         const txinfoInput: Unsigedtx = {
           ...userTxInputReview,
-          gas: gas.toNumber(),
+          gas: gasEstimate.toNumber(),
           gasPrice: gasprise.toNumber()
         }
         setUsertTxInputReviewnew(txinfoInput)
-        setIsShow(true)
       }
     }
     run()
@@ -177,7 +183,7 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
     setGasIsOpen(false)
     if (gasLimit != undefined && gasPrise != undefined) {
       // setUsertTxInputReviewnew(txinfoInput)
-      setUsertTxInputReviewnew((prevState: Unsigedtx|undefined) => {
+      setUsertTxInputReviewnew((prevState: Unsigedtx | undefined) => {
         return {
           ...(prevState || {}),
           gas: parseInt(gasLimit),
@@ -230,7 +236,6 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
           </div>
         </Dialog>
       </Transition>
-      
     </div>
   )
 }
