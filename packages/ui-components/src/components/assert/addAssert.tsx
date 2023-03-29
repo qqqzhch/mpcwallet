@@ -1,12 +1,16 @@
-import { FC,useEffect } from 'react'
+import { FC,useCallback,useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
-import { useForm } from "react-hook-form";
+import { Fragment } from 'react'
+import { useForm,SubmitHandler } from "react-hook-form";
 import { useWeb3React } from '@web3-react/core'
 import { ethers } from 'ethers';
 import erc20ABI from '../../constants/ABI/ERC20.json'
-
-
+import {useAddAssetSigner} from '../../hooks/useSigns'
+import { rpclist } from '../../constants/rpcConfig'
+import { useParams } from 'react-router-dom'
+import useAccount from '../../hooks/useAccount'
+import addAssertType from '../../state/addAssert';
+import { useToasts } from 'react-toast-notifications'
 
 
 type Props = {
@@ -16,11 +20,31 @@ type Props = {
 }
 
 const AddAssert: FC<Props> = ({ isOpen, closeModal, openModal }) => {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
-  const { account,library } = useWeb3React()
+  const { register,reset, handleSubmit, watch,setValue } = useForm<addAssertType>();
+  const { library,chainId } = useWeb3React()
+  const {execute:AddAssetSigner} = useAddAssetSigner(rpclist[0])
+  const { address, chainType } = useParams<{ address: string; chainType: string }>()
+  const mpcGroupAccount = useAccount(address)
+  const { addToast } = useToasts()
 
-  //@ts-ignore
-  const onSubmit = data => {};
+  
+  const onSubmit: SubmitHandler<addAssertType> = useCallback(data => {
+    const run =async ()=>{
+      if(AddAssetSigner!=undefined&&mpcGroupAccount!=undefined&&chainType!=undefined&&chainId!=undefined){
+         const result = await AddAssetSigner(mpcGroupAccount,chainType,data as addAssertType,chainId)
+         if (result.msg == 'success') {
+          addToast("Added successfully", { appearance: 'success' })
+          closeModal()
+        } else {
+          addToast(result.error, { appearance: 'error' })
+        }
+      }
+    }
+
+    run();
+
+
+  },[AddAssetSigner,chainId,chainType,mpcGroupAccount,addToast,closeModal]) ;
   
 
   
@@ -28,6 +52,7 @@ const AddAssert: FC<Props> = ({ isOpen, closeModal, openModal }) => {
  useEffect(()=>{
    
    const run = async()=>{
+     console.log('- -')
      if(contractAddress==undefined){
        return ;
      }
@@ -38,6 +63,9 @@ const AddAssert: FC<Props> = ({ isOpen, closeModal, openModal }) => {
      const name= await Contract.name()
      const symbol= await Contract.symbol()
      const decimals= await Contract.decimals()
+     setValue("Symbol",symbol)
+     setValue("Decimal",decimals)
+     setValue("Name",name)
      
     }
 
@@ -45,7 +73,7 @@ const AddAssert: FC<Props> = ({ isOpen, closeModal, openModal }) => {
    run();
    
 
- },[contractAddress,library])
+ },[contractAddress,library,setValue])
 
   
   
@@ -131,6 +159,7 @@ const AddAssert: FC<Props> = ({ isOpen, closeModal, openModal }) => {
                           
                         ></input>
                       </div>
+                      
                       <div className="mt-4 flex flex-col sm:flex-row-reverse justify-around">
                         <button
                           type="submit"
@@ -141,6 +170,7 @@ const AddAssert: FC<Props> = ({ isOpen, closeModal, openModal }) => {
                         </button>
                         <button
                           type="button"
+                          onClick={()=>{reset()}}
                           className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
                           
                         >

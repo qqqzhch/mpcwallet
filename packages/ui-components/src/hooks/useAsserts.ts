@@ -12,6 +12,7 @@ import { chainTypeName } from '../constants/chainTypeName'
 import { useParams } from 'react-router-dom'
 import { assertType } from '../utils/buildMpcTx'
 
+
 type Assert = {
   Symbol: string
   Contract: string
@@ -35,10 +36,11 @@ async function fetcher(mpcAccount: string | null | undefined, chainId: number | 
 
 export default function useAsserts() {
   const { chainId } = useWeb3React()
-  const { address, chainType } = useParams<{ address: string; chainType: string }>()
+  const {  chainType } = useParams<{ address: string; chainType: string }>()
   const [asserts, setAsserts] = useState<Array<assertType>>([])
+  const { account } = useWeb3React()
 
-  const { data, error, isLoading } = useSWR(chainId ? ['/smw/getAccountList', address, chainId, chainType] : null, () => fetcher(address, chainId, chainType), {
+  const { data, error, isLoading } = useSWR(chainId ? ['/smw/useAsserts', account, chainId, chainType] : null, () => fetcher(account, chainId, chainType), {
     refreshInterval: 1000 * 60
   })
 
@@ -50,7 +52,7 @@ export default function useAsserts() {
         img: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880',
         decimals: 18
       })
-      if (data !== undefined) {
+      if (data !== undefined&&data!==null) {
         data.forEach(item => {
           list.push({
             name: item.Symbol,
