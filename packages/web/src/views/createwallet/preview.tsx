@@ -8,20 +8,19 @@ const Preview = () => {
   return (
     <div className="flex flex-col lg:flex-row  xl:mx-40 2xl:mx-80 ">
       <div className="felx flex-col w-full xl:w-2/3 p-10 bg-white">
-        <h1 className="font-semibold text-3xl mb-4 pb-4  border-b ">Create new Wallet</h1>
+        <h1 className="font-semibold text-3xl mb-4 pb-4  border-b ">Review</h1>
         <div className="mb-4 pb-4  border-b  px-4">
-          <h3 className="font-semibold text-xl pb-4 ">Review</h3>
-          <p>You&apos;re about to create a new wallet and will have to confirm the transaction with your connected wallet.</p>
+          <p>Please review the details of your newly created Vault and sign with your connected wallet.</p>
         </div>
         <div className="mb-4 pb-4  border-b  px-4">
           {/* <div className="relative mb-4">
             <span className="leading-7 text-sm text-gray-600 inline-block w-40 ">Wallet Name:</span>
             {createGroup.walletname}
           </div> */}
-          <div className="relative mb-4">
+          {/* <div className="relative mb-4">
             <span className="leading-7 text-sm text-gray-600 inline-block w-40">Mpc Type:</span>
             {createGroup.keytype}
-          </div>
+          </div> */}
           {createGroup.admins.map((item, index) => {
             return (
               <div className="relative mb-4" key={item.key}>
