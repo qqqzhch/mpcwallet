@@ -4,6 +4,7 @@ import UserPanel from '@monorepo/ui-components/src/components/siderBar/userPanel
 import SiderMenu from '@monorepo/ui-components/src/components/siderBar/siderMenu'
 import ChainName from '@monorepo/ui-components/src/components/chainList/chainName'
 import WalletList from '@monorepo/ui-components/src/components/walletList/walletMenu'
+import packageJson from '../../../package.json'
 const SideBar = () => {
   const showsideBar = useAppStore(state => state.sideBar)
 
@@ -31,9 +32,16 @@ const SideBar = () => {
             aria-label="Sidebar"
           >
             <ChainName></ChainName>
-            <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50   dark:bg-gray-800">
-              <UserPanel></UserPanel>
-              <SiderMenu></SiderMenu>
+            <div className="h-full flex flex-col  px-3 py-4 overflow-y-auto bg-gray-50   dark:bg-gray-800">
+              <div className=" flex-1">
+                <UserPanel></UserPanel>
+                <SiderMenu></SiderMenu>
+              </div>
+              <div className=" relative ">
+                <div className=" absolute  w-full  -top-40 border-t border-gray-200  space-y-1 pt-4 ">
+                  <div>version:{packageJson.version}</div>
+                </div>
+              </div>
             </div>
           </aside>
         </Else>
