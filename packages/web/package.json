@@ -1,7 +1,7 @@
 {
   "name": "@monorepo/web-react-vite-app",
   "private": true,
-  "version": "0.1.17",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "start": "vite",
@@ -28,9 +28,9 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@heroicons/react": "^2.0.16",
     "@metamask/eth-sig-util": "^5.0.2",
-    "@monorepo/design-tokens": "^0.1.14",
-    "@monorepo/eslint-prettier-config": "^0.1.14",
-    "@monorepo/ui-components": "^0.1.16",
+    "@monorepo/design-tokens": "^1.0.0",
+    "@monorepo/eslint-prettier-config": "^1.0.0",
+    "@monorepo/ui-components": "^1.0.0",
     "@rsksmart/mock-web3-provider": "^1.0.2-beta1",
     "@tailwindcss/forms": "^0.5.3",
     "add": "^2.0.6",

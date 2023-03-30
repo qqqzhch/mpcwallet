@@ -2,6 +2,7 @@ import logo from '../../assets/logo.svg'
 import facebook from '../../assets/icon/facebook.svg'
 import twitter from '../../assets/icon/twitter.svg'
 import discord from '../../assets/icon/discord.svg'
+import packageJson from '../../../package.json'
 
 export const Footer = () => {
   return (
@@ -13,10 +14,7 @@ export const Footer = () => {
           <span className="ml-3 text-xl">Multichain - Vault</span>
         </a>
         <p className="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">
-          © 2023 Multichain —
-          <a href="https://twitter.com/knyttneve" className="text-gray-600 ml-1" rel="noopener noreferrer" target="_blank">
-            @Multichain
-          </a>
+          © 2023 Multichain —<span className="text-gray-600 ml-1">Vault v{packageJson.version}</span>
         </p>
         <span className="inline-flex sm:ml-auto sm:mt-0 mt-4 justify-center sm:justify-start">
           <a className="text-gray-500">
