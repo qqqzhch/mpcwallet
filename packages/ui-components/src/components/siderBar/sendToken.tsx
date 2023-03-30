@@ -391,9 +391,9 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
                                             >
                                               {({ selected }) => (
                                                 <div className="flex flex-row  ">
-                                                  <span className="block truncate">
+                                                  {/* <span className="block truncate">
                                                     <img width={16} src={Assert.img} className="m-1"></img>
-                                                  </span>
+                                                  </span> */}
 
                                                   <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>{Assert.name}</span>
                                                   {selected ? (

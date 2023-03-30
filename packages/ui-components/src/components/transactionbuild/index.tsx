@@ -261,7 +261,7 @@ const TransactionBuild: FC = () => {
         <When condition={isValueInputVisible()}>
           <div className="mb-6">
             <label htmlFor="ContractAddress" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              {ChainInfo?.nativeCurrency.name}
+              {ChainInfo?.nativeCurrency.name} Unit:wei
             </label>
             <input
               type="text"

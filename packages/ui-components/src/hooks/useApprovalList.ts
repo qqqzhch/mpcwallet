@@ -7,6 +7,7 @@ import { TxApprove } from '../state/approve'
 import { useEffect } from 'react'
 import { rpclist } from '../constants/rpcConfig'
 import { useWeb3React } from '@web3-react/core'
+import { useParams } from 'react-router-dom'
 
 async function fetcher(Account: string | null | undefined): Promise<Array<TxApprove> | undefined> {
   if (Account == null || Account == undefined) {
@@ -24,17 +25,19 @@ async function fetcher(Account: string | null | undefined): Promise<Array<TxAppr
 export default function useApprovalList() {
   const setWalletApproveList = useAppStore(state => state.setWalletApproveList)
   const { account } = useWeb3React()
+  const { address: mpcaddress } = useParams<{ address: string; chainType: string }>()
 
   const { data, error, isLoading } = useSWR(account != null && account != undefined ? ['/smpc/txApprovelist', account] : null, () => fetcher(account), {
     refreshInterval: 1000 * 15
   })
   useEffect(() => {
     if (data) {
-      setWalletApproveList(data)
+      const result = data.filter(item => item.Mpc_address == mpcaddress)
+      setWalletApproveList(result)
     } else {
       setWalletApproveList([])
     }
-  }, [setWalletApproveList, data])
+  }, [setWalletApproveList, data, mpcaddress])
 
   return {
     data,
