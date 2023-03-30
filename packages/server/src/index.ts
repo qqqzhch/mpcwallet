@@ -46,7 +46,7 @@ app.post('/api', async (_req: any, res: any) => {
     jsondata.id=_req.body.id
   } else {
     console.log('need mock ',method)
-    const response = await fetch('http://43.157.49.23:5928', {
+    const response = await fetch('https://api.smpcwallet.com', {
       method: 'post',
       body: JSON.stringify(_req.body),
       headers: { 'Content-Type': 'application/json' }

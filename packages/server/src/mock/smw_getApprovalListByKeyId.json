@@ -4,26 +4,6 @@
     "result": {
         "Data": [
             {
-                "User_account": "0x8d5992c1151439c0a6f421564588f556722eece6",
-                "Group_id": "874a5f6f4aca0ea16487be4269476c5231df8ab59f91340c723b59e487877a383fff449f351e6fe28543a4c109b91a46f02e782e01640c9c54a74f1ec1a50824",
-                "Key_id": "0xce8e22a90bc7c79b230e29cb850e70e5e3c42d426aa628d5ce45c1c6f4498678",
-                "Key_type": "EC256K1",
-                "Mode": "2",
-                "Msg_context": [
-                    "{\"from\":\"0xFDE75431218d8a16E20B43e333Cb45D57Ce70D7F\",\"to\":\"0xa3eDE283D61d5f100a95099D78fd07566bB6c7F0\",\"chainId\":\"0x61\",\"value\":\"0x1C6BF52634000\",\"nonce\":0,\"gas\":100000,\"gasPrice\":10000000000,\"data\":\"\",\"originValue\":\"0.0005\",\"name\":\"BSC testnet\"}"
-                ],
-                "Msg_hash": [
-                    "0x95c58a2bf0cff8f69c7bae7c1b1f834de1da132022a31befbbbeba8a45733314"
-                ],
-                "Nonce": "5",
-                "Public_key": "04f0f6b326aea6a3eaa6e2603fcadb82131be6afa176145a62b7fbe649a9142eed6b34679b1e6bb1f29128649caadf37b7d7ff6132e2d407dff980ffa93492529e",
-                "Mpc_address": "0xFDE75431218d8a16E20B43e333Cb45D57Ce70D7F",
-                "Threshold": "2/3",
-                "Timestamp": "1679628957289",
-                "Status": 1,
-                "Signed": 3
-            },
-            {
                 "User_account": "0xac9526c5db81267804a32ec508db780402fd9fec",
                 "Group_id": "874a5f6f4aca0ea16487be4269476c5231df8ab59f91340c723b59e487877a383fff449f351e6fe28543a4c109b91a46f02e782e01640c9c54a74f1ec1a50824",
                 "Key_id": "0xce8e22a90bc7c79b230e29cb850e70e5e3c42d426aa628d5ce45c1c6f4498678",
@@ -41,7 +21,8 @@
                 "Threshold": "2/3",
                 "Timestamp": "1679628957289",
                 "Status": 1,
-                "Signed": 3
+                "Signed": 3,
+                "Reply_status": ""
             },
             {
                 "User_account": "0xd17831dd9db4ce9a8d331c807329e93015ca2bcb",
@@ -61,7 +42,29 @@
                 "Threshold": "2/3",
                 "Timestamp": "1679628957289",
                 "Status": 1,
-                "Signed": 3
+                "Signed": 3,
+                "Reply_status": "AGREE"
+            },
+            {
+                "User_account": "0x12CF5132064Ee45AcD4843E8C9D7Ae5e3852Aaab",
+                "Group_id": "874a5f6f4aca0ea16487be4269476c5231df8ab59f91340c723b59e487877a383fff449f351e6fe28543a4c109b91a46f02e782e01640c9c54a74f1ec1a50824",
+                "Key_id": "0xce8e22a90bc7c79b230e29cb850e70e5e3c42d426aa628d5ce45c1c6f4498678",
+                "Key_type": "EC256K1",
+                "Mode": "2",
+                "Msg_context": [
+                    "{\"from\":\"0xFDE75431218d8a16E20B43e333Cb45D57Ce70D7F\",\"to\":\"0xa3eDE283D61d5f100a95099D78fd07566bB6c7F0\",\"chainId\":\"0x61\",\"value\":\"0x1C6BF52634000\",\"nonce\":0,\"gas\":100000,\"gasPrice\":10000000000,\"data\":\"\",\"originValue\":\"0.0005\",\"name\":\"BSC testnet\"}"
+                ],
+                "Msg_hash": [
+                    "0x95c58a2bf0cff8f69c7bae7c1b1f834de1da132022a31befbbbeba8a45733314"
+                ],
+                "Nonce": "5",
+                "Public_key": "04f0f6b326aea6a3eaa6e2603fcadb82131be6afa176145a62b7fbe649a9142eed6b34679b1e6bb1f29128649caadf37b7d7ff6132e2d407dff980ffa93492529e",
+                "Mpc_address": "0xFDE75431218d8a16E20B43e333Cb45D57Ce70D7F",
+                "Threshold": "2/3",
+                "Timestamp": "1679628957289",
+                "Status": 1,
+                "Signed": 3,
+                "Reply_status": "AGREE"
             }
         ],
         "Error": "",
