@@ -12,6 +12,7 @@ import { rpclist } from '../../constants/rpcConfig'
 import { useToasts } from 'react-toast-notifications'
 import useAccount from '../../hooks/useAccount'
 import GasModel from '../transaction/gasmodel'
+import { getChainInfo } from '../../constants/chainInfo'
 
 type Props = {
   isOpen: boolean
@@ -53,7 +54,7 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
           gas: 0,
           gasPrice: 0,
           originValue: item.raw.value.toString(),
-          name: 'wei'
+          name: 'wei ' + getChainInfo(chainId)?.nativeCurrency.name
         }
         const haveNative = item.raw.haveNative
 

@@ -56,12 +56,10 @@ const AddAsset: FC<Props> = ({ isOpen, closeModal, openModal }) => {
       if (isAddress) {
         const Contract = new ethers.Contract(addr, erc20ABI, library)
         try {
-          const name = await Contract.name()
-          const symbol = await Contract.symbol()
-          const decimals = await Contract.decimals()
-          setValue('Symbol', symbol)
-          setValue('Decimal', decimals)
-          setValue('Name', name)
+          const list = await Promise.all([Contract.name(), Contract.symbol(), Contract.decimals()])
+          setValue('Name', list[0])
+          setValue('Symbol', list[1])
+          setValue('Decimal', list[2])
         } catch (error: unknown) {
           const errorinfo = error as Error
           addToast(errorinfo.message, { appearance: 'error' })

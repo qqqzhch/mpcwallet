@@ -18,6 +18,8 @@ import useTxStatusByKeyId from '../../hooks/useTxStatusByKeyId'
 import useTxHashByKeyId from '../../hooks/useTxHashByKeyId'
 import loadingiImg from '../../assets/loading.svg'
 import ScanTxUrl from '../mpcinfo/scanTxUrl'
+import { getChainInfo } from '../../constants/chainInfo'
+import { BigNumber } from 'ethers'
 
 function checkThreshold(str: string) {
   const list = str.split('/')
@@ -79,6 +81,12 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
     [execute, chainType, txApprove, addToast, chainId]
   )
 
+  const getChain = useCallback((chainId: string) => {
+    const num = BigNumber.from(chainId).toNumber()
+    const info = getChainInfo(num)
+    return info
+  }, [])
+
   return (
     <div className="flex flex-col overflow-x-auto  text-base p-2">
       {txApprove &&
@@ -112,9 +120,11 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                   {nowThreshold(item.Threshold, item.Signed, issignHIstory)}
                 </div>
                 <div className=" w-full sm:w-1/5 text-right sm:text-left text-indigo-500">
-                  <If condition={item.Status == 0 && issignHIstory === false}>
+                  <If condition={item.Status == 0}>
                     <Then>
-                      Needs your confirmation
+                      <When condition={issignHIstory === false}>Needs your confirmation</When>
+                      <When condition={issignHIstory === true}>Needs other confirmation</When>
+
                       <ArrowDownIcon className=" w-6 h-6 flex-shrink-0 ml-4 inline-block"></ArrowDownIcon>
                     </Then>
                     <Else>TX Status:{txStatus.data.text}</Else>
@@ -129,15 +139,34 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                         <div key={index}>
                           <div className="flex flex-row border-b  border-gray-200 border-solid p-4">
                             <div className="flex-1">
-                              Sent {tx.originValue} {tx.name} to
-                              <div className=" flex items-center p-1 ">
-                                <span className=" ">
-                                  <Avvvatars value={tx.to} style="shape" size={30} />
-                                </span>
-                                <span className=" p-2 break-all ">{tx.to}</span>
-                              </div>
+                              <If condition={tx.data == '0x'}>
+                                <Then>
+                                  Sent {tx.originValue} {tx.name} to
+                                  <div className=" flex items-center p-1 ">
+                                    <span className=" ">
+                                      <Avvvatars value={tx.to} style="shape" size={30} />
+                                    </span>
+                                    <span className=" p-2 break-all ">{tx.to}</span>
+                                  </div>
+                                </Then>
+                                <Else>
+                                  Interacting with contracts {tx.originValue} {tx.name}
+                                  <div className=" flex items-center p-1 ">
+                                    <span className=" ">
+                                      <Avvvatars value={tx.to} style="shape" size={30} />
+                                    </span>
+                                    <span className=" p-2 break-all ">{tx.to}</span>
+                                  </div>
+                                </Else>
+                              </If>
                             </div>
-                            <div>{/* ... */}</div>
+                            <div className="flex flex-col sm:flex-row  items-center  justify-center bg-yellow-300 px-4 my-4">
+                              <span className="mr-1">
+                                <img width={16} src={getChain(txList[0].chainId)?.logoUrl}></img>
+                              </span>
+
+                              <span>{getChain(txList[0].chainId)?.label}</span>
+                            </div>
                           </div>
                           <div className="flex  flex-col border-b  border-gray-200 border-solid p-4 gap-1">
                             <div className="">Gas Limit:{tx.gas}</div>
@@ -177,7 +206,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                           <div className="w-1/3">Transaction Hash:</div>
                           <div className="w-2/3">
                             {/* {txhashInfo} */}
-                            <ScanTxUrl txhash={txhashInfo}></ScanTxUrl>
+                            <ScanTxUrl txhash={txhashInfo} chainId={BigNumber.from(txList[0].chainId).toNumber()}></ScanTxUrl>
                           </div>
                         </div>
                       </div>

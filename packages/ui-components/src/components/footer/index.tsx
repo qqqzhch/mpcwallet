@@ -10,7 +10,7 @@ export const Footer = () => {
         <a className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
           <img src={logo} className="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full" />
 
-          <span className="ml-3 text-xl">Multichain - SMPC</span>
+          <span className="ml-3 text-xl">Multichain - Vault</span>
         </a>
         <p className="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">
           © 2023 Multichain —

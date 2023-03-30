@@ -25,7 +25,7 @@ const WalletList: FC = props => {
   return (
     <>
       <div className="flex flex-row border-b items-center py-4 mx-2">
-        <h1 className="text-2xl font-semibold  border-gray-300 flex-1 ">My MPC Wallets</h1>
+        <h1 className="text-2xl font-semibold  border-gray-300 flex-1 ">My Vaults</h1>
         <div
           onClick={() => {
             toggle()

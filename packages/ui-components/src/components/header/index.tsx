@@ -28,7 +28,7 @@ export const Header: FC = () => {
         >
           <img src={logo} className="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full " />
 
-          <span className="ml-3 text-xl hidden lg:block">Multichain</span>
+          <span className="ml-3 text-xl hidden lg:block">Vault</span>
         </a>
         <div
           onClick={() => {
