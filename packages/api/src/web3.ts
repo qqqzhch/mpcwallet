@@ -280,6 +280,13 @@ web3.extend({
       params: 2,
       inputFormatter: [null,null],
       outputFormatter: undefined,
+    },
+    {
+      name: "getMpcAddressDetail",
+      call: "smw_getMpcAddressDetail",
+      params: 1,
+      inputFormatter: [null],
+      outputFormatter: undefined,
     }
 
     

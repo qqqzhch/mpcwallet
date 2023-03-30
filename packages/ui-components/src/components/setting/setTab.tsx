@@ -9,8 +9,8 @@ type nameAndPath = {
 }
 
 const pair: nameAndPath[] = [
-  { name: 'Setup', path: '' },
-  { name: 'Environment variables', path: 'environment' }
+  { name: 'Setup', path: '' }
+  // { name: 'Environment variables', path: 'environment' }
 ]
 
 const SetTab: FC = () => {
@@ -42,7 +42,7 @@ const SetTab: FC = () => {
             )
           })}
         </Tab.List>
-        <Tab.Panels className="mt-10">
+        <Tab.Panels className="">
           <Outlet></Outlet>
         </Tab.Panels>
       </Tab.Group>

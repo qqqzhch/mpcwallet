@@ -13,36 +13,36 @@ const Transactions = () => {
         <h2 className="text-3xl font-bold">Transactions</h2>
         {/* <p className="font-serif text-sm text-gray-600">xxx.</p> */}
       </div>
-      <Tab.Group>
-        <Tab.List>
-          <Tab
-            key={'Queue'}
-            className={({ selected }) =>
-              classNames('inline-flex p-4 border-b-2 border-transparent rounded-t-lg  outline-none group', selected ? 'text-blue-600  border-blue-600' : '')
-            }
-          >
-            Queue
-          </Tab>
-          <Tab
-            key={'History'}
-            className={({ selected }) =>
-              classNames('inline-flex p-4 border-b-2 border-transparent rounded-t-lg outline-none group', selected ? 'text-blue-600  border-blue-600' : '')
-            }
-          >
-            History
-          </Tab>
-        </Tab.List>
-        <Tab.Panels>
-          <Tab.Panel key={'Queue'}>
-            <TxApproveQueue></TxApproveQueue>
-          </Tab.Panel>
-          <Tab.Panel key={'History'}>
-            <div className="flex flex-col overflow-x-auto  p-2  text-base">
+      <div className="mt-10">
+        <Tab.Group>
+          <Tab.List>
+            <Tab
+              key={'Queue'}
+              className={({ selected }) =>
+                classNames('inline-flex p-4 border-b-2 border-transparent rounded-t-lg  outline-none group', selected ? 'text-blue-600  border-blue-600 ' : '')
+              }
+            >
+              Queue
+            </Tab>
+            <Tab
+              key={'History'}
+              className={({ selected }) =>
+                classNames('inline-flex p-4 border-b-2 border-transparent rounded-t-lg outline-none group', selected ? 'text-blue-600  border-blue-600' : '')
+              }
+            >
+              History
+            </Tab>
+          </Tab.List>
+          <Tab.Panels>
+            <Tab.Panel key={'Queue'}>
+              <TxApproveQueue></TxApproveQueue>
+            </Tab.Panel>
+            <Tab.Panel key={'History'}>
               <SignHistory></SignHistory>
-            </div>
-          </Tab.Panel>
-        </Tab.Panels>
-      </Tab.Group>
+            </Tab.Panel>
+          </Tab.Panels>
+        </Tab.Group>
+      </div>
     </div>
   )
 }

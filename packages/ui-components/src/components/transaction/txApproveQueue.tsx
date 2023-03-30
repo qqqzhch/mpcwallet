@@ -10,7 +10,7 @@ const TxApproveQueue: FC = () => {
   const needMpcApproves = useAppStore(state => state.getTxApproveListByStatus(0, address))
 
   return (
-    <div className="flex flex-col overflow-x-auto  text-base p-2">
+    <div className="flex flex-col overflow-x-auto  text-base">
       {needMpcApproves.map(item => {
         return <TxApproveItem key={item.Key_id} txApprove={item}></TxApproveItem>
       })}
