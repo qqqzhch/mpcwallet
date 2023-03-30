@@ -4,7 +4,10 @@ import { useParams } from 'react-router-dom'
 import { FC, useCallback } from 'react'
 import { useToasts } from 'react-toast-notifications'
 
-const CopyAddress: FC = () => {
+type Prop = {
+  addr?: string
+}
+const CopyAddress: FC<Prop> = ({ addr }) => {
   const { addToast } = useToasts()
 
   const onCopy = useCallback(() => {
@@ -12,9 +15,9 @@ const CopyAddress: FC = () => {
   }, [addToast])
 
   const { address } = useParams<{ address: string; chainType: string }>()
-
+  const showAddr = addr || address || ''
   return (
-    <CopyToClipboard text={address ? address : ''} onCopy={() => onCopy()}>
+    <CopyToClipboard text={showAddr} onCopy={() => onCopy()}>
       <ClipboardDocumentIcon className=" h-4 w-4 "></ClipboardDocumentIcon>
     </CopyToClipboard>
   )

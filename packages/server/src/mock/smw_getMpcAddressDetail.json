@@ -1,0 +1,56 @@
+{
+    "jsonrpc": "2.0",
+    "id": 67,
+    "result": {
+        "Data": [
+            {
+                "Status": "1",
+                "User_account": "0xac9526c5db81267804a32ec508db780402fd9fec",
+                "Key_id": "0x5f3cd990d9dbc1a2bc5f217829246cb24aca3eb571fea0dd171bb2fe32f62fde",
+                "Public_key": "04f0f6b326aea6a3eaa6e2603fcadb82131be6afa176145a62b7fbe649a9142eed6b34679b1e6bb1f29128649caadf37b7d7ff6132e2d407dff980ffa93492529e",
+                "Mpc_address": "0xFDE75431218d8a16E20B43e333Cb45D57Ce70D7F",
+                "Initializer": "1",
+                "Reply_status": "AGREE",
+                "Reply_timestamp": "1678948494520",
+                "Reply_enode": "748ba7475b0da18887480871eb6a41c0b207c2056bf9e0cbe2d25677fef9849e3ec82d038e3d820ba9586abd1a1327555c63c34b71d9b8bccd7a1e3bedeca47b",
+                "Gid": "874a5f6f4aca0ea16487be4269476c5231df8ab59f91340c723b59e487877a383fff449f351e6fe28543a4c109b91a46f02e782e01640c9c54a74f1ec1a50824",
+                "Threshold": "2/3",
+                "Mode": "2",
+                "Key_type": "EC256K1"
+            },
+            {
+                "Status": "1",
+                "User_account": "0xd17831dd9db4ce9a8d331c807329e93015ca2bcb",
+                "Key_id": "0x5f3cd990d9dbc1a2bc5f217829246cb24aca3eb571fea0dd171bb2fe32f62fde",
+                "Public_key": "04f0f6b326aea6a3eaa6e2603fcadb82131be6afa176145a62b7fbe649a9142eed6b34679b1e6bb1f29128649caadf37b7d7ff6132e2d407dff980ffa93492529e",
+                "Mpc_address": "0xFDE75431218d8a16E20B43e333Cb45D57Ce70D7F",
+                "Initializer": "0",
+                "Reply_status": "AGREE",
+                "Reply_timestamp": "1678948494520",
+                "Reply_enode": "2e2b74160a62114e8901668022ab8df0d30ae9c69a48100ab70d50da4713ca6d71ca1bee30bd60a505077ea1c1c2b67b423ed75d535599c3be2b46f397de1a96",
+                "Gid": "874a5f6f4aca0ea16487be4269476c5231df8ab59f91340c723b59e487877a383fff449f351e6fe28543a4c109b91a46f02e782e01640c9c54a74f1ec1a50824",
+                "Threshold": "2/3",
+                "Mode": "2",
+                "Key_type": "EC256K1"
+            },
+            {
+                "Status": "1",
+                "User_account": "0x8d5992c1151439c0a6f421564588f556722eece6",
+                "Key_id": "0x5f3cd990d9dbc1a2bc5f217829246cb24aca3eb571fea0dd171bb2fe32f62fde",
+                "Public_key": "04f0f6b326aea6a3eaa6e2603fcadb82131be6afa176145a62b7fbe649a9142eed6b34679b1e6bb1f29128649caadf37b7d7ff6132e2d407dff980ffa93492529e",
+                "Mpc_address": "0xFDE75431218d8a16E20B43e333Cb45D57Ce70D7F",
+                "Initializer": "0",
+                "Reply_status": "AGREE",
+                "Reply_timestamp": "1678948494520",
+                "Reply_enode": "08ba43b0715bb27e03911592d3fed49a22f49ecaf1628d44c4c7d4a8914b86d423716d7316d98a80f4d280b852a33ba7972f0a744e386375e6d58a12fab96752",
+                "Gid": "874a5f6f4aca0ea16487be4269476c5231df8ab59f91340c723b59e487877a383fff449f351e6fe28543a4c109b91a46f02e782e01640c9c54a74f1ec1a50824",
+                "Threshold": "2/3",
+                "Mode": "2",
+                "Key_type": "EC256K1"
+            }
+        ],
+        "Error": "",
+        "Status": "success",
+        "Tip": ""
+    }
+}

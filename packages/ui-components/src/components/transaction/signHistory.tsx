@@ -7,9 +7,11 @@ const SignHistory = () => {
   return (
     <>
       <When condition={isLoading == false}>
-        {data.map(item => {
-          return <TxApproveItem key={item.Key_id} txApprove={item} issignHIstory={true}></TxApproveItem>
-        })}
+        <div className="flex flex-col overflow-x-auto  text-base">
+          {data.map(item => {
+            return <TxApproveItem key={item.Key_id} txApprove={item} issignHIstory={true}></TxApproveItem>
+          })}
+        </div>
       </When>
       <When condition={isLoading == true}>
         <Skeleton count={10} height={100} />
