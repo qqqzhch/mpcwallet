@@ -24,18 +24,18 @@ const Preview = () => {
           {createGroup.admins.map((item, index) => {
             return (
               <div className="relative mb-4" key={item.key}>
-                <div className="leading-7 text-sm text-gray-600  w-40">Admin address {index + 1}:</div>
+                <div className="leading-7 text-sm text-gray-600  w-40">Owner address {index + 1}:</div>
                 <div className="break-all">{item.address}</div>
               </div>
             )
           })}
 
-          <div className="flex flex-col   lg:flex-row  mb-20">
-            <div className="w-2/3">
+          <div className="flex flex-col   lg:flex-row  mb-20  lg:space-x-6">
+            <div className="">
               <h2 className="font-semibold text-xl">Threshold</h2>
             </div>
             <div className="flex items-center">
-              {createGroup.threshold} out of {createGroup.admins.length} owner(s)
+              {createGroup.threshold} out of {createGroup.admins.length} owners
             </div>
           </div>
           <div className="flex  flex-col-reverse   lg:flex-row  justify-around space-y-reverse space-y-8 text-center">

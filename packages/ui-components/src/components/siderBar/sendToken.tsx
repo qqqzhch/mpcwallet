@@ -44,19 +44,6 @@ type Inputs = {
   amountRequired: string
 }
 
-const isAmount = (Amount: string) => {
-  const result = parseFloat(Amount)
-  if (isNaN(result)) {
-    return false
-  } else {
-    if (result > 0) {
-      return true
-    } else {
-      return false
-    }
-  }
-}
-
 const isAddress = (address: string) => {
   const result = ethers.utils.isAddress(address)
   if (result == false) {
@@ -86,7 +73,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
   const { addToast } = useToasts()
   const [gas, setGas] = useState<{ gasLimit?: string; gasPrise?: string; gasCustom?: boolean }>({})
 
-  const [selectedAssert, setSelectedAssert] = useState<assertType>()
+  const [selectedAsset, setselectedAsset] = useState<assertType>()
 
   const [isOpen, setIsOpen] = useState(false)
 
@@ -94,7 +81,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
   const [btnLoading, setBtnLoading] = useState<boolean>(false)
   const { data: assertList } = useAsserts()
   const { balance: NativeBalance } = useNativeBalance(address)
-  const { balance: erc20Balance } = useErc20Balance(address, selectedAssert?.contractaddress)
+  const { balance: erc20Balance } = useErc20Balance(address, selectedAsset?.contractaddress)
 
   const {
     register,
@@ -113,7 +100,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
         callBack()
       }
       reset()
-      setSelectedAssert(undefined)
+      setselectedAsset(undefined)
       setGas({ gasCustom: false })
     },
     [callBack, reset]
@@ -126,10 +113,41 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
 
   useEffect(() => {
     if (selectAssert != undefined) {
-      setSelectedAssert(selectAssert)
+      setselectedAsset(selectAssert)
       setValue('assert', selectAssert)
     }
   }, [selectAssert, setValue])
+
+  const isAmount = useCallback(
+    (Amount: string) => {
+      const result = parseFloat(Amount)
+      if (isNaN(result) || selectedAsset == undefined) {
+        return false
+      } else {
+        if (result > 0) {
+          const amountBig = ethers.utils.parseUnits(Amount, selectedAsset?.decimals)
+          if (selectedAsset?.contractaddress == undefined || selectedAsset?.contractaddress == '') {
+            if (amountBig.gt(BigNumber.from(NativeBalance))) {
+              return 'Insufficient balance'
+            } else {
+              return true
+            }
+          } else {
+            if (amountBig.gt(BigNumber.from(erc20Balance))) {
+              return 'Insufficient balance'
+            } else {
+              return true
+            }
+          }
+
+          return true
+        } else {
+          return false
+        }
+      }
+    },
+    [NativeBalance, erc20Balance, selectedAsset]
+  )
 
   const onSubmit: SubmitHandler<Inputs> = useCallback(
     data => {
@@ -347,7 +365,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
                           </div>
                           <div className="mb-6">
                             <label htmlFor="assert" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                              Assert{' '}
+                              Asset{' '}
                             </label>
 
                             <Controller
@@ -363,15 +381,15 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
                               render={({ field: { onChange } }) => {
                                 return (
                                   <Listbox
-                                    value={selectedAssert}
+                                    value={selectedAsset}
                                     onChange={e => {
                                       onChange(e)
-                                      setSelectedAssert(e)
+                                      setselectedAsset(e)
                                     }}
                                   >
                                     <div className="relative mt-1">
                                       <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-                                        <span className="block truncate">{selectedAssert ? selectedAssert.name : 'please select assert'}</span>
+                                        <span className="block truncate">{selectedAsset ? selectedAsset.name : 'please select asset'}</span>
                                         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                           <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
                                         </span>
@@ -433,11 +451,11 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
                                 Amount{' '}
                               </label>
                               <label htmlFor="Amount" className="block mb-2 text-sm font-medium text-gray-600 dark:text-white">
-                                <If condition={selectedAssert?.contractaddress == undefined}>
-                                  <Then>Balance:{NativeBalance && selectedAssert ? formatUnits(chainId, NativeBalance) : ''}</Then>
+                                <If condition={selectedAsset?.contractaddress == undefined}>
+                                  <Then>Balance:{NativeBalance && selectedAsset ? formatUnits(chainId, NativeBalance) : ''}</Then>
                                   <Else>
                                     Balance:
-                                    {erc20Balance && selectedAssert ? formatUnitsErc20(erc20Balance, selectedAssert?.name, selectedAssert?.decimals) : ''}
+                                    {erc20Balance && selectedAsset ? formatUnitsErc20(erc20Balance, selectedAsset?.name, selectedAsset?.decimals) : ''}
                                   </Else>
                                 </If>
                               </label>
@@ -449,6 +467,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
                               {...register('amount', { required: true, validate: isAmount })}
                               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             />
+                            <div>{errors.amount && <div className=" text-red-400 ">{errors.amount.message}</div>}</div>
                           </div>
                           {errors.toAddressRequired && <span>This field is required</span>}
                           <div className="mb-6 flex  flex-col-reverse sm:flex-row  pt-8">

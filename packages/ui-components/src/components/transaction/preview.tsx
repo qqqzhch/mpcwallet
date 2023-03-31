@@ -45,8 +45,8 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
 
           setGasError(undefined)
         } catch (error: unknown) {
-          const errorinfo = error as { reason: string }
-          setGasError(errorinfo.reason)
+          const errorinfo = error as { reason: string; message: string }
+          setGasError(errorinfo.reason || errorinfo.message)
           return
         }
       }
@@ -99,9 +99,9 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
           </div>
           <When condition={isTxBuild == false}>
             <div className="mb-6">
-              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Assert </label>
+              <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Asset </label>
               <div className=" flex flex-row items-center space-x-1">
-                <img width={20} src={assert?.img}></img>
+                {/* <img width={20} src={assert?.img}></img> */}
                 <span>
                   {userTxInput && assert ? userTxInput?.originValue : ''} {assert?.name}
                 </span>
@@ -158,7 +158,7 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
                 <If condition={btnLoading}>
                   <Then>
                     <img className="inline w-4 h-4 mr-3 text-white animate-spin" src={loadingiImg}></img>
-                    loading...
+                    Signing
                   </Then>
                   <Else>Next</Else>
                 </If>

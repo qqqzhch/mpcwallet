@@ -1,14 +1,27 @@
-import { FC, useCallback } from 'react'
+import { FC, useCallback, useEffect } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import SendToken from './sendToken'
 import { useParams, useNavigate } from 'react-router-dom'
 
+import { appSupportedChainId, SupportedChainId } from '../../constants/chains'
+import { L1ChainInfo, L2ChainInfo } from '../../constants/chainInfo'
+import { useWeb3React } from '@web3-react/core'
+import { Else, If, Then } from 'react-if'
+import { getChainInfo } from '../../constants/chainInfo'
+import switchEthereumChain from '../../metamask/switchEthereumChain'
+import { RPC_URLS } from '../../constants/networks'
+
 const NewTransaction: FC = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [isTokenOpen, setIsTokenOpen] = useState(false)
   const { address, chainType } = useParams<{ address: string; chainType: string }>()
+  const [nextChain, setNextChain] = useState<L1ChainInfo | L2ChainInfo>()
   const navigate = useNavigate()
+
+  const { chainId, library } = useWeb3React()
+  const [isSupported, setIsSupported] = useState<boolean>(false)
+
   function closeModal() {
     setIsOpen(false)
   }
@@ -29,15 +42,46 @@ const NewTransaction: FC = () => {
     [navigate, chainType, address]
   )
 
+  useEffect(() => {
+    if (appSupportedChainId && chainId) {
+      const isSupported = appSupportedChainId.includes(chainId as SupportedChainId)
+      setIsSupported(isSupported)
+      const nextChainInfo = getChainInfo(appSupportedChainId[0])
+      setNextChain(nextChainInfo)
+    }
+  }, [chainId])
+
+  const SwitchingNetwork = useCallback(async () => {
+    if (nextChain && chainId !== undefined) {
+      await switchEthereumChain(appSupportedChainId[0], nextChain?.label, RPC_URLS[chainId as SupportedChainId], library, false)
+    }
+  }, [library, nextChain, chainId])
+
   return (
     <>
-      <button
-        type="button"
-        onClick={openModal}
-        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
-      >
-        New transaction
-      </button>
+      <If condition={isSupported}>
+        <Then>
+          <button
+            type="button"
+            onClick={openModal}
+            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
+          >
+            New transaction
+          </button>
+        </Then>
+        <Else>
+          <button
+            type="button"
+            onClick={() => {
+              SwitchingNetwork()
+            }}
+            className="text-white  bg-black  focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
+          >
+            Switch to {nextChain?.label} Chain
+          </button>
+        </Else>
+      </If>
+
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative   z-40" onClose={closeModal}>
           <Transition.Child
