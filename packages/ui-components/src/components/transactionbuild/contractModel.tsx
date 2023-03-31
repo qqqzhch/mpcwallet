@@ -13,6 +13,7 @@ import { useToasts } from 'react-toast-notifications'
 import useAccount from '../../hooks/useAccount'
 import GasModel from '../transaction/gasmodel'
 import { getChainInfo } from '../../constants/chainInfo'
+import { calculateGasMargin } from '../../utils/index'
 
 type Props = {
   isOpen: boolean
@@ -86,11 +87,12 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
         setIsShow(true)
         const gasprise: BigNumber = await library.getGasPrice()
         const gasEstimate: BigNumber = await library.estimateGas(txforestimateGas)
-        setGas({ gasLimit: gasEstimate.toString(), gasPrise: gasprise.toString() })
+        const gasEstimateMore = calculateGasMargin(gasEstimate)
+        setGas({ gasLimit: gasEstimateMore.toString(), gasPrise: gasprise.toString() })
 
         const txinfoInput: Unsigedtx = {
           ...userTxInputReview,
-          gas: gasEstimate.toNumber(),
+          gas: gasEstimateMore.toNumber(),
           gasPrice: gasprise.toNumber()
         }
         setUsertTxInputReviewnew(txinfoInput)

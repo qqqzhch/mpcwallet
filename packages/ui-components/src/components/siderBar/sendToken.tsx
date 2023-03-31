@@ -10,7 +10,7 @@ import ChainName from '../chainList/chainName'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { ethers } from 'ethers'
 import { useParams } from 'react-router-dom'
-import { cutOut } from '../../utils/index'
+import { cutOut, calculateGasMargin } from '../../utils/index'
 import { TxInput, assertType, buidTransactionJson, Unsigedtx } from '../../utils/buildMpcTx'
 
 import { useGetTxMsgHash, useTransactionSigner } from '../../hooks/useSigns'
@@ -203,11 +203,13 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
           try {
             const gasEstimate: BigNumber = await library.estimateGas(txforestimateGas)
             const gasprise: BigNumber = await library.getGasPrice()
-            setGas({ gasLimit: gasEstimate.toString(), gasPrise: gasprise.toString() })
+            const gasEstimateMore = calculateGasMargin(gasEstimate)
+
+            setGas({ gasLimit: gasEstimateMore.toString(), gasPrise: gasprise.toString() })
             if (unsigedtx) {
               const txinfoInput: Unsigedtx = {
                 ...unsigedtx,
-                gas: gasEstimate.toNumber(),
+                gas: gasEstimateMore.toNumber(),
                 gasPrice: gasprise.toNumber()
               }
               setUsertTxInputReview(txinfoInput)
