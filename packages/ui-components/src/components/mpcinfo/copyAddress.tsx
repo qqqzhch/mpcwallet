@@ -18,7 +18,7 @@ const CopyAddress: FC<Prop> = ({ addr }) => {
   const showAddr = addr || address || ''
   return (
     <CopyToClipboard text={showAddr} onCopy={() => onCopy()}>
-      <ClipboardDocumentIcon className=" h-4 w-4 "></ClipboardDocumentIcon>
+      <ClipboardDocumentIcon data-tooltip-id="tooltip" data-tooltip-content="Copy to clipboard" className=" h-4 w-4 cursor-pointer "></ClipboardDocumentIcon>
     </CopyToClipboard>
   )
 }

@@ -30,11 +30,11 @@ const Preview = () => {
             )
           })}
 
-          <div className="flex flex-col   lg:flex-row  mb-20  lg:space-x-6">
+          <div className="flex flex-col  mb-20  ">
             <div className="">
-              <h2 className="font-semibold text-xl">Threshold</h2>
+              <h2 className="leading-7 text-sm text-gray-600  w-40">Threshold</h2>
             </div>
-            <div className="flex items-center">
+            <div className="">
               {createGroup.threshold} out of {createGroup.admins.length} owners
             </div>
           </div>

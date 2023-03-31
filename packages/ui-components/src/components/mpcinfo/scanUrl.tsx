@@ -14,7 +14,13 @@ const ScanUrl: FC<Prop> = ({ addr }) => {
 
   const data = addr || address || ''
   return (
-    <a rel="noreferrer" target={'_blank'} href={`${ChainInfo?.explorer}address/${data}`}>
+    <a
+      data-tooltip-id="tooltip"
+      data-tooltip-content={`View on ${ChainInfo?.label} Blockchain Explorer`}
+      rel="noreferrer"
+      target={'_blank'}
+      href={`${ChainInfo?.explorer}address/${data}`}
+    >
       <ArrowTopRightOnSquareIcon className=" h-4 w-4 "></ArrowTopRightOnSquareIcon>
     </a>
   )
