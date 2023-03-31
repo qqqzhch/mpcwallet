@@ -89,7 +89,7 @@ const CreateWalletBtn: FC = () => {
       <If condition={btnLoading}>
         <Then>
           <img className="inline w-4 h-4 mr-3 text-white animate-spin" src={loadingiImg}></img>
-          loading...
+          Signing
         </Then>
         <Else>Next</Else>
       </If>

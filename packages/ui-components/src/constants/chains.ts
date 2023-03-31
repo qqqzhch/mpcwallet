@@ -23,7 +23,7 @@ export enum SupportedChainId {
   BNBTEST = 97
 }
 
-export const appSupportedChainId = [SupportedChainId.MAINNET, SupportedChainId.GOERLI, SupportedChainId.BNBTEST]
+export const appSupportedChainId = [SupportedChainId.BNBTEST, SupportedChainId.GOERLI]
 
 export const CHAIN_IDS_TO_NAMES = {
   [SupportedChainId.MAINNET]: 'mainnet',

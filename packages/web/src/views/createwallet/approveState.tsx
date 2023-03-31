@@ -1,41 +1,34 @@
 import { useAppStore } from '@monorepo/ui-components'
 // import { useNavigate } from 'react-router-dom'
 import { useCreateWalletStatus } from '@monorepo/ui-components/src/hooks/useCreateWalletStatus'
-import { useCallback } from 'react'
+
 import { When } from 'react-if'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/20/solid'
-import { CopyToClipboard } from 'react-copy-to-clipboard'
-import { useToasts } from 'react-toast-notifications'
-import { ClipboardDocumentListIcon } from '@heroicons/react/20/solid'
+// import { CopyToClipboard } from 'react-copy-to-clipboard'
 
-import Avvvatars from 'avvvatars-react'
+import CopyAddress from '@monorepo/ui-components/src/components/mpcinfo/copyAddress'
+
 import { Link } from 'react-router-dom'
+import ScanUrl from '@monorepo/ui-components/src/components/mpcinfo/scanUrl'
 
 const ApproveState = () => {
   const createGroup = useAppStore(state => state.createGroup)
   const { data } = useCreateWalletStatus()
 
-  // const navigate = useNavigate()
-  const { addToast } = useToasts()
-
-  const onCopy = useCallback(() => {
-    addToast('Copy successful', { appearance: 'success' })
-  }, [addToast])
-
   return (
     <div className="flex flex-col lg:flex-row  xl:mx-40 2xl:mx-80 ">
       <div className="felx flex-col w-full xl:w-2/3 p-10 bg-white">
-        <h1 className="font-semibold text-3xl mb-4 pb-4  border-b ">Your Vault has been created successfully</h1>
+        <h1 className="font-semibold text-3xl mb-4 pb-4  border-b ">Waiting for the MPC network to create your Vault</h1>
         <div className="mb-4 pb-4  border-b  px-4">
           <h3 className="font-semibold text-xl pb-4 ">Please do not close this page before you create the vault</h3>
           <p>View the creation status of vault</p>
         </div>
         <div className="mb-4 pb-4  border-b  px-4">
           <div className="relative mb-4">
-            <span className="leading-7 text-sm text-gray-600 inline-block w-40 ">Wallet Status:</span>
+            <span className="leading-7 text-sm text-gray-600 inline-block w-40 ">Vault Status:</span>
             <When condition={data?.status == 0}>
-              <div className="px-3 py-1 w-40 inline-block text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">
-                pending...
+              <div className="px-3 py-2  inline-block text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">
+                The MPC network nodes are calculating your Vault address. Please wait…
               </div>
             </When>
             <When condition={data?.status == 1}>
@@ -56,15 +49,25 @@ const ApproveState = () => {
             <span className="leading-7 text-sm text-gray-600 inline-block w-40 ">Vault address:</span>
 
             <When condition={data != undefined && data.mpcAddress != undefined}>
-              <CopyToClipboard text={data?.mpcAddress ? data?.mpcAddress : ''} onCopy={() => onCopy()}>
-                <div className="inline-block  cursor-pointer break-all">
-                  <span>{data?.mpcAddress}</span>
-                  <ClipboardDocumentListIcon className="h-6 w-6 inline-block text-green-500"></ClipboardDocumentListIcon>
+              {/* <CopyToClipboard text={data?.mpcAddress ? data?.mpcAddress : ''} onCopy={() => onCopy()}> */}
+              <div className=" inline-flex    break-all items-center">
+                <span>{data?.mpcAddress}</span>
+                <span className="h-6 w-6 mx-2 inline-block text-blue-500 p-1 hover:bg-blue-200 rounded">
+                  <CopyAddress addr={data?.mpcAddress}></CopyAddress>
+                </span>
+                <span className="h-6 w-6 mx-2 inline-block text-blue-500 p-1 hover:bg-blue-200 rounded">
+                  <ScanUrl addr={data?.mpcAddress}></ScanUrl>
+                </span>
+
+                {/* <ClipboardDocumentListIcon className="h-6 w-6 inline-block text-green-500"></ClipboardDocumentListIcon>
                   <div className="inline-block">
                     <Avvvatars value={data ? data.mpcAddress : ''} style="shape" size={20} />
-                  </div>
-                </div>
-              </CopyToClipboard>
+                  </div> */}
+              </div>
+              {/* </CopyToClipboard> */}
+            </When>
+            <When condition={data == undefined || data.mpcAddress == undefined}>
+              <span>waiting to be created</span>
             </When>
           </div>
           {data?.list.map((item, index) => {
@@ -80,8 +83,8 @@ const ApproveState = () => {
             )
           })}
 
-          <div className="flex flex-col   lg:flex-row  mb-10">
-            <div className="w-2/3">
+          <div className="flex flex-col   lg:flex-row  mb-10 lg:space-x-6">
+            <div className="">
               <h2 className="font-semibold text-xl">Threshold</h2>
             </div>
             <div className="flex items-center">
@@ -91,7 +94,7 @@ const ApproveState = () => {
 
           <div className="flex flex-col   lg:flex-row  mb-20">
             <div className="w-2/3">
-              <h2 className="font-semibold text-xl">Recharge</h2>
+              <h2 className="font-semibold text-xl">Attention</h2>
               <p>You can deposit assets to your Vault now. Before you send assets from the Vault, please deposit gas coin to the Vault first. </p>
             </div>
           </div>

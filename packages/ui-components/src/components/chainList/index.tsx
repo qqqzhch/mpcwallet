@@ -84,9 +84,9 @@ const ChainList: FC<Props> = ({ children }) => {
         </When>
       </Popover.Button>
 
-      <Popover.Panel className="absolute left-1/4  z-10 mt-4   max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl  ">
+      <Popover.Panel className="absolute left-1/4  w-48 z-10 mt-4   max-w-sm -translate-x-1/2 transform px-4 sm:px-0 lg:max-w-3xl  ">
         <div className="overflow-hidden  rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-          <div className="relative   bg-white p-6 flex flex-col space-y-4">
+          <div className="relative   bg-white p-2 flex flex-col space-y-4">
             {chains?.map(({ item, chainId }) => {
               return (
                 <a
@@ -94,7 +94,7 @@ const ChainList: FC<Props> = ({ children }) => {
                   onClick={() => {
                     SwitchingNetwork(item, chainId)
                   }}
-                  className="-m-3 flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
+                  className="flex items-center rounded-lg   transition duration-150 ease-in-out hover:bg-blue-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50"
                 >
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center text-white sm:h-12 sm:w-12">
                     <img width={20} src={item.logoUrl}></img>

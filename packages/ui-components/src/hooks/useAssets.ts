@@ -11,6 +11,7 @@ import { serverStatusIsSuccess } from '../utils/index'
 import { chainTypeName } from '../constants/chainTypeName'
 import { useParams } from 'react-router-dom'
 import { assertType } from '../utils/buildMpcTx'
+import useChainInfo from './useChainInfo'
 
 type Asset = {
   Symbol: string
@@ -38,6 +39,7 @@ export default function useAssets() {
   const { chainType } = useParams<{ address: string; chainType: string }>()
   const [asserts, setAsserts] = useState<Array<assertType>>([])
   const { account } = useWeb3React()
+  const chaifo = useChainInfo()
 
   const { data, error, isLoading } = useSWR(chainId ? ['/smw/useAsserts', account, chainId, chainType] : null, () => fetcher(account, chainId, chainType), {
     refreshInterval: 1000 * 60
@@ -46,10 +48,13 @@ export default function useAssets() {
   useEffect(() => {
     const run = async () => {
       const list: Array<assertType> = []
+      if (chaifo == undefined) {
+        return
+      }
       list.push({
-        name: 'eth',
+        name: chaifo.nativeCurrency.symbol,
         img: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png?1595348880',
-        decimals: 18
+        decimals: chaifo?.nativeCurrency.decimals
       })
       if (data !== undefined && data !== null) {
         data.forEach(item => {
@@ -65,7 +70,7 @@ export default function useAssets() {
       setAsserts(list)
     }
     run()
-  }, [data])
+  }, [data, chaifo])
 
   return {
     data: asserts,

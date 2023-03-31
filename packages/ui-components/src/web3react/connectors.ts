@@ -1,7 +1,7 @@
 import { InjectedConnector } from '@web3-react/injected-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 // import { WalletLinkConnector } from "@web3-react/walletlink-connector";
-import { ALL_SUPPORTED_CHAIN_IDS } from '../constants/chains'
+// import { ALL_SUPPORTED_CHAIN_IDS } from '../constants/chains'
 
 interface RPCURLSTYPE {
   [propName: number]: string
@@ -14,7 +14,7 @@ const RPC_URLS: RPCURLSTYPE = {
 
 // MetaMask
 export const Injected = new InjectedConnector({
-  supportedChainIds: ALL_SUPPORTED_CHAIN_IDS
+  // supportedChainIds: ALL_SUPPORTED_CHAIN_IDS
 })
 
 // export const activateInjectedProvider = (providerName: "MetaMask" | "CoinBase"|"WalletConnect") => {

@@ -4,7 +4,7 @@ import UserPanel from '@monorepo/ui-components/src/components/siderBar/userPanel
 import SiderMenu from '@monorepo/ui-components/src/components/siderBar/siderMenu'
 import ChainName from '@monorepo/ui-components/src/components/chainList/chainName'
 import WalletList from '@monorepo/ui-components/src/components/walletList/walletMenu'
-import packageJson from '../../../package.json'
+// import packageJson from '../../../package.json'
 const SideBar = () => {
   const showsideBar = useAppStore(state => state.sideBar)
 
@@ -37,11 +37,11 @@ const SideBar = () => {
                 <UserPanel></UserPanel>
                 <SiderMenu></SiderMenu>
               </div>
-              <div className=" relative ">
+              {/* <div className=" relative ">
                 <div className=" absolute  w-full  -top-40 border-t border-gray-200  space-y-1 pt-4 ">
                   <div>version:{packageJson.version}</div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </aside>
         </Else>

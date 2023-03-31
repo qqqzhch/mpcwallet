@@ -37,7 +37,7 @@ const AccountInfo: FC<Props> = ({ children }) => {
         <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
           <div className="relative  bg-white p-6 flex flex-col  space-y-2">
             <div className=" w-full">Address</div>
-            <div className=" break-words flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+            <div className=" break-words flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-blue-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
               <CopyToClipboard text={account ? account : ''} onCopy={() => onCopy()}>
                 <div className=" flex flex-row  cursor-pointer break-all">
                   <span>{account}</span>
@@ -45,7 +45,7 @@ const AccountInfo: FC<Props> = ({ children }) => {
                 </div>
               </CopyToClipboard>
             </div>
-            <div className=" break-words flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-gray-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
+            <div className=" break-words flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-blue-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
               <button onClick={onLogout} className="text-white bg-indigo-500 border-0 py-1 px-4 focus:outline-none hover:bg-indigo-600 rounded text-lg">
                 log out
               </button>
