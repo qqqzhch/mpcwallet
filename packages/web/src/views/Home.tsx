@@ -37,7 +37,9 @@ const Home = () => {
               <p className="leading-relaxed mb-3">Connect your wallet to access already created Vault</p>
 
               <div className="text-center mt-2 leading-none flex justify-center absolute bottom-0 left-0 w-full py-4">
-                <button className="bg-sky-500 hover:bg-sky-700 px-5 py-2.5 text-sm leading-5 rounded-md font-semibold text-white">Access your Vault</button>
+                <ProtectedButton>
+                  <button className="bg-sky-500 hover:bg-sky-700 px-5 py-2.5 text-sm leading-5 rounded-md font-semibold text-white">Access your Vault</button>
+                </ProtectedButton>
               </div>
             </div>
           </div>

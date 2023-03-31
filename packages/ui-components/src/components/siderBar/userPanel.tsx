@@ -5,7 +5,8 @@ import { cutOut } from '../../utils'
 
 import NewTransaction from './newTransaction'
 
-import { SquaresPlusIcon, Bars3Icon } from '@heroicons/react/20/solid'
+// import { SquaresPlusIcon, Bars3Icon } from '@heroicons/react/20/solid'
+import { Bars3Icon } from '@heroicons/react/20/solid'
 
 import MpcAvvvatar from '../mpcAvvvatar'
 import CopyAddress from '../mpcinfo/copyAddress'
@@ -16,6 +17,8 @@ import { formatUnits } from '../../utils'
 import ScanUrl from '../mpcinfo/scanUrl'
 import { useAppStore } from '../..'
 import useNativeBalance from '../../hooks/useNativeBalance'
+import { Tooltip } from 'react-tooltip'
+import { ProtectedButton } from '@monorepo/ui-components'
 
 const UserPanel: FC = () => {
   const { address } = useParams<{ address: string; chainType: string }>()
@@ -38,15 +41,19 @@ const UserPanel: FC = () => {
           <div>{formatUnits(chainId, nativeBalance.balance)}</div>
         </div>
       </div>
-      <div className="pl-2.5 mb-5 flex flex-row justify-between">
-        <button
+      <div className="pl-2.5 mb-5 flex flex-row justify-between ">
+        <Tooltip id="tooltip"></Tooltip>
+        {/* <button
           type="button"
-          className="text-blue-700  bg-gray-200
+          data-tooltip-id="tooltip"
+          data-tooltip-content="Hello world!"
+          data-tooltip-place="left"
+          className="text-blue-700  bg-gray-200 my-anchor-element
       hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 
       font-medium rounded-lg text-sm   p-1.5 text-center inline-flex items-center mr-2"
         >
-          <SquaresPlusIcon className=" h-4 w-4 "></SquaresPlusIcon>
-        </button>
+          <SquaresPlusIcon className=" h-4 w-4 "></SquaresPlusIcon> 
+        </button> */}
         <button
           type="button"
           className="text-blue-700  bg-gray-200
@@ -72,6 +79,8 @@ const UserPanel: FC = () => {
             }
           }}
           type="button"
+          data-tooltip-id="tooltip"
+          data-tooltip-content="Open My Vaults"
           className="text-blue-700  bg-gray-200
       hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 
       font-medium rounded-lg text-sm   p-1.5 text-center inline-flex items-center mr-2"
@@ -80,7 +89,9 @@ const UserPanel: FC = () => {
         </button>
       </div>
       <div className="pl-2.5 mb-5">
-        <NewTransaction></NewTransaction>
+        <ProtectedButton className="text-white  bg-black  focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full">
+          <NewTransaction></NewTransaction>
+        </ProtectedButton>
       </div>
     </>
   )

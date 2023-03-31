@@ -12,7 +12,8 @@ import { useWeb3React } from '@web3-react/core'
 import Skeleton from 'react-loading-skeleton'
 import { If, Then, Else, When } from 'react-if'
 import loadingiImg from '../../assets/loading.svg'
-//Skeleton
+import { ProtectedButton } from '../../protectedRoutes/protectedButton'
+import { SwitchButton } from '../../protectedRoutes/switchButton'
 
 type Props = {
   userTxInput: Unsigedtx | undefined
@@ -150,19 +151,23 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
               </button>
             </div>
             <div className=" text-center">
-              <button
-                type="button"
-                onClick={next}
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 "
-              >
-                <If condition={btnLoading}>
-                  <Then>
-                    <img className="inline w-4 h-4 mr-3 text-white animate-spin" src={loadingiImg}></img>
-                    Signing
-                  </Then>
-                  <Else>Next</Else>
-                </If>
-              </button>
+              <ProtectedButton>
+                <SwitchButton className="text-white  bg-black  focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full">
+                  <button
+                    type="button"
+                    onClick={next}
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 "
+                  >
+                    <If condition={btnLoading}>
+                      <Then>
+                        <img className="inline w-4 h-4 mr-3 text-white animate-spin" src={loadingiImg}></img>
+                        Signing
+                      </Then>
+                      <Else>Next</Else>
+                    </If>
+                  </button>
+                </SwitchButton>
+              </ProtectedButton>
             </div>
           </div>
           <p className=" font-light text-xs text-gray-400">

@@ -7,6 +7,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 import { useToasts } from 'react-toast-notifications'
 import { ClipboardDocumentIcon } from '@heroicons/react/20/solid'
 import { useNavigate } from 'react-router-dom'
+import { Tooltip } from 'react-tooltip'
 
 type Props = {
   children?: React.ReactNode
@@ -39,7 +40,8 @@ const AccountInfo: FC<Props> = ({ children }) => {
             <div className=" w-full">Address</div>
             <div className=" break-words flex items-center rounded-lg p-2 transition duration-150 ease-in-out hover:bg-blue-50 focus:outline-none focus-visible:ring focus-visible:ring-orange-500 focus-visible:ring-opacity-50">
               <CopyToClipboard text={account ? account : ''} onCopy={() => onCopy()}>
-                <div className=" flex flex-row  cursor-pointer break-all">
+                <div data-tooltip-id="tooltip2" data-tooltip-content="Copy to clipboard" className=" flex flex-row  cursor-pointer break-all">
+                  <Tooltip id="tooltip2" />
                   <span>{account}</span>
                   <ClipboardDocumentIcon className="h-6 w-6 text-blue-700"></ClipboardDocumentIcon>
                 </div>

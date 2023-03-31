@@ -2,7 +2,7 @@ import { useAppStore } from '@monorepo/ui-components'
 // import { useNavigate } from 'react-router-dom'
 import { useCreateWalletStatus } from '@monorepo/ui-components/src/hooks/useCreateWalletStatus'
 
-import { When } from 'react-if'
+import { If, When, Then, Else } from 'react-if'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/20/solid'
 // import { CopyToClipboard } from 'react-copy-to-clipboard'
 
@@ -10,17 +10,24 @@ import CopyAddress from '@monorepo/ui-components/src/components/mpcinfo/copyAddr
 
 import { Link } from 'react-router-dom'
 import ScanUrl from '@monorepo/ui-components/src/components/mpcinfo/scanUrl'
+import { Tooltip } from 'react-tooltip'
 
 const ApproveState = () => {
   const createGroup = useAppStore(state => state.createGroup)
   const { data } = useCreateWalletStatus()
-
   return (
     <div className="flex flex-col lg:flex-row  xl:mx-40 2xl:mx-80 ">
       <div className="felx flex-col w-full xl:w-2/3 p-10 bg-white">
-        <h1 className="font-semibold text-3xl mb-4 pb-4  border-b ">Waiting for the MPC network to create your Vault</h1>
-        <div className="mb-4 pb-4  border-b  px-4">
-          <h3 className="font-semibold text-xl pb-4 ">Please do not close this page before you create the vault</h3>
+        <h1 className="font-semibold text-3xl mb-4 pb-4  border-b ">
+          <When condition={data?.status == 0}>Waiting for the MPC network to create your Vault</When>
+          <When condition={data?.status == 1}>Your Vault has been created successfully</When>
+          <When condition={data?.status == 2}>Your vault has failed to be created</When>
+          <When condition={data?.status == 3}>Your vault has timed out to create</When>
+        </h1>
+        <div className="mb-4 pb-4  border-b  px-4 ">
+          <When condition={data?.status == 0}>
+            <h3 className="font-semibold text-xl  bg-blue-200  py-16 text-center mb-6  ">Please do not close this page before you create the vault</h3>
+          </When>
           <p>View the creation status of vault</p>
         </div>
         <div className="mb-4 pb-4  border-b  px-4">
@@ -47,28 +54,30 @@ const ApproveState = () => {
           </div> */}
           <div className="relative mb-4 flex  flex-col">
             <span className="leading-7 text-sm text-gray-600 inline-block w-40 ">Vault address:</span>
+            <Tooltip id="tooltip" />
+            <If condition={data?.status == 1}>
+              <Then>
+                {/* <CopyToClipboard text={data?.mpcAddress ? data?.mpcAddress : ''} onCopy={() => onCopy()}> */}
+                <div className=" inline-flex    break-all items-center">
+                  <span>{data?.mpcAddress}</span>
+                  <span className="h-6 w-6 mx-2 inline-block text-blue-500 p-1 hover:bg-blue-200 rounded">
+                    <CopyAddress addr={data?.mpcAddress}></CopyAddress>
+                  </span>
+                  <span className="h-6 w-6 mx-2 inline-block text-blue-500 p-1 hover:bg-blue-200 rounded">
+                    <ScanUrl addr={data?.mpcAddress}></ScanUrl>
+                  </span>
 
-            <When condition={data != undefined && data.mpcAddress != undefined}>
-              {/* <CopyToClipboard text={data?.mpcAddress ? data?.mpcAddress : ''} onCopy={() => onCopy()}> */}
-              <div className=" inline-flex    break-all items-center">
-                <span>{data?.mpcAddress}</span>
-                <span className="h-6 w-6 mx-2 inline-block text-blue-500 p-1 hover:bg-blue-200 rounded">
-                  <CopyAddress addr={data?.mpcAddress}></CopyAddress>
-                </span>
-                <span className="h-6 w-6 mx-2 inline-block text-blue-500 p-1 hover:bg-blue-200 rounded">
-                  <ScanUrl addr={data?.mpcAddress}></ScanUrl>
-                </span>
-
-                {/* <ClipboardDocumentListIcon className="h-6 w-6 inline-block text-green-500"></ClipboardDocumentListIcon>
+                  {/* <ClipboardDocumentListIcon className="h-6 w-6 inline-block text-green-500"></ClipboardDocumentListIcon>
                   <div className="inline-block">
                     <Avvvatars value={data ? data.mpcAddress : ''} style="shape" size={20} />
                   </div> */}
-              </div>
-              {/* </CopyToClipboard> */}
-            </When>
-            <When condition={data == undefined || data.mpcAddress == undefined}>
-              <span>waiting to be created</span>
-            </When>
+                </div>
+                {/* </CopyToClipboard> */}
+              </Then>
+              <Else>
+                <span>waiting to be created</span>
+              </Else>
+            </If>
           </div>
           {data?.list.map((item, index) => {
             return (
@@ -83,9 +92,9 @@ const ApproveState = () => {
             )
           })}
 
-          <div className="flex flex-col   lg:flex-row  mb-10 lg:space-x-6">
+          <div className="flex flex-col   mb-10 ">
             <div className="">
-              <h2 className="font-semibold text-xl">Threshold</h2>
+              <h2 className="">Threshold</h2>
             </div>
             <div className="flex items-center">
               {createGroup.threshold} out of {createGroup.admins.length} owners
