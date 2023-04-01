@@ -50,7 +50,7 @@ export default defineConfig(({ mode }) => {
     build: {
 
       rollupOptions: {
-        plugins: [inject({Buffer:["Buffer","Buffer"],process:'process'})],
+        plugins: [inject({Buffer:["safe-buffer","Buffer"],process:'process'})],
 
       },
     }
