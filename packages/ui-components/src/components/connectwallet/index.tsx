@@ -50,13 +50,12 @@ const Connectwallet: FC = () => {
       <When condition={account !== undefined}>
         <AccountInfo>
           <div className="py-1 text-xl ">
-            <When condition={walletName.toLowerCase()=="metamask"}>
-            <img width={20} src={metamask}></img>
+            <When condition={walletName.toLowerCase() == 'metamask'}>
+              <img width={20} src={metamask}></img>
             </When>
-            <When condition={walletName.toLowerCase()=="walletconnect"}>
-            <img width={20} src={walletconnect}></img>
+            <When condition={walletName.toLowerCase() == 'walletconnect'}>
+              <img width={20} src={walletconnect}></img>
             </When>
-            
           </div>
           <div className="flex  flex-col  text-sm mx-4">
             <div className="">{walletName}</div>
