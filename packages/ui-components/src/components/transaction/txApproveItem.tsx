@@ -139,51 +139,56 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
       }
 
       txList.forEach(async (tx, index) => {
-        const decodedData = abiDecoder.decodeMethod(tx.data)
-        if (decodedData === undefined) {
-          // not erc 20
-          return
-        }
-        // read symbol() decimals()
-        // 这里需要从目标链上读取数据而不是当前链
-        const rpcurl = RPC_URLS[txchainId as unknown as SupportedChainId]
-        const txprovider = new ethers.providers.JsonRpcProvider(rpcurl[0])
-        const erc20Contract = new ethers.Contract(tx.to, ERC20, txprovider)
-        const result = await Promise.all([erc20Contract.symbol(), erc20Contract.decimals()])
-        const [tokensymbol, tokendecimals] = result
-
-        let to = '',
-          value = ''
-        switch (decodedData.name) {
-          case 'transferFrom':
-            to = decodedData.params[1].value
-            value = decodedData.params[2].value
-
-            break
-          case 'transfer':
-            to = decodedData.params[0].value
-            value = decodedData.params[1].value
-            break
-        }
-        if (value == undefined) {
-          return
-        }
-
-        const tokenAmount = formatUnitsErc20(value, tokensymbol, tokendecimals)
-        const txListTokenInfo: tokenTxType = {}
-        txListTokenInfo[index] = {
-          to,
-          tokenAmount
-        }
-        settxtokenTxInfo(pre => {
-          return {
-            ...pre,
-            ...txListTokenInfo
+        try {
+          const decodedData = abiDecoder.decodeMethod(tx.data)
+          if (decodedData === undefined) {
+            // not erc 20
+            return
           }
-        })
+          // read symbol() decimals()
+          // 这里需要从目标链上读取数据而不是当前链
+          const rpcurl = RPC_URLS[txchainId as unknown as SupportedChainId]
+          const txprovider = new ethers.providers.JsonRpcProvider(rpcurl[0])
+          const erc20Contract = new ethers.Contract(tx.to, ERC20, txprovider)
+          const result = await Promise.all([erc20Contract.symbol(), erc20Contract.decimals()])
+          const [tokensymbol, tokendecimals] = result
 
-        if (index == 0) {
-          setTxTokenAmount(tokenAmount)
+          let to = '',
+            value = ''
+          switch (decodedData.name) {
+            case 'transferFrom':
+              to = decodedData.params[1].value
+              value = decodedData.params[2].value
+
+              break
+            case 'transfer':
+              to = decodedData.params[0].value
+              value = decodedData.params[1].value
+              break
+          }
+          if (value == undefined) {
+            return
+          }
+
+          const tokenAmount = value == '' ? '' : formatUnitsErc20(value, tokensymbol, tokendecimals)
+          const txListTokenInfo: tokenTxType = {}
+          txListTokenInfo[index] = {
+            to,
+            tokenAmount
+          }
+          settxtokenTxInfo(pre => {
+            return {
+              ...pre,
+              ...txListTokenInfo
+            }
+          })
+
+          if (index == 0) {
+            setTxTokenAmount(tokenAmount)
+          }
+        } catch (error) {
+          console.info(error)
+          console.info(tx)
         }
       })
     }
@@ -260,17 +265,20 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                                   </div>
                                   <When condition={txtokenTxInfo !== undefined && txtokenTxInfo[index] !== undefined}>
                                     <div>
-                                      <div className=" inline-flex items-center flex-wrap">
-                                        To:
-                                        <span className=" break-words    break-all ">{txtokenTxInfo[index] && txtokenTxInfo[index].to}</span>
-                                        <span className=" ">
-                                          <Avvvatars value={txtokenTxInfo[index] && txtokenTxInfo[index].to} style="shape" size={20} />
-                                        </span>
-                                      </div>
-
-                                      <div>
-                                        Amount:{txtokenTxInfo[index] && txtokenTxInfo[index].tokenAmount} {txAmount}
-                                      </div>
+                                      <When condition={txtokenTxInfo && txtokenTxInfo[index] && txtokenTxInfo[index].to != ''}>
+                                        <div className=" inline-flex items-center flex-wrap">
+                                          To:
+                                          <span className=" break-words    break-all ">{txtokenTxInfo[index] && txtokenTxInfo[index].to}</span>
+                                          <span className=" ">
+                                            <Avvvatars value={txtokenTxInfo[index] && txtokenTxInfo[index].to} style="shape" size={20} />
+                                          </span>
+                                        </div>
+                                      </When>
+                                      <When condition={(txtokenTxInfo && txtokenTxInfo[index] && txtokenTxInfo[index].tokenAmount != '') || txAmount !== ''}>
+                                        <div>
+                                          Amount:{txtokenTxInfo[index] && txtokenTxInfo[index].tokenAmount} {txAmount}
+                                        </div>
+                                      </When>
                                     </div>
                                   </When>
                                 </Else>
