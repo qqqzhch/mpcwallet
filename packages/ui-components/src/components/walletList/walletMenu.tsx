@@ -11,6 +11,7 @@ import { useAppStore } from '../../state/index'
 
 import { useNavigate, Link } from 'react-router-dom'
 import { cutOut } from '../../utils/index'
+import { useUserStore } from '../..'
 
 const WalletMenu: FC = props => {
   // const { data: walletAccounts, isLoading } = useAccounts()
@@ -20,6 +21,8 @@ const WalletMenu: FC = props => {
   const walletAccounts = useAppStore(state => state.getWalletAccounts(account))
   const togglesideBar = useAppStore(state => state.togglesideBar)
   const togglesidewalletMenu = useAppStore(state => state.togglesidewalletMenu)
+
+  const getAddressName = useUserStore(state => state.getAddressName)
 
   // const toggle = useCallback(() => {
   //   setshowwalletMobile(!showwalletMobile)
@@ -71,7 +74,8 @@ const WalletMenu: FC = props => {
                     </div>
 
                     <div className="flex-1 ">
-                      <p className="text-gray-500  text-ellipsis overflow-hidden  break-words">{cutOut(item.Mpc_address, 6, 6)}</p>
+                      <p className="text-gray-500 text-sm text-ellipsis overflow-hidden  break-words">{getAddressName(item.Mpc_address)}</p>
+                      <p className="text-gray-500 text-sm  text-ellipsis overflow-hidden  break-words">{cutOut(item.Mpc_address, 6, 6)}</p>
                     </div>
                   </div>
                 </div>

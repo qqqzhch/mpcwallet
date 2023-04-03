@@ -5,6 +5,7 @@ import { useWeb3React } from '@web3-react/core'
 import CopyAddress from '../mpcinfo/copyAddress'
 import ScanUrl from '../mpcinfo/scanUrl'
 import useAsserts from '../../hooks/useAssets'
+import AddressName from '../walletList/addressName'
 const Overview: FC = () => {
   const { address, chainType } = useParams<{ address: string; chainType: string }>()
   const { chainId } = useWeb3React()
@@ -12,9 +13,11 @@ const Overview: FC = () => {
   return (
     <div className="flex  min-h-80 rounded bg-gray-50 flex-col  space-y-6 p-8" title={address}>
       <h1 className=" border-b border-blue-300 pb-4">Overview</h1>
-      <div className="">
+      <div className=" flex flex-row  items-center ">
         <MpcAvvvatar address={address} chainid={chainId}></MpcAvvvatar>
+        <AddressName address={address}></AddressName>
       </div>
+
       <div className=" break-all">
         {address}
         <button

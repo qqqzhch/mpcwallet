@@ -1,18 +1,24 @@
 import Avvvatars from 'avvvatars-react'
-import { FC, useCallback } from 'react'
+import { FC, useCallback, useState } from 'react'
 import CopyAddress from '../mpcinfo/copyAddress'
 import ScanUrl from '../mpcinfo/scanUrl'
-// import { PencilSquareIcon } from '@heroicons/react/20/solid'
+import { PencilSquareIcon } from '@heroicons/react/20/solid'
 import useMpcAddressDetail from '../../hooks/useMpcAddressDetail'
 import useAccount from '../../hooks/useAccount'
 import { useParams } from 'react-router-dom'
-
-useMpcAddressDetail
+import RenameModel from '../walletList/renameModel'
+import { When } from 'react-if'
+import AddressName from '../walletList/addressName'
 
 const Setup: FC = () => {
   const { data: list } = useMpcAddressDetail()
   const { address } = useParams<{ address: string; chainType: string }>()
+  const [needEditAddress, setNeedEditAddress] = useState<string | undefined>()
+
   const mpcGroupAccount = useAccount(address)
+
+  const [isOpen, setIsOpen] = useState(false)
+
   const getThreshold = useCallback(() => {
     if (mpcGroupAccount !== undefined) {
       const list = mpcGroupAccount.Threshold.split('/')
@@ -26,6 +32,11 @@ const Setup: FC = () => {
       all: ''
     }
   }, [mpcGroupAccount])
+  const openModel = useCallback((addr: string) => {
+    setNeedEditAddress(addr)
+    setIsOpen(true)
+  }, [])
+
   return (
     <div className="flex flex-col gap-2   mb-4  ">
       <div className="flex flex-col xl:flex-row bg-gray-50 dark:bg-gray-800 rounded">
@@ -45,16 +56,21 @@ const Setup: FC = () => {
                           <Avvvatars value={item.User_account} style="shape" size={50} />
                         </div>
                         <div className="flex-1 flex flex-row justify-between ">
-                          <h2 className="text-gray-900 text-lg title-font font-medium ">owner {index + 1}</h2>
+                          <h2 className="text-gray-900 text-lg title-font font-medium ">
+                            <AddressName address={item.User_account}>owner {index + 1}</AddressName>
+                          </h2>
                           <span className="w-10">
-                            {/* <button
+                            <button
+                              onClick={() => {
+                                openModel(item.User_account)
+                              }}
                               type="button"
                               className="text-blue-700  bg-gray-200
       hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 
       font-medium rounded-lg text-sm   p-1.5 text-center inline-flex items-center mr-2"
                             >
                               <PencilSquareIcon className=" h-4 w-4 "></PencilSquareIcon>
-                            </button> */}
+                            </button>
                           </span>
                         </div>
                       </div>
@@ -98,6 +114,15 @@ const Setup: FC = () => {
           </div>
         </div>
       </div>
+      <When condition={needEditAddress !== undefined}>
+        <RenameModel
+          isOpen={isOpen}
+          closeModal={() => {
+            setIsOpen(false)
+          }}
+          address={needEditAddress}
+        ></RenameModel>
+      </When>
     </div>
   )
 }

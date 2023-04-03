@@ -20,6 +20,8 @@ import useNativeBalance from '../../hooks/useNativeBalance'
 import { Tooltip } from 'react-tooltip'
 import { ProtectedButton } from '@monorepo/ui-components'
 
+import { useUserStore } from '../..'
+
 const UserPanel: FC = () => {
   const { address } = useParams<{ address: string; chainType: string }>()
 
@@ -29,6 +31,8 @@ const UserPanel: FC = () => {
   const showsideBar = useAppStore(state => state.sideBar)
   const nativeBalance = useNativeBalance(address)
 
+  const getAddressName = useUserStore(state => state.getAddressName)
+
   return (
     <>
       <div className="flex items-center pl-2.5 mb-5 flex-row " title={address}>
@@ -36,8 +40,9 @@ const UserPanel: FC = () => {
           {/* <Avvvatars value={address ? address : ''} style="shape" size={40} /> */}
           <MpcAvvvatar address={address} chainid={chainId}></MpcAvvvatar>
         </div>
-        <div className=" flex-1  flex flex-col ">
-          <div className=" break-all">{address ? cutOut(address, 8, 8) : ''}</div>
+        <div className=" flex-1  flex flex-col text-sm">
+          <div className=" break-all  ">{getAddressName(address)}</div>
+          <div className=" break-all ">{address ? cutOut(address, 8, 8) : ''}</div>
           <div>{formatUnits(chainId, nativeBalance.balance)}</div>
         </div>
       </div>

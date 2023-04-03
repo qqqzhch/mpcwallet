@@ -3,12 +3,19 @@ import { devtools, persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 import React, { createContext, FC, useContext } from 'react'
 
+type addressNameType = { address: string; name: string }
+
 export interface UserState {
   counter: number
+  addressNameList: Array<addressNameType>
+  increase: (by: number) => void
+  setAddressName: (address: string, name: string) => void
+  getAddressName: (address: string | undefined) => string
 }
 
 const intialState = {
-  counter: 0
+  counter: 0,
+  addressNameList: []
 }
 
 const createMyStore = (state: typeof intialState = intialState) => {
@@ -22,6 +29,32 @@ const createMyStore = (state: typeof intialState = intialState) => {
               set(state => {
                 state.counter++
               })
+            },
+            setAddressName: (address: string, name: string) => {
+              if (address !== undefined && address != '') {
+                set(state => {
+                  const result = state.addressNameList.find(item => item.address.toLowerCase() == address.toLowerCase())
+                  if (result == undefined) {
+                    state.addressNameList.push({
+                      address,
+                      name
+                    })
+                  } else {
+                    result.name = name
+                  }
+                })
+              }
+            },
+            getAddressName: (address: string | undefined) => {
+              if (address == undefined) {
+                return ''
+              }
+              const result = get().addressNameList.find(item => item.address.toLowerCase() == address.toLowerCase())
+              if (result == undefined) {
+                return ''
+              } else {
+                return result.name
+              }
             }
           }),
           { name: 'user-storage-v1' }

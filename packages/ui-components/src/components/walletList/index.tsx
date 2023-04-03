@@ -10,7 +10,9 @@ import { useWeb3React } from '@web3-react/core'
 import { useAppStore } from '../../state/index'
 
 import { useNavigate } from 'react-router-dom'
-// import { useUserStore } from '../..'
+
+import AddressMenu from './addressMenu'
+import AddressName from './addressName'
 
 const WalletList: FC = props => {
   // const { data: walletAccounts, isLoading } = useAccounts()
@@ -18,8 +20,6 @@ const WalletList: FC = props => {
   const [showwalletMobile, setshowwalletMobile] = useState<boolean>(false)
   const navigate = useNavigate()
   const walletAccounts = useAppStore(state => state.getWalletAccounts(account))
-  // const counter = useUserStore(state=>state.counter)
-  // console.log(counter)
 
   const toggle = useCallback(() => {
     setshowwalletMobile(!showwalletMobile)
@@ -27,14 +27,14 @@ const WalletList: FC = props => {
 
   return (
     <>
-      <div className="flex flex-row border-b items-center py-4 mx-2">
+      <div
+        onClick={() => {
+          toggle()
+        }}
+        className="flex flex-row border-b items-center py-4 mx-2"
+      >
         <h1 className="text-2xl font-semibold  border-gray-300 flex-1 ">My Vaults</h1>
-        <div
-          onClick={() => {
-            toggle()
-          }}
-          className="block sm:hidden  cursor-pointer p-2"
-        >
+        <div className="block sm:hidden  cursor-pointer p-2">
           <When condition={showwalletMobile == false}>
             <ChevronDownIcon className="h-5 w-5  text-gray-400" aria-hidden="true"></ChevronDownIcon>
           </When>
@@ -46,7 +46,9 @@ const WalletList: FC = props => {
 
       <div
         className={
-          showwalletMobile ? 'block sm:block  min-h-[90%]  overflow-x-hidden  overflow-y-auto' : 'hidden sm:block min-h-[90%] overflow-x-hidden overflow-y-auto'
+          showwalletMobile
+            ? 'block sm:block   min-h-screen  max-h-screen  overflow-x-hidden  overflow-y-auto'
+            : 'hidden sm:block min-h-[90%] overflow-x-hidden overflow-y-auto'
         }
       >
         {/* <When condition={isLoading}>
@@ -55,22 +57,30 @@ const WalletList: FC = props => {
         <When condition={walletAccounts.length > 0}>
           {walletAccounts.map((item: walletaccount) => {
             return (
-              <div
-                onClick={() => {
-                  navigate(`dashboard/evm/${item.Mpc_address}`)
-                }}
-                key={item.Mpc_address}
-                className="flex flex-wrap -m-2 cursor-pointer"
-              >
+              <div key={item.Mpc_address} className="flex flex-wrap -m-2 ">
                 <div className="w-full p-4 ">
                   <div className="h-full flex items-center border-gray-200 border p-4 rounded-lg hover:bg-blue-200">
-                    <div className="relative mr-4">
-                      <Avvvatars value={item.Mpc_address} style="shape" size={50} />
-                      <span className=" absolute  bg-green-200  text-[12px]  p-[3px]  rounded-xl  -top-2 left-6  ">{item.Threshold}</span>
+                    <div
+                      onClick={() => {
+                        navigate(`dashboard/evm/${item.Mpc_address}`)
+                      }}
+                      className="flex-1 flex items-center cursor-pointer"
+                    >
+                      <div className="relative mr-4">
+                        <Avvvatars value={item.Mpc_address} style="shape" size={50} />
+                        <span className=" absolute  bg-green-200  text-[12px]  p-[3px]  rounded-xl  -top-2 left-6  ">{item.Threshold}</span>
+                      </div>
+
+                      <div className="flex-1 ">
+                        <p className="text-gray-500  text-sm w-60 sm:w-80 md:w-full   text-ellipsis overflow-hidden">
+                          <AddressName address={item.Mpc_address}></AddressName>
+                        </p>
+                        <p className="text-gray-500  text-sm w-60 sm:w-80 md:w-full   text-ellipsis overflow-hidden">{item.Mpc_address}</p>
+                      </div>
                     </div>
 
-                    <div className="flex-1 ">
-                      <p className="text-gray-500  w-60 sm:w-80 md:w-full   text-ellipsis overflow-hidden">{item.Mpc_address}</p>
+                    <div className=" m-auto px-4">
+                      <AddressMenu {...item}></AddressMenu>
                     </div>
                   </div>
                 </div>
