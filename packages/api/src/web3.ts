@@ -287,6 +287,13 @@ web3.extend({
       params: 1,
       inputFormatter: [null],
       outputFormatter: undefined,
+    },
+    {
+      name: "getApprovalListByKeyId",
+      call: "smw_getApprovalListByKeyId",
+      params: 1,
+      inputFormatter: [null],
+      outputFormatter: undefined,
     }
 
     

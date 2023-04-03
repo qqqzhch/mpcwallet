@@ -1,7 +1,7 @@
 import { FC, useState, useCallback, useEffect } from 'react'
 
 import { ArrowDownIcon, ArrowUpRightIcon, UsersIcon } from '@heroicons/react/20/solid'
-import { formatTxApprove } from '../../utils'
+import { cutOut, formatTxApprove } from '../../utils'
 import dayjs from '../../utils/dayjs'
 import { classNames } from '../../utils'
 import { When, If, Then, Else } from 'react-if'
@@ -31,6 +31,9 @@ import { RPC_URLS } from '../../constants/networks'
 import { SupportedChainId } from '../../constants/chains'
 abiDecoder.addABI(ERC20)
 
+import useMpcAddressDetail from '../../hooks/useMpcAddressDetail'
+import useApprovalListByKeyId from '../../hooks/useApprovalListByKeyId'
+
 function checkThreshold(str: string) {
   const list = str.split('/')
   if (list[0] === list[1]) {
@@ -50,6 +53,13 @@ type tokenTxType = {
     to: string
     tokenAmount: string
   }
+}
+
+type mpcOwnerStatusType = {
+  address: string
+  reply_status?: string
+  signed?: number
+  status?: number
 }
 
 const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
@@ -81,6 +91,36 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
   const [txTokenAmount, setTxTokenAmount] = useState<string>('')
 
   const [txtokenTxInfo, settxtokenTxInfo] = useState<tokenTxType>({})
+  const { data: ownerAccountInfo } = useMpcAddressDetail()
+
+  const [ownerStatusList, setOwnerStatusList] = useState<mpcOwnerStatusType[]>()
+  const { data: ApprovalListByKeyIds } = useApprovalListByKeyId(txApprove?.Key_id)
+
+  useEffect(() => {
+    if (ownerAccountInfo) {
+      const list: mpcOwnerStatusType[] = []
+
+      ownerAccountInfo.forEach(item => {
+        let status: TxtxSignHistory | undefined
+        if (ApprovalListByKeyIds) {
+          status = ApprovalListByKeyIds.find(it => {
+            return it.User_account == item.User_account
+          })
+        }
+        if (status == undefined) {
+          return
+        }
+
+        list.push({
+          address: item.User_account,
+          reply_status: status ? (status.Reply_status == '' ? 'pending' : status.Reply_status) : undefined,
+          signed: status ? status.Signed : undefined,
+          status: status ? status.Status : undefined
+        })
+      })
+      setOwnerStatusList(list)
+    }
+  }, [ownerAccountInfo, ApprovalListByKeyIds, txApprove?.Key_id])
 
   const Agree = useCallback(
     async (nameType: string) => {
@@ -359,7 +399,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                         </div>
                       </div>
                     </div>
-                    <div className="lg:w-2/5 md:w-1/2 ">
+                    <div className="lg:w-4/5 md:w-1/2 ">
                       <div className="flex relative pb-2">
                         <div className="h-full w-8 absolute inset-0 flex items-center justify-center">
                           <div className="h-full w-1 bg-gray-200 pointer-events-none"></div>
@@ -368,11 +408,22 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                           <When condition={checkThreshold(item.Threshold) === true}>✓</When>
                           <When condition={checkThreshold(item.Threshold) === false}>~</When>
                         </div>
-                        <div className="flex-grow pl-4">
+                        <div className="flex-grow pl-4 ">
                           <h2 className="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">
                             Confirmations {nowThreshold(item.Threshold, item.Signed, issignHIstory)}
                           </h2>
-                          <p className="leading-relaxed">{/* xx */}</p>
+                          <div className="leading-relaxed flex flex-col  ">
+                            {ownerStatusList &&
+                              ownerStatusList.map((item, index) => {
+                                return (
+                                  <div key={index} className=" inline-flex flex-row items-center">
+                                    <Avvvatars value={item.address} style="shape" size={20} />
+                                    <span className="px-2 flex-grow">{cutOut(item.address, 6, 6)}</span>
+                                    <span className="px-2">{item.reply_status ? item.reply_status : ''}</span>
+                                  </div>
+                                )
+                              })}
+                          </div>
                         </div>
                       </div>
                     </div>
