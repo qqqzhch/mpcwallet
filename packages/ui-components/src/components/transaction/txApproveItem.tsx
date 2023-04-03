@@ -98,7 +98,11 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
   const {data:ApprovalListByKeyIds}= useApprovalListByKeyId(txApprove?.Key_id)
 
   useEffect(()=>{
+
     if(ownerAccountInfo){
+      if(txApprove?.Key_id=="0x46b7c457db8d00ec7bd544df69329e867f990ad8918cb5f1351410f4a79f689b"){
+        console.log('- -!')
+      }
       const list:mpcOwnerStatusType[]=[]
       console.log('- -')
       ownerAccountInfo.forEach((item)=>{
@@ -108,6 +112,11 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
            return  it.User_account==item.User_account
           })
         }
+        if(status==undefined){
+          return;
+        }
+        
+
         list.push({
           address:item.User_account,
           reply_status:status?(status.Reply_status==""?"pending":status.Reply_status):undefined,
