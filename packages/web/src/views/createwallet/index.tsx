@@ -71,7 +71,7 @@ const CreatWallet: FC = props => {
     }
 
     navigate('/preview')
-  }, [navigate, createGroup.admins,createGroup.walletname])
+  }, [navigate, createGroup.admins, createGroup.walletname])
 
   useEffect(() => {
     // if (createGroup.walletname !== '') {

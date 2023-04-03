@@ -1,17 +1,17 @@
 import { Menu, Transition } from '@headlessui/react'
-import { Fragment, useEffect, useRef, useState } from 'react'
-import { ChevronDownIcon,PencilIcon,EllipsisVerticalIcon } from '@heroicons/react/20/solid'
+import { Fragment, useState } from 'react'
+import { PencilIcon, EllipsisVerticalIcon } from '@heroicons/react/20/solid'
 import { walletaccount } from '../../state/walletaccount'
 import RenameModel from './renameModel'
 
-import {FC} from 'react';
+import { FC } from 'react'
 
-const AddressMenu:FC<walletaccount> = ({Mpc_address}) => {
+const AddressMenu: FC<walletaccount> = ({ Mpc_address }) => {
   const [isOpen, setIsOpen] = useState(false)
 
-    return (
-        <div className="text-right">
-      <Menu  as="div" className="relative inline-block text-left">
+  return (
+    <div className="text-right">
+      <Menu as="div" className="relative inline-block text-left">
         <div>
           <Menu.Button className="inline-flex w-full justify-center  rounded-2xl  px-2 py-2 text-sm font-medium  hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 hover:bg-blue-300">
             <EllipsisVerticalIcon className=" h-4 w-4 cursor-pointer text-blue-500 "></EllipsisVerticalIcon>
@@ -31,37 +31,29 @@ const AddressMenu:FC<walletaccount> = ({Mpc_address}) => {
               <Menu.Item>
                 {({ active }) => (
                   <button
-                  onClick={()=>{setIsOpen(true)}}
-                    className={`${
-                      active ? 'bg-blue-500 text-white' : 'text-gray-900'
-                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                    onClick={() => {
+                      setIsOpen(true)
+                    }}
+                    className={`${active ? 'bg-blue-500 text-white' : 'text-gray-900'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                   >
-                    {active ? (
-                      <PencilIcon
-                        className="mr-2 h-5 w-5"
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <PencilIcon
-                        className="mr-2 h-5 w-5"
-                        aria-hidden="true"
-                      />
-                    )}
+                    {active ? <PencilIcon className="mr-2 h-5 w-5" aria-hidden="true" /> : <PencilIcon className="mr-2 h-5 w-5" aria-hidden="true" />}
                     Rename
                   </button>
                 )}
               </Menu.Item>
-              
             </div>
-            
           </Menu.Items>
         </Transition>
       </Menu>
-      <RenameModel isOpen={isOpen} closeModal={()=>{setIsOpen(false)}} address={Mpc_address}></RenameModel>
+      <RenameModel
+        isOpen={isOpen}
+        closeModal={() => {
+          setIsOpen(false)
+        }}
+        address={Mpc_address}
+      ></RenameModel>
     </div>
   )
-};
+}
 
-
-
-export default AddressMenu;
+export default AddressMenu

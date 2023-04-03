@@ -22,7 +22,7 @@ const WalletMenu: FC = props => {
   const togglesideBar = useAppStore(state => state.togglesideBar)
   const togglesidewalletMenu = useAppStore(state => state.togglesidewalletMenu)
 
-  const getAddressName = useUserStore(state=>state.getAddressName)
+  const getAddressName = useUserStore(state => state.getAddressName)
 
   // const toggle = useCallback(() => {
   //   setshowwalletMobile(!showwalletMobile)
@@ -74,7 +74,7 @@ const WalletMenu: FC = props => {
                     </div>
 
                     <div className="flex-1 ">
-                    <p className="text-gray-500 text-sm text-ellipsis overflow-hidden  break-words">{getAddressName(item.Mpc_address)}</p>
+                      <p className="text-gray-500 text-sm text-ellipsis overflow-hidden  break-words">{getAddressName(item.Mpc_address)}</p>
                       <p className="text-gray-500 text-sm  text-ellipsis overflow-hidden  break-words">{cutOut(item.Mpc_address, 6, 6)}</p>
                     </div>
                   </div>

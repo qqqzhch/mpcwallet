@@ -1,14 +1,14 @@
 import { FC, useEffect } from 'react'
-import { walletaccount } from '../../state/walletaccount'
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
 import { useForm } from 'react-hook-form'
 import { useUserStore } from '../..'
+import { useToasts } from 'react-toast-notifications'
 
 type Props = {
   isOpen: boolean
   closeModal: () => void
-  address: string
+  address: string | undefined
 }
 type formData = {
   address: string
@@ -23,12 +23,20 @@ const RenameModel: FC<Props> = ({ isOpen, closeModal, address }) => {
   } = useForm<formData>()
   const addressName = useUserStore(state => state.getAddressName(address))
   const setAddressName = useUserStore(state => state.setAddressName)
+  const { addToast } = useToasts()
+
   const onSubmit = (data: formData) => {
-    setAddressName(address, data.name)
+    if (address !== undefined) {
+      setAddressName(address, data.name)
+      addToast('Editing success', { appearance: 'success' })
+      closeModal()
+    }
   }
   useEffect(() => {
-    setValue('name', addressName)
-    setValue('address', address)
+    if (address !== undefined) {
+      setValue('name', addressName)
+      setValue('address', address)
+    }
   }, [addressName, setValue, address])
 
   return (
@@ -85,10 +93,10 @@ const RenameModel: FC<Props> = ({ isOpen, closeModal, address }) => {
                         </div>
                       </div>
 
-                      <div className='flex'>
+                      <div className="flex flex-row">
                         <button
                           type="submit"
-                          className="text-white  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                          className="text-white flex-1  bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                         >
                           Submit
                         </button>

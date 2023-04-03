@@ -31,7 +31,7 @@ const UserPanel: FC = () => {
   const showsideBar = useAppStore(state => state.sideBar)
   const nativeBalance = useNativeBalance(address)
 
-  const getAddressName = useUserStore(state=>state.getAddressName)
+  const getAddressName = useUserStore(state => state.getAddressName)
 
   return (
     <>
@@ -41,9 +41,9 @@ const UserPanel: FC = () => {
           <MpcAvvvatar address={address} chainid={chainId}></MpcAvvvatar>
         </div>
         <div className=" flex-1  flex flex-col text-sm">
-        <div className=" break-all  ">{getAddressName(address)}</div>
+          <div className=" break-all  ">{getAddressName(address)}</div>
           <div className=" break-all ">{address ? cutOut(address, 8, 8) : ''}</div>
-          <div >{formatUnits(chainId, nativeBalance.balance)}</div>
+          <div>{formatUnits(chainId, nativeBalance.balance)}</div>
         </div>
       </div>
       <div className="pl-2.5 mb-5 flex flex-row justify-between ">
