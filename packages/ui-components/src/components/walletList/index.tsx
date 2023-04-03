@@ -10,6 +10,7 @@ import { useWeb3React } from '@web3-react/core'
 import { useAppStore } from '../../state/index'
 
 import { useNavigate } from 'react-router-dom'
+// import { useUserStore } from '../..'
 
 const WalletList: FC = props => {
   // const { data: walletAccounts, isLoading } = useAccounts()
@@ -17,6 +18,8 @@ const WalletList: FC = props => {
   const [showwalletMobile, setshowwalletMobile] = useState<boolean>(false)
   const navigate = useNavigate()
   const walletAccounts = useAppStore(state => state.getWalletAccounts(account))
+  // const counter = useUserStore(state=>state.counter)
+  // console.log(counter)
 
   const toggle = useCallback(() => {
     setshowwalletMobile(!showwalletMobile)
