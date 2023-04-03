@@ -33,6 +33,7 @@ abiDecoder.addABI(ERC20)
 
 import useMpcAddressDetail from '../../hooks/useMpcAddressDetail'
 import useApprovalListByKeyId from '../../hooks/useApprovalListByKeyId'
+import AddressName from '../walletList/addressName'
 
 function checkThreshold(str: string) {
   const list = str.split('/')
@@ -241,7 +242,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
         [txApprove].map(item => {
           const txList = formatTxApprove(item.Msg_context)
           return (
-            <>
+            <div key={item.Key_id}>
               <div
                 onClick={() => {
                   openPanel(item.Key_id)
@@ -257,18 +258,18 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                   sent
                 </div>
                 <div className=" w-full sm:w-1/5 ">{dayjs(Number(item.Timestamp || (item as TxtxSignHistory).Local_timestamp)).fromNow()}</div>
-                <div className=" w-full sm:w-1/5 ">
+                <div className=" w-full sm:w-1/5 break-words">
                   {/* {txList.map(tx => {
                     return tx.originValue + ' ' + tx.name + ' '
                   })}{' '} */}
                   {txAmount} {txTokenAmount}
                 </div>
-                <div className=" w-full sm:w-1/5 ">
+                <div className=" w-full sm:flex-1 ">
                   <UsersIcon className="text-indigo-500 w-6 h-6 flex-shrink-0 mr-4 inline-block"></UsersIcon>
 
                   {nowThreshold(item.Threshold, item.Signed, issignHIstory)}
                 </div>
-                <div className=" w-full sm:w-1/5 text-right sm:text-left text-indigo-500">
+                <div className=" w-full sm:w-1/4 text-right sm:text-left text-indigo-500">
                   <If condition={item.Status == 0}>
                     <Then>
                       <When condition={issignHIstory === false}>Needs your confirmation</When>
@@ -378,7 +379,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                     <div className="flex flex-col px-4 py-1">
                       <div className="flex flex-row">
                         <div className="w-1/3">Key Id:</div>
-                        <div className="w-2/3">
+                        <div className="w-2/3 break-words">
                           {/* {txhashInfo} */}
                           {item.Key_id}
                         </div>
@@ -399,7 +400,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                         </div>
                       </div>
                     </div>
-                    <div className="lg:w-4/5 md:w-1/2 ">
+                    <div className="w-full 2xl:w-4/5 ">
                       <div className="flex relative pb-2">
                         <div className="h-full w-8 absolute inset-0 flex items-center justify-center">
                           <div className="h-full w-1 bg-gray-200 pointer-events-none"></div>
@@ -418,8 +419,14 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                                 return (
                                   <div key={index} className=" inline-flex flex-row items-center">
                                     <Avvvatars value={item.address} style="shape" size={20} />
-                                    <span className="px-2 flex-grow">{cutOut(item.address, 6, 6)}</span>
-                                    <span className="px-2">{item.reply_status ? item.reply_status : ''}</span>
+                                    <div className="px-2 flex-grow text-sm">
+                                      <div>
+                                        <AddressName address={item.address}></AddressName>
+                                      </div>
+
+                                      <div>{cutOut(item.address, 6, 6)}</div>
+                                    </div>
+                                    <div className="px-2">{item.reply_status ? item.reply_status : ''}</div>
                                   </div>
                                 )
                               })}
@@ -482,7 +489,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                   </div>
                 </div>
               </When>
-            </>
+            </div>
           )
         })}
     </div>

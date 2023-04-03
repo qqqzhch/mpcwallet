@@ -3,7 +3,7 @@ import { Else, If, Then } from 'react-if'
 import { useUserStore } from '../..'
 
 type Props = {
-  address: string
+  address: string | undefined
   children?: ReactNode
 }
 
