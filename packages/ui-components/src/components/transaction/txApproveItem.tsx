@@ -100,7 +100,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
   useEffect(()=>{
 
     if(ownerAccountInfo){
-      if(txApprove?.Key_id=="0x46b7c457db8d00ec7bd544df69329e867f990ad8918cb5f1351410f4a79f689b"){
+      if(txApprove?.Key_id=="0xaff2fc586c4c4426a8fe508b25a967f493be54b4255547a27f028ad4678d6f79"){
         console.log('- -!')
       }
       const list:mpcOwnerStatusType[]=[]
@@ -132,7 +132,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
     }
     
 
-  },[ownerAccountInfo,ApprovalListByKeyIds])
+  },[ownerAccountInfo,ApprovalListByKeyIds,txApprove?.Key_id])
 
 
   const Agree = useCallback(
