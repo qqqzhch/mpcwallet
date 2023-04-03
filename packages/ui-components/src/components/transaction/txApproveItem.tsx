@@ -34,7 +34,6 @@ abiDecoder.addABI(ERC20)
 import useMpcAddressDetail from '../../hooks/useMpcAddressDetail'
 import useApprovalListByKeyId from '../../hooks/useApprovalListByKeyId'
 
-
 function checkThreshold(str: string) {
   const list = str.split('/')
   if (list[0] === list[1]) {
@@ -56,11 +55,11 @@ type tokenTxType = {
   }
 }
 
-type mpcOwnerStatusType={
-  address:string,
-  reply_status?:string,
-  signed?:number,
-  status?:number
+type mpcOwnerStatusType = {
+  address: string
+  reply_status?: string
+  signed?: number
+  status?: number
 }
 
 const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
@@ -92,48 +91,36 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
   const [txTokenAmount, setTxTokenAmount] = useState<string>('')
 
   const [txtokenTxInfo, settxtokenTxInfo] = useState<tokenTxType>({})
-  const {data:ownerAccountInfo}= useMpcAddressDetail()
+  const { data: ownerAccountInfo } = useMpcAddressDetail()
 
   const [ownerStatusList, setOwnerStatusList] = useState<mpcOwnerStatusType[]>()
-  const {data:ApprovalListByKeyIds}= useApprovalListByKeyId(txApprove?.Key_id)
+  const { data: ApprovalListByKeyIds } = useApprovalListByKeyId(txApprove?.Key_id)
 
-  useEffect(()=>{
+  useEffect(() => {
+    if (ownerAccountInfo) {
+      const list: mpcOwnerStatusType[] = []
 
-    if(ownerAccountInfo){
-      if(txApprove?.Key_id=="0xaff2fc586c4c4426a8fe508b25a967f493be54b4255547a27f028ad4678d6f79"){
-        console.log('- -!')
-      }
-      const list:mpcOwnerStatusType[]=[]
-      console.log('- -')
-      ownerAccountInfo.forEach((item)=>{
-        let status:TxtxSignHistory|undefined;
-        if(ApprovalListByKeyIds){
-          status=ApprovalListByKeyIds.find((it)=>{
-           return  it.User_account==item.User_account
+      ownerAccountInfo.forEach(item => {
+        let status: TxtxSignHistory | undefined
+        if (ApprovalListByKeyIds) {
+          status = ApprovalListByKeyIds.find(it => {
+            return it.User_account == item.User_account
           })
         }
-        if(status==undefined){
-          return;
+        if (status == undefined) {
+          return
         }
-        
 
         list.push({
-          address:item.User_account,
-          reply_status:status?(status.Reply_status==""?"pending":status.Reply_status):undefined,
-          signed:status?status.Signed:undefined,
-          status:status?status.Status:undefined,
-
-          
+          address: item.User_account,
+          reply_status: status ? (status.Reply_status == '' ? 'pending' : status.Reply_status) : undefined,
+          signed: status ? status.Signed : undefined,
+          status: status ? status.Status : undefined
         })
-
       })
       setOwnerStatusList(list)
-
     }
-    
-
-  },[ownerAccountInfo,ApprovalListByKeyIds,txApprove?.Key_id])
-
+  }, [ownerAccountInfo, ApprovalListByKeyIds, txApprove?.Key_id])
 
   const Agree = useCallback(
     async (nameType: string) => {
@@ -426,21 +413,16 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                             Confirmations {nowThreshold(item.Threshold, item.Signed, issignHIstory)}
                           </h2>
                           <div className="leading-relaxed flex flex-col  ">
-                            {ownerStatusList&&ownerStatusList.map((item,index)=>{
-                              return (
-                              <div key={index} className=" inline-flex flex-row items-center">
-                              <Avvvatars value={item.address} style="shape" size={20} />
-                              <span className='px-2 flex-grow'>{cutOut(item.address,6,6)}</span> 
-                              <span className='px-2'>{
-                                item.reply_status?item.reply_status:""
-                              }</span> 
-  
-                              </div>)
-
-                            })}
-                            
-                            
-                            
+                            {ownerStatusList &&
+                              ownerStatusList.map((item, index) => {
+                                return (
+                                  <div key={index} className=" inline-flex flex-row items-center">
+                                    <Avvvatars value={item.address} style="shape" size={20} />
+                                    <span className="px-2 flex-grow">{cutOut(item.address, 6, 6)}</span>
+                                    <span className="px-2">{item.reply_status ? item.reply_status : ''}</span>
+                                  </div>
+                                )
+                              })}
                           </div>
                         </div>
                       </div>
