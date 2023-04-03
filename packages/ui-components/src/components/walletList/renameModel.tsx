@@ -5,7 +5,6 @@ import { Fragment, useState } from 'react'
 type Props={
     isOpen:boolean,
     closeModal:()=>void,
-    openModal:()=>void,
     address:string
 }
 const RenameModel:FC<Props> = ({isOpen,closeModal,address}) => {
