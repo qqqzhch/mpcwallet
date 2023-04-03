@@ -11,10 +11,26 @@ import CopyAddress from '@monorepo/ui-components/src/components/mpcinfo/copyAddr
 import { Link } from 'react-router-dom'
 import ScanUrl from '@monorepo/ui-components/src/components/mpcinfo/scanUrl'
 import { Tooltip } from 'react-tooltip'
+import { useEffect } from 'react'
+import { useUserStore } from '@monorepo/ui-components'
 
 const ApproveState = () => {
   const createGroup = useAppStore(state => state.createGroup)
+  const setAddressName = useUserStore(state=>state.setAddressName)
+  const getAddressName = useUserStore(state=>state.getAddressName)
   const { data } = useCreateWalletStatus()
+  const resetCreateGroupAdmin = useAppStore(state => state.resetCreateGroupAdmin)
+  useEffect(()=>{
+    if(data&&data.status==1){
+      // data.mpcAddress
+      setAddressName(data.mpcAddress,createGroup.walletname)
+      // resetCreateGroupAdmin()
+    }
+
+  },[data,setAddressName,createGroup.walletname,resetCreateGroupAdmin])
+
+
+
   return (
     <div className="flex flex-col lg:flex-row  xl:mx-40 2xl:mx-80 ">
       <div className="felx flex-col w-full xl:w-2/3 p-10 bg-white">
@@ -52,6 +68,10 @@ const ApproveState = () => {
             <span className="leading-7 text-sm text-gray-600 inline-block w-40">Mpc Type:</span>
             {createGroup.keytype}
           </div> */}
+          <div className="relative mb-4">
+            <div className="leading-7 text-sm text-gray-600 inline-block w-40">Wallet Name:</div>
+            <div>{createGroup.walletname||getAddressName(data?.mpcAddress)}</div>
+          </div>
           <div className="relative mb-4 flex  flex-col">
             <span className="leading-7 text-sm text-gray-600 inline-block w-40 ">Vault address:</span>
             <Tooltip id="tooltip" />

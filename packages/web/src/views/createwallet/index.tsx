@@ -14,11 +14,11 @@ const CreatWallet: FC = props => {
   const { account } = useWeb3React()
 
   const createGroup = useAppStore(state => state.createGroup)
-  // const [walletnameerror, setwalletnameerror] = useState<string>('')
+  const [walletnameerror, setwalletnameerror] = useState<string>('')
   // const [keytypeerror, setkeytypeerror] = useState<string>('')
   const [adminserror, setadminserror] = useState<string>('')
 
-  // const setcreateGroupWalletName = useAppStore(state => state.setcreateGroupWalletName)
+  const setcreateGroupWalletName = useAppStore(state => state.setcreateGroupWalletName)
   const addcreateGroupAdmin = useAppStore(state => state.addcreateGroupAdmin)
   const editcreateGroupAdmin = useAppStore(state => state.editcreateGroupAdmin)
   const resetCreateGroupAdmin = useAppStore(state => state.resetCreateGroupAdmin)
@@ -39,10 +39,10 @@ const CreatWallet: FC = props => {
   }
 
   const formvaValidation = useCallback(() => {
-    // if (createGroup.walletname == '') {
-    //   setwalletnameerror('wallet name required')
-    //   return
-    // }
+    if (createGroup.walletname == '') {
+      setwalletnameerror('wallet name required')
+      return
+    }
     // if (createGroup.keytype == '') {
     //   setkeytypeerror('keytype required')
     //   return
@@ -71,7 +71,7 @@ const CreatWallet: FC = props => {
     }
 
     navigate('/preview')
-  }, [navigate, createGroup.admins])
+  }, [navigate, createGroup.admins,createGroup.walletname])
 
   useEffect(() => {
     // if (createGroup.walletname !== '') {
@@ -102,7 +102,7 @@ const CreatWallet: FC = props => {
         </div>
         <div className="mb-4 pb-4  border-b  px-4">
           <div className=" bg-white flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0">
-            {/* <div className="relative mb-4">
+            <div className="relative mb-4">
               <label htmlFor="walletname" className="leading-7 text-sm text-gray-600">
                 Wallet Name
               </label>
@@ -117,7 +117,7 @@ const CreatWallet: FC = props => {
                 className="w-full  rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
               ></input>
               <div className="text-red-400">{walletnameerror ? walletnameerror : null}</div>
-            </div> */}
+            </div>
 
             {/* <div className="relative mb-4">
               <label className="leading-7 text-sm text-gray-600">MpcType</label>

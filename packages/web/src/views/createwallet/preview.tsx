@@ -13,10 +13,10 @@ const Preview = () => {
           <p>Please review the details of your newly created Vault and sign with your connected wallet.</p>
         </div>
         <div className="mb-4 pb-4  border-b  px-4">
-          {/* <div className="relative mb-4">
-            <span className="leading-7 text-sm text-gray-600 inline-block w-40 ">Wallet Name:</span>
-            {createGroup.walletname}
-          </div> */}
+          <div className="relative mb-4">
+            <div className="leading-7 text-sm text-gray-600 inline-block w-40 ">Wallet Name:</div>
+            <div>{createGroup.walletname} </div>
+          </div>
           {/* <div className="relative mb-4">
             <span className="leading-7 text-sm text-gray-600 inline-block w-40">Mpc Type:</span>
             {createGroup.keytype}
