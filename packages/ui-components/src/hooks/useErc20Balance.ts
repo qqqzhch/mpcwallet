@@ -22,7 +22,7 @@ export default function useErc20Balance(mpcAddress: string | undefined, contract
         const contract = new Contract(contractAddress, erc20ABI, library)
         const result: BigNumber = await contract.balanceOf(mpcAddress)
         setBalance(result.toString())
-        library.on('newBlockHeaders', () => {
+        library.on('block', () => {
           run()
         })
       }
@@ -31,7 +31,7 @@ export default function useErc20Balance(mpcAddress: string | undefined, contract
 
     return () => {
       if (library) {
-        library.off('newBlockHeaders')
+        library.off('block')
       }
     }
   }, [mpcAddress, library, contractAddress])
