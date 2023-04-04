@@ -13,6 +13,7 @@ import ScanUrl from '@monorepo/ui-components/src/components/mpcinfo/scanUrl'
 import { Tooltip } from 'react-tooltip'
 import { useEffect } from 'react'
 import { useUserStore } from '@monorepo/ui-components'
+import AddressName from '@monorepo/ui-components/src/components/walletList/addressName'
 
 const ApproveState = () => {
   const createGroup = useAppStore(state => state.createGroup)
@@ -99,7 +100,9 @@ const ApproveState = () => {
           {data?.list.map((item, index) => {
             return (
               <div className="relative mb-4" key={item.User_account}>
-                <div className="leading-7 text-sm text-gray-600  w-40">Owner address {index + 1}:</div>
+                <div className="leading-7 text-sm text-gray-600  w-40">
+                  <AddressName address={item.User_account}>Owner address {index + 1}:</AddressName>
+                </div>
                 <div className="break-all ">{item.User_account}</div>
                 {/* <div className="leading-7 text-sm text-gray-600  w-40">Reply status:</div>
                 <div className="break-all">{item.Reply_status}</div>

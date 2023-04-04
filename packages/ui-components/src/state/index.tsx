@@ -58,7 +58,7 @@ export interface AppState {
   addcreateGroupAdmin: () => void
   removecreateGroupAdminByindex: (index: number) => void
   setcreateGroupWalletName: (name: string) => void
-  editcreateGroupAdmin: (index: number, name: string) => void
+  editcreateGroupAdmin: (index: number, address: string, name?: string) => void
   setpollingPubKey: (pollingPubKey: PollingPubKey) => void
   setWalletApproveList: (list: Array<TxApprove>) => void
   hidenWalletApprove: (item: TxApprove) => void
@@ -172,9 +172,11 @@ const createMyStore = (state: typeof intialState = intialState) => {
                 state.createGroup.keyid = ''
               })
             },
-            editcreateGroupAdmin: (index: number, address: string) => {
+            editcreateGroupAdmin: (index: number, address: string, name?: string) => {
               set(state => {
                 state.createGroup.admins[index].address = address
+                state.createGroup.admins[index].name = name || ''
+
                 state.createGroup.keyid = ''
               })
             },

@@ -9,6 +9,7 @@ import { useCallback } from 'react'
 import { useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { ethers } from 'ethers'
+import { MinusIcon } from '@heroicons/react/20/solid'
 
 const CreatWallet: FC = props => {
   const { account } = useWeb3React()
@@ -27,14 +28,14 @@ const CreatWallet: FC = props => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (account) editcreateGroupAdmin(0, account)
+    if (account) editcreateGroupAdmin(0, account, createGroup.admins[0].name)
     setcreateGroupKeytype('EC256K1')
-  }, [editcreateGroupAdmin, account, setcreateGroupKeytype])
+  }, [editcreateGroupAdmin, account, setcreateGroupKeytype, createGroup.admins])
 
   function reset() {
     if (account) {
       resetCreateGroupAdmin()
-      editcreateGroupAdmin(0, account)
+      editcreateGroupAdmin(0, account, createGroup.admins[0].name)
     }
   }
 
@@ -106,16 +107,20 @@ const CreatWallet: FC = props => {
               <label htmlFor="walletname" className="leading-7 text-sm text-gray-600">
                 Wallet Name
               </label>
-              <input
-                type="text"
-                id="walletname"
-                name="walletname"
-                value={createGroup.walletname}
-                onChange={e => {
-                  setcreateGroupWalletName(e.target.value)
-                }}
-                className="w-full  rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-              ></input>
+              <div className=" flex">
+                <input
+                  type="text"
+                  id="walletname"
+                  name="walletname"
+                  value={createGroup.walletname}
+                  onChange={e => {
+                    setcreateGroupWalletName(e.target.value)
+                  }}
+                  className=" flex-1  rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                ></input>
+                <MinusIcon className="w-8 h-8 opacity-0"></MinusIcon>
+              </div>
+
               <div className="text-red-400">{walletnameerror ? walletnameerror : null}</div>
             </div>
 
