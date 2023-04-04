@@ -28,11 +28,11 @@ export default function useNativeBalance(mpcAddress: string | undefined) {
       }
     }
     run()
-    library.on('newBlockHeaders', () => {
+    library.on('block', () => {
       run()
     })
     return () => {
-      library.off('newBlockHeaders')
+      library.off('block')
     }
   }, [mpcAddress, library, ChainInfo])
 

@@ -20,11 +20,11 @@ async function fetcher(KeyId: string | null | undefined): Promise<string | undef
 //0:pending , 1 SUCCESS , 2 FAIL, 3 Timeout, 4 Tx-Pending, 5 Tx-Confirmed, 6 Tx-Failed
 
 const statusCode: { [Key: string]: string } = {
-  '0': 'pending',//Request required
+  '0': 'pending', //Request required
   '1': 'SUCCESS',
   '2': 'FAIL',
   '3': 'Timeout',
-  '4': 'Tx-Pending',// Request required
+  '4': 'Tx-Pending', // Request required
   '5': 'Tx-Confirmed',
   '6': 'Tx-Failed',
   '7': 'Tx-NotValid'
