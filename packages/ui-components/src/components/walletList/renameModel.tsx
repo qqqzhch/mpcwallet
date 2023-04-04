@@ -4,17 +4,19 @@ import { Fragment } from 'react'
 import { useForm } from 'react-hook-form'
 import { useUserStore } from '../..'
 import { useToasts } from 'react-toast-notifications'
+import { Else, If, Then } from 'react-if'
 
 type Props = {
   isOpen: boolean
   closeModal: () => void
   address: string | undefined
+  isVault: boolean
 }
 type formData = {
   address: string
   name: string
 }
-const RenameModel: FC<Props> = ({ isOpen, closeModal, address }) => {
+const RenameModel: FC<Props> = ({ isOpen, closeModal, address, isVault }) => {
   const {
     register,
     handleSubmit,
@@ -73,7 +75,12 @@ const RenameModel: FC<Props> = ({ isOpen, closeModal, address }) => {
                   <div className="mt-6">
                     <form onSubmit={handleSubmit(onSubmit)}>
                       <div className="mb-6">
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Vault Address</label>
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                          <If condition={isVault}>
+                            <Then>Vault Address</Then>
+                            <Else>Owner Address</Else>
+                          </If>
+                        </label>
                         <input
                           readOnly
                           disabled
@@ -82,7 +89,12 @@ const RenameModel: FC<Props> = ({ isOpen, closeModal, address }) => {
                         ></input>
                       </div>
                       <div className="mb-6">
-                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Vault Name</label>
+                        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                          <If condition={isVault}>
+                            <Then>Vault Name</Then>
+                            <Else>Owner Name</Else>
+                          </If>
+                        </label>
                         <input
                           {...register('name', { required: true, maxLength: 20 })}
                           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

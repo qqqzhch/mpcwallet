@@ -74,10 +74,11 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
               <div className="flex flex-row  items-center">
                 <Avvvatars value={address ? address : ''} style="shape" size={40} />
                 <div>
-                <div className="break-all pl-2 text-start"><AddressName address={address}></AddressName></div>
-                <div className="break-all pl-2">{address ? cutOut(address, 6, 6) : ''}</div>
+                  <div className="break-all pl-2 text-start">
+                    <AddressName address={address}></AddressName>
+                  </div>
+                  <div className="break-all pl-2">{address ? cutOut(address, 6, 6) : ''}</div>
                 </div>
-                
               </div>
             </div>
             <div>
@@ -89,11 +90,11 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
                   <div className="flex flex-row items-center">
                     <Avvvatars value={userTxInputShow?.to ? userTxInputShow?.to : ''} style="shape" size={40} />
                     <div>
-                      
-                      <div className="break-all pl-2 text-start"><AddressName address={userTxInputShow?.to}></AddressName></div>
+                      <div className="break-all pl-2 text-start">
+                        <AddressName address={userTxInputShow?.to}></AddressName>
+                      </div>
                       <div className="break-all pl-2">{userTxInputShow?.to ? cutOut(userTxInputShow?.to, 6, 6) : ''}</div>
                     </div>
-                    
                   </div>
                 </Then>
                 <Else>

@@ -18,6 +18,7 @@ const Setup: FC = () => {
   const mpcGroupAccount = useAccount(address)
 
   const [isOpen, setIsOpen] = useState(false)
+  const [isVault, setIsVault] = useState(true)
 
   const getThreshold = useCallback(() => {
     if (mpcGroupAccount !== undefined) {
@@ -32,19 +33,51 @@ const Setup: FC = () => {
       all: ''
     }
   }, [mpcGroupAccount])
-  const openModel = useCallback((addr: string) => {
+  const openModel = useCallback((addr: string, isVault: boolean) => {
     setNeedEditAddress(addr)
     setIsOpen(true)
+    setIsVault(isVault)
   }, [])
 
   return (
     <div className="flex flex-col gap-2   mb-4  ">
+      <div className="flex flex-col sm:flex-row bg-gray-50 dark:bg-gray-800 rounded">
+        <div className="w-full xl:w-1/3 p-8 ">
+          <h1 className=" text-2xl font-medium">Vault info</h1>
+        </div>
+        <div className="w-full xl:w-2/3 flex flex-col p-8">
+          <div className="p-4 ">
+            <When condition={address !== undefined}>
+              <div className=" flex  justify-between">
+                <span>
+                  Name:<AddressName address={address || ''}></AddressName>
+                </span>
+                <span className="w-10">
+                  <button
+                    onClick={() => {
+                      openModel(address || '', true)
+                    }}
+                    type="button"
+                    className="text-blue-700  bg-gray-200
+      hover:bg-blue-700 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 
+      font-medium rounded-lg text-sm   p-1.5 text-center inline-flex items-center mr-2"
+                  >
+                    <PencilSquareIcon className=" h-4 w-4 "></PencilSquareIcon>
+                  </button>
+                </span>
+              </div>
+            </When>
+
+            <div className="break-words">Address:{address}</div>
+          </div>
+        </div>
+      </div>
       <div className="flex flex-col xl:flex-row bg-gray-50 dark:bg-gray-800 rounded">
         <div className=" w-full xl:w-1/3 p-8 ">
-          <h1 className=" text-2xl  font-medium">Manage Vault owners</h1>
+          <h1 className=" text-2xl  font-medium">Manage the Vault</h1>
         </div>
         <div className=" w-full xl:w-2/3 flex flex-col p-8">
-          <div>View current owners. Owner names are only stored locally and will never be shared with us or any third parties.</div>
+          <div>You can change the name of the Vault and names of the owners. These names are only stored locally in your brower. </div>
           <div className="flex flex-col  mt-4">
             {list &&
               list.map((item, index) => {
@@ -62,7 +95,7 @@ const Setup: FC = () => {
                           <span className="w-10">
                             <button
                               onClick={() => {
-                                openModel(item.User_account)
+                                openModel(item.User_account, false)
                               }}
                               type="button"
                               className="text-blue-700  bg-gray-200
@@ -117,6 +150,7 @@ const Setup: FC = () => {
       <When condition={needEditAddress !== undefined}>
         <RenameModel
           isOpen={isOpen}
+          isVault={isVault}
           closeModal={() => {
             setIsOpen(false)
           }}

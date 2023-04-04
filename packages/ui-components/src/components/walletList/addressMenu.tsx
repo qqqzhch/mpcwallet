@@ -47,6 +47,7 @@ const AddressMenu: FC<walletaccount> = ({ Mpc_address }) => {
       </Menu>
       <RenameModel
         isOpen={isOpen}
+        isVault={true}
         closeModal={() => {
           setIsOpen(false)
         }}

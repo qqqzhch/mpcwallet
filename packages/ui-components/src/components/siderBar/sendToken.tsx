@@ -364,13 +364,12 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
                             </label>
                             <div className="flex flex-row   items-center ">
                               <Avvvatars value={address ? address : ''} style="shape" size={40} />
-                              <div className='flex-1 flex flex-col '>
-                              <div className="break-all pl-2"><AddressName address={address}></AddressName></div>
-                              <div className="break-all pl-2">{address ? cutOut(address, 12, 12) : ''}</div>
-                              
-                              
+                              <div className="flex-1 flex flex-col ">
+                                <div className="break-all pl-2">
+                                  <AddressName address={address}></AddressName>
+                                </div>
+                                <div className="break-all pl-2">{address ? cutOut(address, 12, 12) : ''}</div>
                               </div>
-                              
                             </div>
                           </div>
                           <div className="mb-6">
