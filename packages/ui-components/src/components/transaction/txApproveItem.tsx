@@ -467,7 +467,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                         <Then>
                           <div className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 text-center justify-center">
                             <img className="inline w-4 h-4 mr-3 text-white animate-spin" src={loadingiImg}></img>
-                            loading...
+                            Signing...
                           </div>
                         </Then>
                         <Else>
@@ -492,10 +492,12 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                         </Else>
                       </If>
                     </When>
-                    <When condition={showBtn == false && txStatus && txStatus.data.code !== undefined && ['5', '6', '7'].includes(txStatus.data.code) == false}>
+                    <When
+                      condition={showBtn == false && txStatus && txStatus.data.code !== undefined && ['5', '6', '7', '3'].includes(txStatus.data.code) == false}
+                    >
                       <div className="flex items-center justify-center   bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-                        <div className="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">
-                          loading...
+                        <div className="w-full py-2.5 px-5 text-sm font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">
+                          In process...
                         </div>
                       </div>
                     </When>
