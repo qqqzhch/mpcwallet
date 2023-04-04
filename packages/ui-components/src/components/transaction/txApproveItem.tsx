@@ -111,10 +111,10 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
         if (status == undefined) {
           return
         }
-
+        const reply_status = status ? (status.Reply_status == '' ? 'pending' : status.Reply_status.toLowerCase()) : undefined
         list.push({
           address: item.User_account,
-          reply_status: status ? (status.Reply_status == '' ? 'pending' : status.Reply_status) : undefined,
+          reply_status: reply_status == 'timeout' ? 'not participate' : reply_status,
           signed: status ? status.Signed : undefined,
           status: status ? status.Status : undefined
         })
@@ -292,11 +292,16 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                               <If condition={tx.data == '0x'}>
                                 <Then>
                                   Sent {tx.originValue} {tx.name} to
-                                  <div className=" flex items-center p-1 ">
-                                    <span className=" ">
+                                  <div className=" flex flex-row items-center p-1 ">
+                                    <span className="mr-2 ">
                                       <Avvvatars value={tx.to} style="shape" size={30} />
                                     </span>
-                                    <span className=" p-2 break-all ">{tx.to}</span>
+                                    <div>
+                                      <div className=" pl-2 break-all ">
+                                        <AddressName address={tx.to}></AddressName>
+                                      </div>
+                                      <span className=" pl-2 break-all ">{tx.to}</span>
+                                    </div>
                                   </div>
                                 </Then>
                                 <Else>
@@ -307,17 +312,25 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                                   <When condition={txtokenTxInfo !== undefined && txtokenTxInfo[index] !== undefined}>
                                     <div>
                                       <When condition={txtokenTxInfo && txtokenTxInfo[index] && txtokenTxInfo[index].to != ''}>
-                                        <div className=" inline-flex items-center flex-wrap">
-                                          To:
-                                          <span className=" break-words    break-all ">{txtokenTxInfo[index] && txtokenTxInfo[index].to}</span>
-                                          <span className=" ">
+                                        <div className="flex items-center flex-wrap">
+                                          <span className=" w-20">To:</span>
+                                          <div className=" flex flex-col">
+                                            <span className=" break-words    break-all ">
+                                              <AddressName address={txtokenTxInfo[index] && txtokenTxInfo[index].to}></AddressName>
+                                            </span>
+                                            <span className=" break-words    break-all  ">{txtokenTxInfo[index] && txtokenTxInfo[index].to}</span>
+                                            {/* <span className=" ">
                                             <Avvvatars value={txtokenTxInfo[index] && txtokenTxInfo[index].to} style="shape" size={20} />
-                                          </span>
+                                          </span> */}
+                                          </div>
                                         </div>
                                       </When>
                                       <When condition={(txtokenTxInfo && txtokenTxInfo[index] && txtokenTxInfo[index].tokenAmount != '') || txAmount !== ''}>
-                                        <div>
-                                          Amount:{txtokenTxInfo[index] && txtokenTxInfo[index].tokenAmount} {txAmount}
+                                        <div className=" flex items-center flex-wrap">
+                                          <span className=" w-20">Amount:</span>
+                                          <span className=" break-words    break-all ">
+                                            {txtokenTxInfo[index] && txtokenTxInfo[index].tokenAmount} {txAmount}
+                                          </span>
                                         </div>
                                       </When>
                                     </div>

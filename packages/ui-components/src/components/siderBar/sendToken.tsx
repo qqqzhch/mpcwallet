@@ -29,6 +29,8 @@ import useAsserts from '../../hooks/useAssets'
 import useNativeBalance from '../../hooks/useNativeBalance'
 import useErc20Balance from '../../hooks/useErc20Balance'
 
+import AddressName from '../walletList/addressName'
+
 // const assertList: Array<assertType> = [
 //   { name: 'eth', img: metamask, decimals: 18 },
 //   { name: 'weth', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e', decimals: 18 },
@@ -362,7 +364,12 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
                             </label>
                             <div className="flex flex-row   items-center ">
                               <Avvvatars value={address ? address : ''} style="shape" size={40} />
-                              <div className="break-all pl-2">{address ? cutOut(address, 12, 12) : ''}</div>
+                              <div className="flex-1 flex flex-col ">
+                                <div className="break-all pl-2">
+                                  <AddressName address={address}></AddressName>
+                                </div>
+                                <div className="break-all pl-2">{address ? cutOut(address, 12, 12) : ''}</div>
+                              </div>
                             </div>
                           </div>
                           <div className="mb-6">
