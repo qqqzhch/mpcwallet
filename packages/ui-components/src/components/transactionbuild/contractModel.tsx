@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom'
 import { useWeb3React } from '@web3-react/core'
 import useChainInfo from '../../hooks/useChainInfo'
 import { BigNumber } from 'ethers'
+// import { BigNumber, ethers } from 'ethers'
 import { useGetTxMsgHash, useTransactionSigner } from '../../hooks/useSigns'
 import { rpclist } from '../../constants/rpcConfig'
 import { useToasts } from 'react-toast-notifications'
@@ -81,25 +82,32 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
         const txforestimateGas = {
           from: userTxInputReview.from,
           to: userTxInputReview.to,
-          data: userTxInputReview.assert?.contractaddress ? userTxInputReview.data : '',
-          value: userTxInputReview.assert?.contractaddress ? '0x' : userTxInputReview.value
+          data: assert?.contractaddress ? userTxInputReview.data : '',
+          value: userTxInputReview.value
         }
         setIsShow(true)
-        const gasprise: BigNumber = await library.getGasPrice()
-        const gasEstimate: BigNumber = await library.estimateGas(txforestimateGas)
-        const gasEstimateMore = calculateGasMargin(gasEstimate)
-        setGas({ gasLimit: gasEstimateMore.toString(), gasPrise: gasprise.toString() })
+        try {
+          const gasprise: BigNumber = await library.getGasPrice()
+          const gasEstimate: BigNumber = await library.estimateGas(txforestimateGas)
+          // const gasEstimate: BigNumber =BigNumber.from(ethers.utils.parseUnits('0.001',"gwei"))
+          // console.log(gasEstimate_.toString(),'gasEstimate_')
+          const gasEstimateMore = calculateGasMargin(gasEstimate)
+          setGas({ gasLimit: gasEstimateMore.toString(), gasPrise: gasprise.toString() })
 
-        const txinfoInput: Unsigedtx = {
-          ...userTxInputReview,
-          gas: gasEstimateMore.toNumber(),
-          gasPrice: gasprise.toNumber()
+          const txinfoInput: Unsigedtx = {
+            ...userTxInputReview,
+            gas: gasEstimateMore.toNumber(),
+            gasPrice: gasprise.toNumber()
+          }
+          setUsertTxInputReviewnew(txinfoInput)
+        } catch (error: unknown) {
+          const err = error as Error
+          addToast(err.message, { appearance: 'error' })
         }
-        setUsertTxInputReviewnew(txinfoInput)
       }
     }
     run()
-  }, [userTxInputReview, library, isOpen])
+  }, [userTxInputReview, library, isOpen, addToast, assert?.contractaddress])
   useEffect(() => {
     if (isOpen == false) {
       setIsShow(false)

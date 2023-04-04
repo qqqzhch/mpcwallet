@@ -16,7 +16,7 @@ export function formatUnits(chainId: number | undefined, value: string | number 
     const num = ethers.utils.formatUnits(value.toString(), chainInfo?.nativeCurrency.decimals)
     const result = parseFloat(num)
 
-    return result.toFixed(4) + ' ' + chainInfo?.nativeCurrency.symbol
+    return result.toFixed(6) + ' ' + chainInfo?.nativeCurrency.symbol
   } else {
     return '...'
   }
@@ -27,7 +27,7 @@ export function formatUnitsErc20(value: string | number | undefined, symbol: str
     const num = ethers.utils.formatUnits(value.toString(), decimals)
     const result = parseFloat(num)
 
-    return result.toFixed(4) + ' ' + symbol
+    return result.toFixed(6) + ' ' + symbol
   } else {
     return '...'
   }
