@@ -1,10 +1,20 @@
-import { useAppStore } from '@monorepo/ui-components'
+import { useAppStore, useUserStore } from '@monorepo/ui-components'
 import { useNavigate } from 'react-router-dom'
 import CreateWalletBtn from '@monorepo/ui-components/src/components/forms/CreateWalletBtn'
+import { Else, If, Then } from 'react-if'
+import { useEffect } from 'react'
 
 const Preview = () => {
   const createGroup = useAppStore(state => state.createGroup)
   const navigate = useNavigate()
+  const setAddressName = useUserStore(state => state.setAddressName)
+  useEffect(() => {
+    createGroup.admins.forEach(item => {
+      if (item.name !== undefined && item.name !== '') {
+        setAddressName(item.address, item.name)
+      }
+    })
+  }, [createGroup, setAddressName])
   return (
     <div className="flex flex-col lg:flex-row  xl:mx-40 2xl:mx-80 ">
       <div className="felx flex-col w-full xl:w-2/3 p-10 bg-white">
@@ -14,7 +24,7 @@ const Preview = () => {
         </div>
         <div className="mb-4 pb-4  border-b  px-4">
           <div className="relative mb-4">
-            <div className="leading-7 text-sm text-gray-600 inline-block w-40 ">Wallet Name:</div>
+            <div className="leading-7 text-sm text-gray-600 inline-block w-40 ">Vault Name:</div>
             <div>{createGroup.walletname} </div>
           </div>
           {/* <div className="relative mb-4">
@@ -24,7 +34,12 @@ const Preview = () => {
           {createGroup.admins.map((item, index) => {
             return (
               <div className="relative mb-4" key={item.key}>
-                <div className="leading-7 text-sm text-gray-600  w-40">Owner address {index + 1}:</div>
+                <div className="leading-7 text-sm text-gray-600  w-40">
+                  <If condition={item.name !== undefined && item.name !== ''}>
+                    <Then>{item.name}:</Then>
+                    <Else>Owner address {index + 1}:</Else>
+                  </If>
+                </div>
                 <div className="break-all">{item.address}</div>
               </div>
             )
