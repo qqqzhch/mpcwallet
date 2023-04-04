@@ -48,7 +48,7 @@ const WalletList: FC = props => {
         className={
           showwalletMobile
             ? 'block sm:block   min-h-screen  max-h-screen  overflow-x-hidden  overflow-y-auto'
-            : 'hidden sm:block min-h-[90%] overflow-x-hidden overflow-y-auto'
+            : 'hidden sm:block min-h-[90%] max-h-screen overflow-x-hidden overflow-y-auto'
         }
       >
         {/* <When condition={isLoading}>

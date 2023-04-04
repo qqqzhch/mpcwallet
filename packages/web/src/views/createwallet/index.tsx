@@ -41,7 +41,7 @@ const CreatWallet: FC = props => {
 
   const formvaValidation = useCallback(() => {
     if (createGroup.walletname == '') {
-      setwalletnameerror('wallet name required')
+      setwalletnameerror('Vault name required')
       return
     }
     // if (createGroup.keytype == '') {
@@ -105,7 +105,7 @@ const CreatWallet: FC = props => {
           <div className=" bg-white flex flex-col md:ml-auto w-full md:py-8 mt-8 md:mt-0">
             <div className="relative mb-4">
               <label htmlFor="walletname" className="leading-7 text-sm text-gray-600">
-                Wallet Name
+                Vault Name
               </label>
               <div className=" flex">
                 <input
