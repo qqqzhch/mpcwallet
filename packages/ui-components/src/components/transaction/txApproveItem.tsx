@@ -111,10 +111,10 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
         if (status == undefined) {
           return
         }
-
+        const reply_status = status ? (status.Reply_status == '' ? 'pending' : status.Reply_status.toLowerCase()) : undefined
         list.push({
           address: item.User_account,
-          reply_status: status ? (status.Reply_status == '' ? 'pending' : status.Reply_status) : undefined,
+          reply_status: reply_status == 'timeout' ? 'not participate' : reply_status,
           signed: status ? status.Signed : undefined,
           status: status ? status.Status : undefined
         })
