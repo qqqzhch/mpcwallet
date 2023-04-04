@@ -30,7 +30,7 @@ export default function useAssetListBalance(mpcAddress: string | undefined, list
         }).then(balances => {
           setBalance(balances)
         })
-        library.on('newBlockHeaders', () => {
+        library.on('block', () => {
           run()
         })
       }
@@ -39,7 +39,7 @@ export default function useAssetListBalance(mpcAddress: string | undefined, list
 
     return () => {
       if (library) {
-        library.off('newBlockHeaders')
+        library.off('block')
       }
     }
   }, [mpcAddress, library, list, chainId])

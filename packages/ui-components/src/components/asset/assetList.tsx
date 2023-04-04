@@ -8,6 +8,7 @@ import { formatUnitsErc20 } from '../../utils/index'
 import SendToken from '../siderBar/sendToken'
 
 import { assertType } from '../../utils/buildMpcTx'
+import { Tooltip } from 'react-tooltip'
 
 const AssetList: FC = () => {
   const { data: assertList } = useAsserts()
@@ -33,11 +34,14 @@ const AssetList: FC = () => {
 
   return (
     <>
+      <Tooltip id="my-tooltip" />
       {assertList.map((item, index) => {
         return (
           <div key={index} className="flex border-b border-opacity-20 border-gray-300  group">
             <div className="flex w-32 px-2 py-3 sm:p-3 items-center">
-              <p>{item.name}</p>
+              <p data-tooltip-content={item.contractaddress} data-tooltip-id="my-tooltip" data-tooltip-place="right">
+                {item.name}
+              </p>
             </div>
             <div className="flex-1 flex px-2 py-3 truncate sm:p-3 sm:w-auto items-center">
               {formatUnitsErc20(getBalance(item.contractaddress), item.name, item.decimals)}

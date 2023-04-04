@@ -196,14 +196,16 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
         const txforestimateGas = {
           from: unsigedtx.from,
           to: unsigedtx.to,
-          data: unsigedtx.assert?.contractaddress ? unsigedtx.data : '',
-          value: unsigedtx.assert?.contractaddress ? '0x' : unsigedtx.value
+          data: selectedAsset?.contractaddress ? unsigedtx.data : '',
+          value: selectedAsset?.contractaddress ? '0x0' : unsigedtx.value
         }
         // console.log('gas')
 
         if (gas.gasCustom == undefined || gas.gasCustom == false) {
           try {
             const gasEstimate: BigNumber = await library.estimateGas(txforestimateGas)
+            // const gasEstimate_: BigNumber =BigNumber.from(ethers.utils.parseUnits('0.001',"gwei"))
+            // console.log(gasEstimate_.toString(),'gasEstimate_')
             const gasprise: BigNumber = await library.getGasPrice()
             const gasEstimateMore = calculateGasMargin(gasEstimate)
 
@@ -217,13 +219,14 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
               setUsertTxInputReview(txinfoInput)
             }
           } catch (error: unknown) {
+            console.info(error)
             return
           }
         }
       }
     }
     run()
-  }, [unsigedtx, library, chainType, gas.gasCustom])
+  }, [unsigedtx, library, chainType, gas.gasCustom, selectedAsset?.contractaddress])
 
   useEffect(() => {
     const run = async () => {

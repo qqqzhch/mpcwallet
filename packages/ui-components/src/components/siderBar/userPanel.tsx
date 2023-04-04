@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { cutOut } from '../../utils'
 // import { When } from 'react-if'
@@ -30,8 +30,13 @@ const UserPanel: FC = () => {
   const togglesideBar = useAppStore(state => state.togglesideBar)
   const showsideBar = useAppStore(state => state.sideBar)
   const nativeBalance = useNativeBalance(address)
+  const [formatBalance, setFormatBalance] = useState('')
 
   const getAddressName = useUserStore(state => state.getAddressName)
+  useEffect(() => {
+    const data = formatUnits(chainId, nativeBalance.balance)
+    setFormatBalance(data)
+  }, [nativeBalance, chainId])
 
   return (
     <>
@@ -43,7 +48,7 @@ const UserPanel: FC = () => {
         <div className=" flex-1  flex flex-col text-sm">
           <div className=" break-all  ">{getAddressName(address)}</div>
           <div className=" break-all ">{address ? cutOut(address, 8, 8) : ''}</div>
-          <div>{formatUnits(chainId, nativeBalance.balance)}</div>
+          <div>{formatBalance}</div>
         </div>
       </div>
       <div className="pl-2.5 mb-5 flex flex-row justify-between ">

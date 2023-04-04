@@ -37,7 +37,8 @@ export function buidTransactionJson(chainType: string, chainId: number, data: Tx
   if (havecontractaddress && data.assert?.contractaddress !== undefined) {
     const erc20Contract = new ethers.utils.Interface(ERC20ABI)
     //  erc20Contract.transfer(data.from,data.to,formatToWei(data.originValue,18))
-    encodeFunctionData = erc20Contract.encodeFunctionData('transferFrom', [data.from, data.to, formatToWei(data.originValue, data.assert.decimals)])
+    encodeFunctionData = erc20Contract.encodeFunctionData('transfer', [data.to, formatToWei(data.originValue, data.assert.decimals)])
+    // encodeFunctionData = erc20Contract.encodeFunctionData('transferFrom', [data.from, data.to, formatToWei(data.originValue, data.assert.decimals)])
   }
 
   return {
