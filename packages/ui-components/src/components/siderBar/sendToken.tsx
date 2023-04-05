@@ -30,6 +30,7 @@ import useNativeBalance from '../../hooks/useNativeBalance'
 import useErc20Balance from '../../hooks/useErc20Balance'
 
 import AddressName from '../walletList/addressName'
+import { useWeb3SignerOnly } from '../../hooks/useWeb3SignerOnly'
 
 // const assertList: Array<assertType> = [
 //   { name: 'eth', img: metamask, decimals: 18 },
@@ -84,6 +85,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
   const { data: assertList } = useAsserts()
   const { balance: NativeBalance } = useNativeBalance(address)
   const { balance: erc20Balance } = useErc20Balance(address, selectedAsset?.contractaddress)
+  const readSigner = useWeb3SignerOnly()
 
   const {
     register,
@@ -192,7 +194,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
 
   useEffect(() => {
     const run = async () => {
-      if (unsigedtx != undefined) {
+      if (unsigedtx != undefined && readSigner !== undefined) {
         const txforestimateGas = {
           from: unsigedtx.from,
           to: unsigedtx.to,
@@ -200,13 +202,14 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
           value: selectedAsset?.contractaddress ? '0x0' : unsigedtx.value
         }
         // console.log('gas')
+        // console.log(txforestimateGas)
 
         if (gas.gasCustom == undefined || gas.gasCustom == false) {
           try {
-            const gasEstimate: BigNumber = await library.estimateGas(txforestimateGas)
+            const gasEstimate: BigNumber = await readSigner.estimateGas(txforestimateGas)
             // const gasEstimate_: BigNumber =BigNumber.from(ethers.utils.parseUnits('0.001',"gwei"))
             // console.log(gasEstimate_.toString(),'gasEstimate_')
-            const gasprise: BigNumber = await library.getGasPrice()
+            const gasprise: BigNumber = await readSigner.getGasPrice()
             const gasEstimateMore = calculateGasMargin(gasEstimate)
 
             setGas({ gasLimit: gasEstimateMore.toString(), gasPrise: gasprise.toString() })
@@ -226,7 +229,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
       }
     }
     run()
-  }, [unsigedtx, library, chainType, gas.gasCustom, selectedAsset?.contractaddress])
+  }, [unsigedtx, library, chainType, gas.gasCustom, selectedAsset?.contractaddress, readSigner])
 
   useEffect(() => {
     const run = async () => {
