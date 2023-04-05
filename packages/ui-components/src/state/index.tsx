@@ -9,6 +9,10 @@ type walletNeedApproval = {
   mpcAddress: string
   count: number
 }
+type walletNonce = {
+  mpcAddress: string
+  nonce: number
+}
 
 export interface adminInfo {
   address: string
@@ -49,6 +53,7 @@ export interface AppState {
   pollingPubKey: Array<PollingPubKey>
   sideBar: boolean
   walletMenu: boolean
+  cacheNonce: Array<walletNonce>
   increase: (by: number) => void
   setLoginAccount: (rpc: string, enode: string, adress: string, signEnode?: string) => void
   clearLoginAccount: (adress: string | null | undefined) => void
@@ -72,6 +77,9 @@ export interface AppState {
   getTxApproveByKeyID: (keyid: string | undefined) => TxApprove | undefined
   getTxApproveGroupByaccountByStatus: (status: number) => Array<walletNeedApproval>
   togglesidewalletMenu: () => void
+  setCacheNonce: (address: string, nonce: number) => void
+  increaseCacheNonce: (address: string) => void
+  getCacheNonce: (address: string | undefined) => number | undefined
 }
 
 export const intialState = {
@@ -99,7 +107,8 @@ export const intialState = {
   },
   walletAccounts: [],
   sideBar: false,
-  walletMenu: false
+  walletMenu: false,
+  cacheNonce: []
 }
 
 const createMyStore = (state: typeof intialState = intialState) => {
@@ -307,6 +316,43 @@ const createMyStore = (state: typeof intialState = intialState) => {
               })
 
               return result
+            },
+            setCacheNonce: (address: string, nonce: number) => {
+              set(state => {
+                const result = state.cacheNonce.find(item => {
+                  return item.mpcAddress.toLowerCase() == address.toLocaleLowerCase()
+                })
+                if (result !== undefined) {
+                  result.nonce = nonce
+                } else {
+                  state.cacheNonce.push({
+                    mpcAddress: address,
+                    nonce: nonce
+                  })
+                }
+              })
+            },
+            increaseCacheNonce: (address: string) => {
+              set(state => {
+                const result = state.cacheNonce.find(item => {
+                  return item.mpcAddress.toLowerCase() == address.toLocaleLowerCase()
+                })
+                if (result && result.nonce !== undefined) {
+                  result.nonce++
+                }
+              })
+            },
+            getCacheNonce: (address: string | undefined) => {
+              if (address == undefined) {
+                return undefined
+              }
+              const result = get().cacheNonce.find(item => {
+                return item.mpcAddress.toLowerCase() == address.toLocaleLowerCase()
+              })
+              if (result == undefined) {
+                return undefined
+              }
+              return result?.nonce
             }
           }),
           { name: 'app-storage-v1' }
