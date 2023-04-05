@@ -15,6 +15,7 @@ import useAccount from '../../hooks/useAccount'
 import GasModel from '../transaction/gasmodel'
 import { getChainInfo } from '../../constants/chainInfo'
 import { calculateGasMargin } from '../../utils/index'
+import { useWeb3SignerOnly } from '../../hooks/useWeb3SignerOnly'
 
 type Props = {
   isOpen: boolean
@@ -39,6 +40,7 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
   const [isgasOpen, setGasIsOpen] = useState(false)
 
   const mpcGroupAccount = useAccount(address)
+  const Web3Signer = useWeb3SignerOnly()
 
   const { addToast } = useToasts()
 
@@ -78,7 +80,7 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
 
   useEffect(() => {
     const run = async () => {
-      if (userTxInputReview && isOpen) {
+      if (userTxInputReview && isOpen && Web3Signer !== undefined) {
         const txforestimateGas = {
           from: userTxInputReview.from,
           to: userTxInputReview.to,
@@ -88,7 +90,8 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
         setIsShow(true)
         try {
           const gasprise: BigNumber = await library.getGasPrice()
-          const gasEstimate: BigNumber = await library.estimateGas(txforestimateGas)
+          const gasEstimate: BigNumber = await Web3Signer.estimateGas(txforestimateGas)
+          // console.log(txforestimateGas)
           // const gasEstimate: BigNumber =BigNumber.from(ethers.utils.parseUnits('0.001',"gwei"))
           // console.log(gasEstimate_.toString(),'gasEstimate_')
           const gasEstimateMore = calculateGasMargin(gasEstimate)
@@ -107,7 +110,7 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
       }
     }
     run()
-  }, [userTxInputReview, library, isOpen, addToast, assert?.contractaddress])
+  }, [userTxInputReview, library, isOpen, addToast, assert?.contractaddress, Web3Signer])
   useEffect(() => {
     if (isOpen == false) {
       setIsShow(false)
