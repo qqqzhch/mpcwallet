@@ -350,6 +350,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                             <div className="">Gas Limit:{tx.gas}</div>
                             <div>Gas Prise:{tx.gasPrice}</div>
                             <div>Gas Fee:{formatUnits(chainId, gasFee(tx.gas, tx.gasPrice))}</div>
+                            <div className="">Nonce:{tx.nonce}</div>
                           </div>
                         </div>
                       )

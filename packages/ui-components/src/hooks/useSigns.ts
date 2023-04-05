@@ -12,6 +12,7 @@ import { walletaccount } from '../state/walletaccount'
 import { useParams } from 'react-router-dom'
 import { chainTypeName } from '../constants/chainTypeName'
 import addAssertType from '../state/addAssert'
+import { useAppStore } from '..'
 
 // interface chainTypes {
 //   [key: string]: number
@@ -56,13 +57,28 @@ export function eNodeCut(enode: any) {
   }
 }
 
-// let nonceLocal = 0;
 // mpc account Nonce
-async function getNonce(account: any, rpc: any, evmChainID: number, chainType: string) {
+async function getNonce(
+  account: any,
+  rpc: any,
+  evmChainID: number,
+  chainType: string,
+  setCachecacheNonce: (address: string, nonce: number) => void,
+  getCacheNonce: (address: string | undefined) => number | undefined
+) {
+  const nonceLocal = getCacheNonce(account)
   const isEvm = chainTypeName[chainType] == 0 ? true : false
   const nonceResult = await getsmpc(rpc).getNonce(account, evmChainID, isEvm, chainTypeName[chainType])
+  let nonce = nonceResult.Data + 1
+  if (nonceLocal == undefined || nonceResult.Data >= nonceLocal) {
+    nonce = nonceResult.Data + 1
+    setCachecacheNonce(account, nonce)
+  } else {
+    nonce = nonceLocal
+  }
 
-  return (nonceResult.Data + 1).toString()
+  
+  return nonce.toString()
 }
 
 export function useSign(): any {
@@ -286,6 +302,8 @@ export function useGetTxMsgHash(rpc: string | undefined): {
 } {
   const { account, library } = useWeb3React()
   const { address: mpcAddress } = useParams<{ address: string }>()
+  const setCachecacheNonce = useAppStore(state => state.setCacheNonce)
+  const getCacheNonce = useAppStore(state => state.getCacheNonce)
 
   return useMemo(() => {
     if (!account || !library || !rpc || !mpcAddress) return {}
@@ -294,7 +312,7 @@ export function useGetTxMsgHash(rpc: string | undefined): {
         web3.setProvider(rpc)
         let cbData, msgContext, errmsg
         try {
-          const Nonce = await getNonce(mpcAddress, rpc, chainId, chainType)
+          const Nonce = await getNonce(mpcAddress, rpc, chainId, chainType, setCachecacheNonce, getCacheNonce)
           const data = {
             ...r,
             nonce: parseFloat(Nonce),
@@ -319,7 +337,7 @@ export function useGetTxMsgHash(rpc: string | undefined): {
         return resultData
       }
     }
-  }, [account, library, rpc, mpcAddress])
+  }, [account, library, rpc, mpcAddress, setCachecacheNonce, getCacheNonce])
 }
 
 type msgHashType = { hash: string; msg: string }
@@ -328,6 +346,7 @@ export function useTransactionSigner(rpc: string | undefined): {
   execute?: (wallet: walletaccount, chainType: string, MsgHash: msgHashType, chainId: number) => Promise<any> | undefined
 } {
   const { account, library } = useWeb3React()
+  const increaseCacheNonce = useAppStore(state => state.increaseCacheNonce)
 
   return useMemo(() => {
     if (!account || !library || !rpc) return {}
@@ -369,6 +388,7 @@ export function useTransactionSigner(rpc: string | undefined): {
         let resultData: any = {}
 
         if (serverStatusIsSuccess(cbData)) {
+          increaseCacheNonce(wallet.Mpc_address)
           resultData = { msg: 'success', info: cbData.Data }
         } else {
           resultData = { msg: 'error', error: errmsg || cbData.Tip }
@@ -376,7 +396,7 @@ export function useTransactionSigner(rpc: string | undefined): {
         return resultData
       }
     }
-  }, [account, library, rpc])
+  }, [account, library, rpc, increaseCacheNonce])
 }
 
 export function useTxApproveAccept(rpc: string | undefined): {
