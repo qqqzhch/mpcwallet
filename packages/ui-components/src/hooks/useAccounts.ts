@@ -34,18 +34,17 @@ export default function useAccounts() {
     if (data == undefined) {
       return
     }
-    if (data.length > 0) {
-      data.sort((pre, next) => {
-        if (next !== undefined && pre !== undefined) {
-          return next.Reply_timestamp - pre.Reply_timestamp
-        } else {
-          return 0
-        }
-      })
-    }
 
-    setwalletAccounts(data)
-    setList(data)
+    const result = [...data].sort((pre, next) => {
+      if (next !== undefined && pre !== undefined) {
+        return next.Reply_timestamp - pre.Reply_timestamp
+      } else {
+        return 0
+      }
+    })
+
+    setwalletAccounts(result)
+    setList(result)
   }, [data, setwalletAccounts])
 
   return {
