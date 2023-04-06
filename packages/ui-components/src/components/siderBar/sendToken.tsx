@@ -116,11 +116,11 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
   }, [open])
 
   useEffect(() => {
-    if (selectAssert != undefined) {
+    if (selectAssert != undefined&&isTokenOpen) {
       setselectedAsset(selectAssert)
       setValue('assert', selectAssert)
     }
-  }, [selectAssert, setValue])
+  }, [selectAssert, setValue,isTokenOpen])
 
   const isAmount = useCallback(
     (Amount: string) => {
@@ -204,7 +204,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
         // console.log('gas')
         // console.log(txforestimateGas)
 
-        if (gas.gasCustom == undefined || gas.gasCustom == false) {
+        if (gas.gasCustom == undefined || gas.gasCustom == false&&selectedAsset!==undefined) {
           try {
             const gasEstimate: BigNumber = await readSigner.estimateGas(txforestimateGas)
             // const gasEstimate_: BigNumber =BigNumber.from(ethers.utils.parseUnits('0.001',"gwei"))
@@ -252,6 +252,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
           setMsgHash(data.info)
           setMsgHash({ hash: data.info, msg: data.msgContext })
         } else {
+          console.info(data)
           addToast(data.error, { appearance: 'error' })
         }
       }
@@ -289,7 +290,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
       console.info('gas.gasLimit', gas.gasLimit)
       console.info('gas.gasPrise', gas.gasPrise)
       if (msgHash === undefined) {
-        addToast('get Unsiged TransactionHash error', { appearance: 'error' })
+        addToast('Trying to get parameters, try again later')
         return
       }
       if (TransactionSigner === undefined) {
@@ -297,7 +298,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
         return
       }
 
-      if (gas.gasLimit === undefined || gas.gasLimit == undefined) {
+      if (gas.gasLimit === undefined || gas.gasPrise == undefined) {
         addToast('get gas error', { appearance: 'error' })
         return
       }
