@@ -40,6 +40,7 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, asset, 
   useEffect(() => {
     const run = async () => {
       if (userTxInput != undefined && readSigner !== undefined) {
+        
         const txforestimateGas = {
           from: userTxInput?.from,
           to: userTxInput?.to,
