@@ -5,7 +5,7 @@ import Avvvatars from 'avvvatars-react'
 
 import { useParams } from 'react-router-dom'
 import { cutOut } from '../../utils/index'
-import { assertType, Unsigedtx, TxInput } from '../../utils/buildMpcTx'
+import { assetType, Unsigedtx, TxInput } from '../../utils/buildMpcTx'
 import { formatUnits, gasFee } from '../../utils'
 import { useWeb3React } from '@web3-react/core'
 
@@ -25,13 +25,13 @@ type Props = {
   openGasModel: () => void
   previous: () => void
   next: () => void
-  assert?: assertType | undefined
+  asset?: assetType | undefined
   btnLoading: boolean
   isTxBuild?: boolean
   userTxInputShow?: TxInput | undefined
 }
 
-const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert, btnLoading, isTxBuild = false, userTxInputShow }) => {
+const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, asset, btnLoading, isTxBuild = false, userTxInputShow }) => {
   const { address } = useParams<{ address: string; chainType: string }>()
   const { chainId, library } = useWeb3React()
   const [gasError, setGasError] = useState<string | undefined>()
@@ -43,7 +43,7 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
         const txforestimateGas = {
           from: userTxInput?.from,
           to: userTxInput?.to,
-          data: assert?.contractaddress ? userTxInput.data : '',
+          data: asset?.contractaddress ? userTxInput.data : '',
           value: userTxInput.value
         }
 
@@ -59,7 +59,7 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
       }
     }
     run()
-  }, [library, userTxInput, assert, readSigner])
+  }, [library, userTxInput, asset, readSigner])
 
   const checkgasAndnext=useCallback(()=>{
     if(userTxInput == undefined || userTxInput.gas == 0 || userTxInput.gasPrice == 0){
@@ -126,9 +126,9 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
             <div className="mb-6">
               <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Asset </label>
               <div className=" flex flex-row items-center space-x-1">
-                {/* <img width={20} src={assert?.img}></img> */}
+                {/* <img width={20} src={asset?.img}></img> */}
                 <span>
-                  {userTxInput && assert ? userTxInput?.originValue : ''} {assert?.name}
+                  {userTxInput && asset ? userTxInput?.originValue : ''} {asset?.name}
                 </span>
               </div>
             </div>

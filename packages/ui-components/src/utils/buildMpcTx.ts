@@ -3,7 +3,7 @@ import { ethers, BigNumber } from 'ethers'
 import ERC20ABI from '../constants/ABI/ERC20.json'
 import { formatToWei } from './index'
 
-export type assertType = {
+export type assetType = {
   name: string
   img: string
   contractaddress?: string
@@ -18,7 +18,7 @@ export type TxInput = {
   gasPrice: number
   originValue: string
   name: string
-  assert?: assertType
+  assert?: assetType
 }
 export type Unsigedtx = TxInput & {
   chainId: string

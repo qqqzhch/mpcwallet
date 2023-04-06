@@ -11,7 +11,7 @@ import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { ethers } from 'ethers'
 import { useParams } from 'react-router-dom'
 import { cutOut, calculateGasMargin } from '../../utils/index'
-import { TxInput, assertType, buidTransactionJson, Unsigedtx } from '../../utils/buildMpcTx'
+import { TxInput, assetType, buidTransactionJson, Unsigedtx } from '../../utils/buildMpcTx'
 
 import { useGetTxMsgHash, useTransactionSigner } from '../../hooks/useSigns'
 import { rpclist } from '../../constants/rpcConfig'
@@ -25,14 +25,14 @@ import Preview from '../transaction/preview'
 import { formatUnitsErc20, formatUnits } from '../../utils/index'
 import { BigNumber } from 'ethers'
 
-import useAsserts from '../../hooks/useAssets'
+import useAssets from '../../hooks/useAssets'
 import useNativeBalance from '../../hooks/useNativeBalance'
 import useErc20Balance from '../../hooks/useErc20Balance'
 
 import AddressName from '../walletList/addressName'
 import { useWeb3SignerOnly } from '../../hooks/useWeb3SignerOnly'
 
-// const assertList: Array<assertType> = [
+// constassertList: Array<assetType> = [
 //   { name: 'eth', img: metamask, decimals: 18 },
 //   { name: 'weth', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e', decimals: 18 },
 //   { name: 'weth1', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e', decimals: 18 }
@@ -41,7 +41,7 @@ import { useWeb3SignerOnly } from '../../hooks/useWeb3SignerOnly'
 type Inputs = {
   toAddress: string
   toAddressRequired: string
-  assert: assertType
+  assert: assetType
   assertRequired: string
   amount: string
   amountRequired: string
@@ -58,10 +58,10 @@ const isAddress = (address: string) => {
 type props = {
   open?: boolean
   callBack: () => void
-  selectAssert?: assertType
+  selectAsset?: assetType
 }
 
-const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
+const SendToken: FC<props> = ({ open, callBack, selectAsset }) => {
   const [isTokenOpen, setIsTokenOpen] = useState(open || false)
   const [isPreviewStep, setIsPreviewStep] = useState(false)
   const { address, chainType } = useParams<{ address: string; chainType: string }>()
@@ -76,13 +76,13 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
   const { addToast } = useToasts()
   const [gas, setGas] = useState<{ gasLimit?: string; gasPrise?: string; gasCustom?: boolean }>({})
 
-  const [selectedAsset, setselectedAsset] = useState<assertType>()
+  const [selectedAsset, setselectedAsset] = useState<assetType>()
 
   const [isOpen, setIsOpen] = useState(false)
 
   const mpcGroupAccount = useAccount(address)
   const [btnLoading, setBtnLoading] = useState<boolean>(false)
-  const { data: assertList } = useAsserts()
+  const { data: assetList } = useAssets()
   const { balance: NativeBalance } = useNativeBalance(address)
   const { balance: erc20Balance } = useErc20Balance(address, selectedAsset?.contractaddress)
   const readSigner = useWeb3SignerOnly()
@@ -116,11 +116,11 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
   }, [open])
 
   useEffect(() => {
-    if (selectAssert != undefined&&isTokenOpen) {
-      setselectedAsset(selectAssert)
-      setValue('assert', selectAssert)
+    if (selectAsset != undefined&&isTokenOpen) {
+      setselectedAsset(selectAsset)
+      setValue('assert', selectAsset)
     }
-  }, [selectAssert, setValue,isTokenOpen])
+  }, [selectAsset, setValue,isTokenOpen])
 
   const isAmount = useCallback(
     (Amount: string) => {
@@ -388,7 +388,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
                               name="assert"
                               control={control}
                               rules={{
-                                validate: (assertValue: assertType) => {
+                                validate: (assertValue: assetType) => {
                                   if (assertValue == undefined) {
                                     return 'need select assert'
                                   }
@@ -413,7 +413,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
 
                                       <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
                                         <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                          {assertList.map((Assert, AssertIdx) => (
+                                          {assetList.map((Assert, AssertIdx) => (
                                             <Listbox.Option
                                               key={AssertIdx}
                                               className={({ active }) =>
@@ -512,7 +512,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
                       openGasModel={openGasModel}
                       previous={previous}
                       next={sendSigner}
-                      assert={userTxInput?.assert}
+                      asset={userTxInput?.assert}
                       btnLoading={btnLoading}
                       userTxInputShow={userTxInput}
                     ></Preview>

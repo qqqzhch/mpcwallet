@@ -240,7 +240,7 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
                     openGasModel={openGasModel}
                     previous={previous}
                     next={sendSigner}
-                    assert={assert}
+                    asset={assert}
                     isTxBuild={true}
                   ></Preview>
                   <GasModel isOpen={isgasOpen} closeModal={editGas} gasPrise={gas.gasPrise} gasLimit={gas.gasLimit}></GasModel>
