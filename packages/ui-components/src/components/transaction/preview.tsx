@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState,useCallback } from 'react'
 import { Dialog } from '@headlessui/react'
 import ChainName from '../chainList/chainName'
 import Avvvatars from 'avvvatars-react'
@@ -60,6 +60,14 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
     }
     run()
   }, [library, userTxInput, assert, readSigner])
+
+  const checkgasAndnext=useCallback(()=>{
+    if(userTxInput == undefined || userTxInput.gas == 0 || userTxInput.gasPrice == 0){
+      return 
+    }
+    next()
+
+  },[userTxInput,next])
 
   return (
     <>
@@ -172,7 +180,7 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
                   <ProtectedMpcButton>
                   <button
                     type="button"
-                    onClick={next}
+                    onClick={()=>{checkgasAndnext()} }
                     className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 "
                   >
                     <If condition={btnLoading}>

@@ -24,6 +24,7 @@ const ChainList: FC<Props> = ({ children }) => {
   const [chianName, setchianName] = useState<string>('')
   const [unsupported, setUnsupported] = useState<boolean>(false)
   const { chainId, library } = useWeb3React()
+  const [chianImg, setchianImg] = useState<string>('')
 
   useEffect(() => {
     const data = appSupportedChainId.map(item => {
@@ -38,11 +39,13 @@ const ChainList: FC<Props> = ({ children }) => {
       const ChainInfo = getChainInfo(chainId)
       if (ChainInfo?.label) {
         setchianName(ChainInfo?.label)
+        setchianImg(ChainInfo.logoUrl)
       }
     } else {
       const ChainInfo = getChainInfo(1)
       if (ChainInfo?.label) {
         setchianName(ChainInfo?.label)
+        setchianImg(ChainInfo.logoUrl)
       }
     }
   }, [chainId])
@@ -64,7 +67,7 @@ const ChainList: FC<Props> = ({ children }) => {
 
   return (
     <Popover className="relative">
-      <Popover.Button className="flex flex-row items-center justify-center  focus:outline-none  ">
+      <Popover.Button className="flex flex-row items-center justify-center  focus:outline-none ">
         <When condition={unsupported === true}>
           <div className="px-3 py-1 mx-2   rounded  bg-red-600 font-thin">Error</div>
           <div>
@@ -72,7 +75,12 @@ const ChainList: FC<Props> = ({ children }) => {
           </div>
         </When>
         <When condition={unsupported !== true && chainId != undefined}>
-          <div className="px-4 py-1 mx-2   rounded  bg-yellow-300 font-thin text-sm">{chianName}</div>
+          <div className="px-4 py-1 mx-2   rounded  bg-yellow-300 font-thin text-sm   max-w-[80px] sm:max-w-md  text-ellipsis overflow-hidden ">
+            <span className="hidden sm:block">
+            {chianName}
+            </span>
+            <img className="sm:hidden" width={20} src={chianImg}></img>
+            </div>
           <div className="lg:flex">
             <FontAwesomeIcon icon={icon({ name: 'chevron-down', style: 'solid' })} />
           </div>
