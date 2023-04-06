@@ -13,7 +13,7 @@ import { useParams } from 'react-router-dom'
 import { useToasts } from 'react-toast-notifications'
 import { TxtxSignHistory } from '../../state/txSignHistory'
 import { useWeb3React } from '@web3-react/core'
-import { nowThreshold, gasFee, formatUnits, formatUnitsErc20, formatFromWei } from '../../utils/index'
+import { nowThreshold, gasFee, formatUnits, formatFromWei } from '../../utils/index'
 import useTxStatusByKeyId from '../../hooks/useTxStatusByKeyId'
 import useTxHashByKeyId from '../../hooks/useTxHashByKeyId'
 import loadingiImg from '../../assets/loading.svg'
@@ -96,6 +96,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
 
   const [ownerStatusList, setOwnerStatusList] = useState<mpcOwnerStatusType[]>()
   const { data: ApprovalListByKeyIds } = useApprovalListByKeyId(txApprove?.Key_id)
+  const [txnonce, setTxnonce] = useState<{ nonce: number | undefined; label: string }>()
 
   useEffect(() => {
     if (ownerAccountInfo) {
@@ -166,6 +167,8 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
         return
       }
 
+      setTxnonce({ nonce: tx.nonce, label: txChainInfo.label })
+
       {
         // native token
         const amount = BigNumber.from(tx.value).toString()
@@ -211,7 +214,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
             return
           }
 
-          const tokenAmount = value == '' ? '' : formatUnitsErc20(value, tokensymbol, tokendecimals)
+          const tokenAmount = value == '' ? '' : formatFromWei(value, tokendecimals) + ' ' + tokensymbol
           const txListTokenInfo: tokenTxType = {}
           txListTokenInfo[index] = {
             to,
@@ -255,7 +258,9 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
               >
                 <div className=" w-full sm:w-1/5 ">
                   <ArrowUpRightIcon className="text-indigo-500 w-6 h-6 flex-shrink-0 mr-4 inline-block"></ArrowUpRightIcon>
-                  sent
+                  <When condition={txnonce !== undefined}>
+                    {txnonce?.label}:{txnonce?.nonce}
+                  </When>
                 </div>
                 <div className=" w-full sm:w-1/5 ">{dayjs(Number(item.Timestamp || (item as TxtxSignHistory).Local_timestamp)).fromNow()}</div>
                 <div className=" w-full sm:w-1/5 break-words">
