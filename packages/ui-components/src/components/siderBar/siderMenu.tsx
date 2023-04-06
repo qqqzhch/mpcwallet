@@ -31,7 +31,7 @@ const SiderMenu: FC = () => {
           to={`/dashboard/${chainType}/${address}/assets`}
           className={classNames(
             'flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700  ',
-            pathname === `/dashboard/${chainType}/${address}/asserts` ? 'bg-gray-200' : ''
+            pathname === `/dashboard/${chainType}/${address}/assets` ? 'bg-gray-200' : ''
           )}
         >
           <img

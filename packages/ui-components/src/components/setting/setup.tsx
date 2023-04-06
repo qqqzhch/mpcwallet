@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom'
 import RenameModel from '../walletList/renameModel'
 import { When } from 'react-if'
 import AddressName from '../walletList/addressName'
-import useGetNonce from '../../hooks/getNonce'
+import useGetNonce from '../../hooks/useGetNonce'
 
 const Setup: FC = () => {
   const { data: list } = useMpcAddressDetail()

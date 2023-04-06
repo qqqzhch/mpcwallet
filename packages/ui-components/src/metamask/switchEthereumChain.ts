@@ -1,11 +1,15 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function (
   chainId: number,
   chainName: string,
   rpcUrls: Array<string>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   library: any,
   Unsupported: boolean,
-  nativeCurrency: any,
+  nativeCurrency: {
+    name: string // e.g. 'Goerli ETH',
+    symbol: string // e.g. 'gorETH',
+    decimals: number // e.g. 18,
+  },
   blockExplorerUrl: string
 ) {
   let libraryprovider
