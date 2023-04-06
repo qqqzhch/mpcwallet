@@ -5,7 +5,7 @@ import { ProposedTransaction } from '../../hooks/useServices/models'
 import { When } from 'react-if'
 import { AbiItem } from 'web3-utils'
 import { cutOut } from '../../utils'
-import useChainName from '../../hooks/useChainName'
+
 import { useToasts } from 'react-toast-notifications'
 import { useParams } from 'react-router-dom'
 // import useAccount from '../../hooks/useAccount'
@@ -13,8 +13,9 @@ import ContractModel from './contractModel'
 import useChainInfo from '../../hooks/useChainInfo'
 
 const TransactionBuild: FC = () => {
-  const ChainName = useChainName()
-  const services = useServices(ChainName)
+  // const ChainName = useChainName()
+
+  const services = useServices()
 
   const [addressOrAbi, setAddressOrAbi] = useState('')
 

@@ -48,7 +48,8 @@ const ChainList: FC<Props> = ({ children }) => {
   }, [chainId])
   const SwitchingNetwork = useCallback(
     async (network: L1ChainInfo | L2ChainInfo, chainId: SupportedChainId) => {
-      await switchEthereumChain(chainId, network.label, RPC_URLS[chainId], library, unsupported)
+      const ChainInfo = getChainInfo(chainId)
+      await switchEthereumChain(chainId, network.label, RPC_URLS[chainId], library, unsupported, ChainInfo.nativeCurrency, ChainInfo.explorer)
     },
     [library, unsupported]
   )

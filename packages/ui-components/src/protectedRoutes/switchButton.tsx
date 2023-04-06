@@ -23,7 +23,15 @@ export const SwitchButton = ({ children, className }: { children: JSX.Element; c
 
   const SwitchingNetwork = useCallback(async () => {
     if (nextChain && chainId !== undefined) {
-      await switchEthereumChain(appSupportedChainId[0], nextChain?.label, RPC_URLS[chainId as SupportedChainId], library, false)
+      await switchEthereumChain(
+        appSupportedChainId[0],
+        nextChain?.label,
+        RPC_URLS[chainId as SupportedChainId],
+        library,
+        false,
+        nextChain.nativeCurrency,
+        nextChain.explorer
+      )
     }
   }, [library, nextChain, chainId])
 

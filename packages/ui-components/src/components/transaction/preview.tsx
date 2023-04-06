@@ -17,6 +17,8 @@ import { SwitchButton } from '../../protectedRoutes/switchButton'
 import AddressName from '../walletList/addressName'
 
 import { useWeb3SignerOnly } from '../../hooks/useWeb3SignerOnly'
+import { ProtectedMpcButton } from '../../protectedRoutes/protectedMpcButton'
+
 
 type Props = {
   userTxInput: Unsigedtx | undefined
@@ -167,6 +169,7 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
             <div className=" text-center">
               <ProtectedButton>
                 <SwitchButton className="text-white  bg-black  focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full">
+                  <ProtectedMpcButton>
                   <button
                     type="button"
                     onClick={next}
@@ -180,6 +183,8 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, assert,
                       <Else>Next</Else>
                     </If>
                   </button>
+                  </ProtectedMpcButton>
+                  
                 </SwitchButton>
               </ProtectedButton>
             </div>

@@ -1,5 +1,17 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default async function (chainId: number, chainName: string, rpcUrls: Array<string>, library: any, Unsupported: boolean) {
+export default async function (
+  chainId: number,
+  chainName: string,
+  rpcUrls: Array<string>,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  library: any,
+  Unsupported: boolean,
+  nativeCurrency: {
+    name: string // e.g. 'Goerli ETH',
+    symbol: string // e.g. 'gorETH',
+    decimals: number // e.g. 18,
+  },
+  blockExplorerUrl: string
+) {
   let libraryprovider
   if (library !== undefined) {
     libraryprovider = library.provider
@@ -28,7 +40,9 @@ export default async function (chainId: number, chainName: string, rpcUrls: Arra
               {
                 chainId: hexchainId,
                 chainName: chainName,
-                rpcUrls: rpcUrls /* ... */
+                rpcUrls: rpcUrls /* ... */,
+                nativeCurrency,
+                blockExplorerUrls: [blockExplorerUrl]
               }
             ]
           })

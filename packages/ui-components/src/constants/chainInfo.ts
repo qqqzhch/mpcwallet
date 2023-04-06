@@ -6,6 +6,8 @@ import celoLogo from '../assets/icon/celo_logo.svg'
 import optimismLogoUrl from '../assets/icon/optimistic_ethereum.svg'
 import polygonMaticLogo from '../assets/icon/polygon-matic-logo.svg'
 import bnbLogo from '../assets/icon/bnb_logo.svg'
+import ftmLogo from '../assets/icon/ftm_logo.svg'
+import avaxLogo from '../assets/icon/avax_logo.svg'
 // import { darkTheme } from 'theme/colors'
 // import ms from 'ms.macro'
 
@@ -230,17 +232,41 @@ const CHAIN_INFO: ChainInfoMap = {
     nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
     defaultListUrl: PLASMA_BNB_LIST
   },
-  [SupportedChainId.BNBTEST]: {
+  [SupportedChainId.BNB_TEST]: {
     networkType: NetworkType.L1,
     // blockWaitMsBeforeWarning: ms`10m`,
     bridge: 'https://cbridge.celer.network/1/56',
     docs: 'https://docs.bnbchain.org/',
     explorer: 'https://testnet.bscscan.com/',
     infoLink: 'https://info.uniswap.org/#/bnb/',
-    label: 'BNB Test',
+    label: 'BSC Test Net',
     logoUrl: bnbLogo,
     nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
     defaultListUrl: PLASMA_BNB_LIST
+  },
+  [SupportedChainId.FANTOM_TEST]: {
+    networkType: NetworkType.L1,
+    // blockWaitMsBeforeWarning: ms`10m`,
+    bridge: '',
+    docs: '',
+    explorer: 'https://testnet.ftmscan.com/',
+    infoLink: '',
+    label: 'FANTOM Test Net',
+    logoUrl: ftmLogo,
+    nativeCurrency: { name: 'FTM', symbol: 'FTM', decimals: 18 }
+    // defaultListUrl: PLASMA_BNB_LIST
+  },
+  [SupportedChainId.AVALANCHE_FUJITEST]: {
+    networkType: NetworkType.L1,
+    // blockWaitMsBeforeWarning: ms`10m`,
+    bridge: '',
+    docs: '',
+    explorer: 'https://testnet.snowtrace.io/',
+    infoLink: '',
+    label: 'AVALANCHE Fuji',
+    logoUrl: avaxLogo,
+    nativeCurrency: { name: 'AVAX', symbol: 'AVAX', decimals: 18 }
+    // defaultListUrl: PLASMA_BNB_LIST
   }
 }
 

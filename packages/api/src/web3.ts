@@ -294,6 +294,13 @@ web3.extend({
       params: 1,
       inputFormatter: [null],
       outputFormatter: undefined,
+    },
+    {
+      name: "getLatestMpcAddressStatus",
+      call: "smw_getLatestMpcAddressStatus",
+      params: 1,
+      inputFormatter: [null],
+      outputFormatter: undefined,
     }
 
     

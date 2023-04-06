@@ -11,6 +11,8 @@ import { Else, If, Then } from 'react-if'
 import { getChainInfo } from '../../constants/chainInfo'
 import switchEthereumChain from '../../metamask/switchEthereumChain'
 import { RPC_URLS } from '../../constants/networks'
+import { ProtectedMpcButton } from '../../protectedRoutes/protectedMpcButton'
+
 
 const NewTransaction: FC = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -53,7 +55,15 @@ const NewTransaction: FC = () => {
 
   const SwitchingNetwork = useCallback(async () => {
     if (nextChain && chainId !== undefined) {
-      await switchEthereumChain(appSupportedChainId[0], nextChain?.label, RPC_URLS[chainId as SupportedChainId], library, false)
+      await switchEthereumChain(
+        appSupportedChainId[0],
+        nextChain?.label,
+        RPC_URLS[chainId as SupportedChainId],
+        library,
+        false,
+        nextChain.nativeCurrency,
+        nextChain.explorer
+      )
     }
   }, [library, nextChain, chainId])
 
@@ -61,6 +71,7 @@ const NewTransaction: FC = () => {
     <>
       <If condition={isSupported}>
         <Then>
+          <ProtectedMpcButton>
           <button
             type="button"
             onClick={openModal}
@@ -68,6 +79,8 @@ const NewTransaction: FC = () => {
           >
             New transaction
           </button>
+          </ProtectedMpcButton>
+          
         </Then>
         <Else>
           <button

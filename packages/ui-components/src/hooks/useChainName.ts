@@ -7,7 +7,9 @@ export default function useChainName() {
   const { chainId } = useWeb3React()
   const [chianName, setchianName] = useState<string>('')
   useEffect(() => {
-    // setUnsupported(false)
+    if (chainId == undefined) {
+      return
+    }
     setchianName(getNameBychainId(chainId))
   }, [chainId])
   return chianName
