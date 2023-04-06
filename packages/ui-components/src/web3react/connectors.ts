@@ -11,7 +11,10 @@ interface RPCURLSTYPE {
 const RPC_URLS_info: RPCURLSTYPE = {
   [SupportedChainId.MAINNET]: RPC_URLS[SupportedChainId.MAINNET][0],
   [SupportedChainId.GOERLI]: RPC_URLS[SupportedChainId.GOERLI][0],
-  [SupportedChainId.BNBTEST]: RPC_URLS[SupportedChainId.BNBTEST][0]
+  [SupportedChainId.BNB_TEST]: RPC_URLS[SupportedChainId.BNB_TEST][0],
+  [SupportedChainId.FANTOM_TEST]: RPC_URLS[SupportedChainId.FANTOM_TEST][0],
+  [SupportedChainId.POLYGON_MUMBAI]: RPC_URLS[SupportedChainId.POLYGON_MUMBAI][0],
+  [SupportedChainId.AVALANCHE_FUJITEST]: RPC_URLS[SupportedChainId.AVALANCHE_FUJITEST][0]
 }
 
 // MetaMask

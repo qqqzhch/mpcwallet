@@ -1,5 +1,13 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default async function (chainId: number, chainName: string, rpcUrls: Array<string>, library: any, Unsupported: boolean) {
+export default async function (
+  chainId: number,
+  chainName: string,
+  rpcUrls: Array<string>,
+  library: any,
+  Unsupported: boolean,
+  nativeCurrency: any,
+  blockExplorerUrl: string
+) {
   let libraryprovider
   if (library !== undefined) {
     libraryprovider = library.provider
@@ -28,7 +36,9 @@ export default async function (chainId: number, chainName: string, rpcUrls: Arra
               {
                 chainId: hexchainId,
                 chainName: chainName,
-                rpcUrls: rpcUrls /* ... */
+                rpcUrls: rpcUrls /* ... */,
+                nativeCurrency,
+                blockExplorerUrls: [blockExplorerUrl]
               }
             ]
           })

@@ -18,6 +18,24 @@ if (typeof BSC_SCAN_KEY === 'undefined') {
   throw new Error(`VITE_REACT_BSC_APP_SCAN_KEY must be a defined environment variable`)
 }
 
+export const FTM_SCAN_KEY = import.meta.env.VITE_REACT_FTM_APP_SCAN_KEY
+
+if (typeof FTM_SCAN_KEY === 'undefined') {
+  throw new Error(`VITE_REACT_FTM_APP_SCAN_KEY must be a defined environment variable`)
+}
+
+export const POLYGON_SCAN_KEY = import.meta.env.VITE_REACT_POLYGON_APP_SCAN_KEY
+
+if (typeof POLYGON_SCAN_KEY === 'undefined') {
+  throw new Error(`VITE_REACT_POLYGON_APP_SCAN_KEY must be a defined environment variable`)
+}
+
+export const AVALANCHE_SCAN_KEY = import.meta.env.VITE_REACT_AVALANCHE_APP_SCAN_KEY
+
+if (typeof AVALANCHE_SCAN_KEY === 'undefined') {
+  throw new Error(`VITE_REACT_AVALANCHE_APP_SCAN_KEY must be a defined environment variable`)
+}
+
 /**
  * Fallback JSON-RPC endpoints.
  * These are used if the integrator does not provide an endpoint, or if the endpoint does not work.
@@ -104,10 +122,12 @@ export const FALLBACK_URLS: { [key in SupportedChainId]: string[] } = {
     // "Safe" URLs
     'https://bsc-dataseed.binance.org'
   ],
-  [SupportedChainId.BNBTEST]: [
+  [SupportedChainId.BNB_TEST]: [
     // "Safe" URLs
     'https://data-seed-prebsc-1-s3.binance.org:8545'
-  ]
+  ],
+  [SupportedChainId.AVALANCHE_FUJITEST]: [],
+  [SupportedChainId.FANTOM_TEST]: []
 }
 
 /**
@@ -125,9 +145,11 @@ export const RPC_URLS: { [key in SupportedChainId]: string[] } = {
   [SupportedChainId.ARBITRUM_ONE]: [`https://arbitrum-mainnet.infura.io/v3/${INFURA_KEY}`, ...FALLBACK_URLS[SupportedChainId.ARBITRUM_ONE]],
   [SupportedChainId.ARBITRUM_RINKEBY]: [`https://arbitrum-rinkeby.infura.io/v3/${INFURA_KEY}`, ...FALLBACK_URLS[SupportedChainId.ARBITRUM_RINKEBY]],
   [SupportedChainId.POLYGON]: [`https://polygon-mainnet.infura.io/v3/${INFURA_KEY}`, ...FALLBACK_URLS[SupportedChainId.POLYGON]],
-  [SupportedChainId.POLYGON_MUMBAI]: [`https://polygon-mumbai.infura.io/v3/${INFURA_KEY}`, ...FALLBACK_URLS[SupportedChainId.POLYGON_MUMBAI]],
+  [SupportedChainId.POLYGON_MUMBAI]: ['https://rpc.ankr.com/polygon_mumbai', ...FALLBACK_URLS[SupportedChainId.POLYGON_MUMBAI]],
   [SupportedChainId.CELO]: FALLBACK_URLS[SupportedChainId.CELO],
   [SupportedChainId.CELO_ALFAJORES]: FALLBACK_URLS[SupportedChainId.CELO_ALFAJORES],
   [SupportedChainId.BNB]: ['https://bsc-dataseed.binance.org'],
-  [SupportedChainId.BNBTEST]: ['https://data-seed-prebsc-1-s3.binance.org:8545']
+  [SupportedChainId.BNB_TEST]: ['https://data-seed-prebsc-1-s3.binance.org:8545'],
+  [SupportedChainId.FANTOM_TEST]: ['https://fantom-testnet.public.blastapi.io/'],
+  [SupportedChainId.AVALANCHE_FUJITEST]: [`https://avalanche-fuji.infura.io/v3/${INFURA_KEY}`]
 }

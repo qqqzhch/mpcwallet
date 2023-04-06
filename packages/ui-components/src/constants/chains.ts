@@ -20,10 +20,18 @@ export enum SupportedChainId {
   CELO = 42220,
   CELO_ALFAJORES = 44787,
   BNB = 56,
-  BNBTEST = 97
+  BNB_TEST = 97,
+  FANTOM_TEST = 4002,
+  AVALANCHE_FUJITEST = 43113
 }
 
-export const appSupportedChainId = [SupportedChainId.BNBTEST, SupportedChainId.GOERLI]
+export const appSupportedChainId = [
+  SupportedChainId.BNB_TEST,
+  SupportedChainId.GOERLI,
+  SupportedChainId.POLYGON_MUMBAI,
+  SupportedChainId.FANTOM_TEST,
+  SupportedChainId.AVALANCHE_FUJITEST
+]
 
 export const CHAIN_IDS_TO_NAMES = {
   [SupportedChainId.MAINNET]: 'mainnet',
@@ -40,7 +48,9 @@ export const CHAIN_IDS_TO_NAMES = {
   [SupportedChainId.OPTIMISM]: 'optimism',
   [SupportedChainId.OPTIMISM_GOERLI]: 'optimism_goerli',
   [SupportedChainId.BNB]: 'bsc',
-  [SupportedChainId.BNBTEST]: 'bsc_test'
+  [SupportedChainId.BNB_TEST]: 'bsc_test',
+  [SupportedChainId.FANTOM_TEST]: 'fantom_test',
+  [SupportedChainId.AVALANCHE_FUJITEST]: 'avalanche_fujitest'
 }
 
 export function getNameBychainId(chainId: number | null | undefined) {
@@ -67,6 +77,9 @@ export declare type Networks =
   | 'UNKNOWN'
   | 'BSC'
   | 'BSC_TEST'
+  | 'FANTOM_TEST'
+  | 'AVALANCHE_FUJITEST'
+  | 'POLYGON_MUMBAITEST'
 
 /**
  * Array of all the supported chain IDs
@@ -84,7 +97,10 @@ export const SUPPORTED_GAS_ESTIMATE_CHAIN_IDS = [
   SupportedChainId.OPTIMISM,
   SupportedChainId.ARBITRUM_ONE,
   SupportedChainId.BNB,
-  SupportedChainId.BNBTEST
+  SupportedChainId.BNB_TEST,
+  SupportedChainId.FANTOM_TEST,
+  SupportedChainId.AVALANCHE_FUJITEST,
+  SupportedChainId.POLYGON_MUMBAI
 ]
 
 /**
@@ -100,7 +116,9 @@ export const TESTNET_CHAIN_IDS = [
   SupportedChainId.POLYGON_MUMBAI,
   SupportedChainId.ARBITRUM_RINKEBY,
   SupportedChainId.OPTIMISM_GOERLI,
-  SupportedChainId.BNBTEST
+  SupportedChainId.BNB_TEST,
+  SupportedChainId.FANTOM_TEST,
+  SupportedChainId.AVALANCHE_FUJITEST
 ] as const
 
 export type SupportedTestnetChainId = typeof TESTNET_CHAIN_IDS[number]

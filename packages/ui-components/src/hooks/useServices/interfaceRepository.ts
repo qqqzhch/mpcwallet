@@ -2,7 +2,7 @@
 import memoize from 'lodash/memoize'
 import { SupportedChainNames } from '../../constants/chains'
 import { api } from '@monorepo/api'
-import { SCAN_KEY, BSC_SCAN_KEY } from '../../constants/networks'
+import { SCAN_KEY, BSC_SCAN_KEY, FTM_SCAN_KEY, POLYGON_SCAN_KEY, AVALANCHE_SCAN_KEY } from '../../constants/networks'
 
 interface ContractMethod {
   inputs: any[]
@@ -40,7 +40,10 @@ const abiUrlGetterByNetwork: {
   //   `https://volta-explorer.energyweb.org/api?module=contract&action=getabi&address=${address}&apikey=${SCAN_KEY}`,
   // UNKNOWN: null,
   bsc: (address: string) => `https://api.bscscan.com/api?module=contract&action=getabi&address=${address}&apikey=${BSC_SCAN_KEY}`,
-  bsc_test: (address: string) => `https://api-testnet.bscscan.com/api?module=contract&action=getabi&address=${address}&apikey=${BSC_SCAN_KEY}`
+  bsc_test: (address: string) => `https://api-testnet.bscscan.com/api?module=contract&action=getabi&address=${address}&apikey=${BSC_SCAN_KEY}`,
+  fantom_test: (address: string) => `https://api-testnet.ftmscan.com/api?module=contract&action=getabi&address=${address}&apikey=${FTM_SCAN_KEY}`,
+  avalanche_fujitest: (address: string) => `https://api-testnet.snowtrace.io/api?module=contract&action=getabi&address=${address}&apikey=${AVALANCHE_SCAN_KEY}`,
+  polygon_mumbai: (address: string) => `https://api-testnet.polygonscan.com/api?module=contract&action=getabi&address=${address}&apikey=${POLYGON_SCAN_KEY}`
 }
 
 class InterfaceRepository {
