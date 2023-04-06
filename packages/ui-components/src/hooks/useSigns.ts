@@ -13,6 +13,7 @@ import { useParams } from 'react-router-dom'
 import { chainTypeName } from '../constants/chainTypeName'
 import addAssertType from '../state/addAssert'
 import { useAppStore } from '..'
+import { useWeb3LibOnly } from './useWeb3LibOnly'
 
 // interface chainTypes {
 //   [key: string]: number
@@ -55,29 +56,6 @@ export function eNodeCut(enode: any) {
     ip: ip,
     enode: enodeObj.input
   }
-}
-
-// mpc account Nonce
-async function getNonce(
-  account: any,
-  rpc: any,
-  evmChainID: number,
-  chainType: string,
-  setCachecacheNonce: (address: string, nonce: number) => void,
-  getCacheNonce: (address: string | undefined) => number | undefined
-) {
-  const nonceLocal = getCacheNonce(account)
-  const isEvm = chainTypeName[chainType] == 0 ? true : false
-  const nonceResult = await getsmpc(rpc).getNonce(account, evmChainID, isEvm, chainTypeName[chainType])
-  let nonce = nonceResult.Data + 1
-  if (nonceLocal == undefined || nonceResult.Data >= nonceLocal) {
-    nonce = nonceResult.Data + 1
-    setCachecacheNonce(account, nonce)
-  } else {
-    nonce = nonceLocal
-  }
-
-  return nonce.toString()
 }
 
 export function useSign(): any {
@@ -301,20 +279,20 @@ export function useGetTxMsgHash(rpc: string | undefined): {
 } {
   const { account, library } = useWeb3React()
   const { address: mpcAddress } = useParams<{ address: string }>()
-  const setCachecacheNonce = useAppStore(state => state.setCacheNonce)
-  const getCacheNonce = useAppStore(state => state.getCacheNonce)
+  const web3LibOnly = useWeb3LibOnly()
 
   return useMemo(() => {
-    if (!account || !library || !rpc || !mpcAddress) return {}
+    if (!account || !library || !rpc || !mpcAddress || !web3LibOnly) return {}
     return {
       execute: async (r: Unsigedtx, chainType: string, chainId: number) => {
         web3.setProvider(rpc)
         let cbData, msgContext, errmsg
         try {
-          const Nonce = await getNonce(mpcAddress, rpc, chainId, chainType, setCachecacheNonce, getCacheNonce)
+          const signerOnly = web3LibOnly.getSigner(mpcAddress)
+          const Nonce = await signerOnly.getTransactionCount()
           const data = {
             ...r,
-            nonce: parseFloat(Nonce),
+            nonce: parseFloat(Nonce.toString()),
             gas: parseFloat(r.gas.toString()),
             gasPrice: parseFloat(r.gasPrice.toString())
           }
@@ -336,7 +314,7 @@ export function useGetTxMsgHash(rpc: string | undefined): {
         return resultData
       }
     }
-  }, [account, library, rpc, mpcAddress, setCachecacheNonce, getCacheNonce])
+  }, [account, library, rpc, mpcAddress, web3LibOnly])
 }
 
 type msgHashType = { hash: string; msg: string }

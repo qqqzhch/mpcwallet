@@ -1,28 +1,23 @@
 /* eslint @typescript-eslint/no-explicit-any: "off" */
 // mpc account Nonce
-import { chainTypeName } from '../constants/chainTypeName'
-import { getsmpc } from '@monorepo/api/src/web3'
-import { useParams } from 'react-router-dom'
-import { useWeb3React } from '@web3-react/core'
-import { rpclist } from '../constants/rpcConfig'
 import { useEffect, useState } from 'react'
+import { useWeb3SignerOnly } from './useWeb3SignerOnly'
 
 export default function useGetNonce(): number | undefined {
-  const { address: mpcaddress, chainType } = useParams<{ address: string; chainType: string }>()
-  const { chainId } = useWeb3React()
+  // const { address: mpcaddress, chainType } = useParams<{ address: string; chainType: string }>()
+  // const { chainId } = useWeb3React()
   const [nonce, setNonce] = useState<number>(0)
+  const web3Signer = useWeb3SignerOnly()
 
   useEffect(() => {
     const run = async () => {
-      if (chainType !== undefined && chainId !== undefined && mpcaddress !== undefined) {
-        const isEvm = chainTypeName[chainType] == 0 ? true : false
-        const nonceResult = await getsmpc(rpclist[0]).getNonce(mpcaddress, chainId, isEvm, chainTypeName[chainType])
-        const data = nonceResult.Data as number
-        setNonce(data)
+      if (web3Signer) {
+        const nonceResult = await web3Signer.getTransactionCount()
+        setNonce(nonceResult)
       }
     }
     run()
-  }, [chainType, chainId, mpcaddress])
+  }, [web3Signer])
 
   return nonce
 }

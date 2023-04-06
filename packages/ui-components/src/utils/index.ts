@@ -93,5 +93,5 @@ export type metamaskError = {
 }
 
 export function calculateGasMargin(value: BigNumber): BigNumber {
-  return value.mul(120).div(100)
+  return value.mul(150).div(100)
 }
