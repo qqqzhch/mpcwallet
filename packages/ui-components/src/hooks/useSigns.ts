@@ -77,7 +77,6 @@ async function getNonce(
     nonce = nonceLocal
   }
 
-  
   return nonce.toString()
 }
 

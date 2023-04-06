@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom'
 import RenameModel from '../walletList/renameModel'
 import { When } from 'react-if'
 import AddressName from '../walletList/addressName'
+import useGetNonce from '../../hooks/getNonce'
 
 const Setup: FC = () => {
   const { data: list } = useMpcAddressDetail()
@@ -19,6 +20,7 @@ const Setup: FC = () => {
 
   const [isOpen, setIsOpen] = useState(false)
   const [isVault, setIsVault] = useState(true)
+  const nonce = useGetNonce()
 
   const getThreshold = useCallback(() => {
     if (mpcGroupAccount !== undefined) {
@@ -69,6 +71,7 @@ const Setup: FC = () => {
             </When>
 
             <div className="break-words">Address:{address}</div>
+            <div className="break-words">Nonce:{nonce ? nonce : ''}</div>
           </div>
         </div>
       </div>
