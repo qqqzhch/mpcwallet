@@ -1,14 +1,14 @@
 import { useWeb3React } from '@web3-react/core'
 import { useEffect, useState } from 'react'
 // import { BigNumber,Contract,ethers,utils } from 'ethers'
-import { assertType } from '../utils/buildMpcTx'
+import { assetType } from '../utils/buildMpcTx'
 import { getAddressBalances } from '../eth-balance-checker'
 
 import BalanceMap from 'eth-balance-checker'
 import checkBalanceAddress from '../constants/checkBalanceAddress'
 import { SupportedChainId } from '../constants/chains'
 
-export default function useAssetListBalance(mpcAddress: string | undefined, list: assertType[]) {
+export default function useAssetListBalance(mpcAddress: string | undefined, list: assetType[]) {
   const { library, chainId } = useWeb3React()
 
   const [balance, setBalance] = useState<BalanceMap.BalanceMap>({})
