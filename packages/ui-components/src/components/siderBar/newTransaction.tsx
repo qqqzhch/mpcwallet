@@ -13,7 +13,6 @@ import switchEthereumChain from '../../metamask/switchEthereumChain'
 import { RPC_URLS } from '../../constants/networks'
 import { ProtectedMpcButton } from '../../protectedRoutes/protectedMpcButton'
 
-
 const NewTransaction: FC = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [isTokenOpen, setIsTokenOpen] = useState(false)
@@ -72,15 +71,14 @@ const NewTransaction: FC = () => {
       <If condition={isSupported}>
         <Then>
           <ProtectedMpcButton>
-          <button
-            type="button"
-            onClick={openModal}
-            className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
-          >
-            New transaction
-          </button>
+            <button
+              type="button"
+              onClick={openModal}
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full"
+            >
+              New transaction
+            </button>
           </ProtectedMpcButton>
-          
         </Then>
         <Else>
           <button

@@ -116,11 +116,11 @@ const SendToken: FC<props> = ({ open, callBack, selectAsset }) => {
   }, [open])
 
   useEffect(() => {
-    if (selectAsset != undefined&&isTokenOpen) {
+    if (selectAsset != undefined && isTokenOpen) {
       setselectedAsset(selectAsset)
       setValue('asset', selectAsset)
     }
-  }, [selectAsset, setValue,isTokenOpen])
+  }, [selectAsset, setValue, isTokenOpen])
 
   const isAmount = useCallback(
     (Amount: string) => {
@@ -204,7 +204,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAsset }) => {
         // console.log('gas')
         // console.log(txforestimateGas)
 
-        if (gas.gasCustom == undefined || gas.gasCustom == false&&selectedAsset!==undefined) {
+        if (gas.gasCustom == undefined || (gas.gasCustom == false && selectedAsset !== undefined)) {
           try {
             const gasEstimate: BigNumber = await readSigner.estimateGas(txforestimateGas)
             // const gasEstimate_: BigNumber =BigNumber.from(ethers.utils.parseUnits('0.001',"gwei"))
@@ -229,7 +229,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAsset }) => {
       }
     }
     run()
-  }, [unsigedtx, library, chainType, gas.gasCustom, selectedAsset?.contractaddress, readSigner,selectedAsset])
+  }, [unsigedtx, library, chainType, gas.gasCustom, selectedAsset?.contractaddress, readSigner, selectedAsset])
 
   useEffect(() => {
     const run = async () => {

@@ -76,11 +76,9 @@ const ChainList: FC<Props> = ({ children }) => {
         </When>
         <When condition={unsupported !== true && chainId != undefined}>
           <div className="px-4 py-1 mx-2   rounded  bg-yellow-300 font-thin text-sm   max-w-[80px] sm:max-w-md  text-ellipsis overflow-hidden ">
-            <span className="hidden sm:block">
-            {chianName}
-            </span>
+            <span className="hidden sm:block">{chianName}</span>
             <img className="sm:hidden" width={20} src={chianImg}></img>
-            </div>
+          </div>
           <div className="lg:flex">
             <FontAwesomeIcon icon={icon({ name: 'chevron-down', style: 'solid' })} />
           </div>
