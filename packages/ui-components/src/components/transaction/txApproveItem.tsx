@@ -1,6 +1,6 @@
 import { FC, useState, useCallback, useEffect } from 'react'
 
-import { ArrowDownIcon, ArrowUpRightIcon, UsersIcon } from '@heroicons/react/20/solid'
+import { ArrowDownIcon,  UsersIcon } from '@heroicons/react/20/solid'
 import { cutOut, formatTxApprove } from '../../utils'
 import dayjs from '../../utils/dayjs'
 import { classNames } from '../../utils'
@@ -96,7 +96,9 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
 
   const [ownerStatusList, setOwnerStatusList] = useState<mpcOwnerStatusType[]>()
   const { data: ApprovalListByKeyIds } = useApprovalListByKeyId(txApprove?.Key_id)
-  const [txnonce, setTxnonce] = useState<{ nonce: number | undefined; label: string }>()
+  const [txnonce, setTxnonce] = useState<{ nonce: number | undefined; logo: string }>()
+
+  const [txSendName, setTxSendName] = useState<string>('')
 
   useEffect(() => {
     if (ownerAccountInfo) {
@@ -167,7 +169,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
         return
       }
 
-      setTxnonce({ nonce: tx.nonce, label: txChainInfo.label })
+      setTxnonce({ nonce: tx.nonce, logo: txChainInfo.logoUrl })
 
       {
         // native token
@@ -175,10 +177,12 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
         if (amount != '0') {
           const nativetokenAmount = formatFromWei(amount, txChainInfo.nativeCurrency.decimals) + txChainInfo.nativeCurrency.symbol
           setTxAmount(nativetokenAmount)
+          
         }
       }
 
       if (tx.data === '0x') {
+        setTxSendName("send")
         return
       }
 
@@ -203,12 +207,16 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
             case 'transferFrom':
               to = decodedData.params[1].value
               value = decodedData.params[2].value
+              setTxSendName("send")
 
               break
             case 'transfer':
               to = decodedData.params[0].value
               value = decodedData.params[1].value
+              setTxSendName("send")
               break
+            default:
+              setTxSendName(decodedData.name)
           }
           if (value == undefined) {
             return
@@ -256,10 +264,13 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                   actives[item.Key_id] ? 'bg-blue-100' : 'hover:bg-blue-100'
                 )}
               >
-                <div className=" w-full sm:w-1/5 ">
-                  <ArrowUpRightIcon className="text-indigo-500 w-6 h-6 flex-shrink-0 mr-4 inline-block"></ArrowUpRightIcon>
+                <div className=" w-full sm:w-1/5  inline-flex  items-center   ">
+                  {/* <ArrowUpRightIcon className="text-indigo-500 w-6 h-6 flex-shrink-0 mr-4 inline-block"></ArrowUpRightIcon> */}
                   <When condition={txnonce !== undefined}>
-                    {txnonce?.label}:{txnonce?.nonce}
+                  
+                  <span className=' h-6 w-6 p-1'><img  width={24} src={txnonce?.logo}></img></span> 
+                   <span className='p-1 flex-1'>{txnonce?.nonce}</span> 
+                   <span className='p-1'>{txSendName}</span>
                   </When>
                 </div>
                 <div className=" w-full sm:w-1/5 ">{dayjs(Number(item.Timestamp || (item as TxtxSignHistory).Local_timestamp)).fromNow()}</div>
