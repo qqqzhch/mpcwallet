@@ -150,6 +150,6 @@ export const RPC_URLS: { [key in SupportedChainId]: string[] } = {
   [SupportedChainId.CELO_ALFAJORES]: FALLBACK_URLS[SupportedChainId.CELO_ALFAJORES],
   [SupportedChainId.BNB]: ['https://bsc-dataseed.binance.org'],
   [SupportedChainId.BNB_TEST]: ['https://data-seed-prebsc-1-s3.binance.org:8545'],
-  [SupportedChainId.FANTOM_TEST]: ['https://fantom-testnet.public.blastapi.io/'],
+  [SupportedChainId.FANTOM_TEST]: ['https://rpc.ankr.com/fantom_testnet'],
   [SupportedChainId.AVALANCHE_FUJITEST]: [`https://avalanche-fuji.infura.io/v3/${INFURA_KEY}`]
 }
