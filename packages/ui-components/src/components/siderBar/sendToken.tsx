@@ -11,7 +11,7 @@ import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { ethers } from 'ethers'
 import { useParams } from 'react-router-dom'
 import { cutOut, calculateGasMargin } from '../../utils/index'
-import { TxInput, assertType, buidTransactionJson, Unsigedtx } from '../../utils/buildMpcTx'
+import { TxInput, assetType, buidTransactionJson, Unsigedtx } from '../../utils/buildMpcTx'
 
 import { useGetTxMsgHash, useTransactionSigner } from '../../hooks/useSigns'
 import { rpclist } from '../../constants/rpcConfig'
@@ -25,14 +25,14 @@ import Preview from '../transaction/preview'
 import { formatUnitsErc20, formatUnits } from '../../utils/index'
 import { BigNumber } from 'ethers'
 
-import useAsserts from '../../hooks/useAssets'
+import useAssets from '../../hooks/useAssets'
 import useNativeBalance from '../../hooks/useNativeBalance'
 import useErc20Balance from '../../hooks/useErc20Balance'
 
 import AddressName from '../walletList/addressName'
 import { useWeb3SignerOnly } from '../../hooks/useWeb3SignerOnly'
 
-// const assertList: Array<assertType> = [
+// constassetList: Array<assetType> = [
 //   { name: 'eth', img: metamask, decimals: 18 },
 //   { name: 'weth', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e', decimals: 18 },
 //   { name: 'weth1', img: metamask, contractaddress: '0xc253F9D86Cb529b91FEe2d952f65cd33Bd98617e', decimals: 18 }
@@ -41,8 +41,8 @@ import { useWeb3SignerOnly } from '../../hooks/useWeb3SignerOnly'
 type Inputs = {
   toAddress: string
   toAddressRequired: string
-  assert: assertType
-  assertRequired: string
+  asset: assetType
+  assetRequired: string
   amount: string
   amountRequired: string
 }
@@ -58,10 +58,10 @@ const isAddress = (address: string) => {
 type props = {
   open?: boolean
   callBack: () => void
-  selectAssert?: assertType
+  selectAsset?: assetType
 }
 
-const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
+const SendToken: FC<props> = ({ open, callBack, selectAsset }) => {
   const [isTokenOpen, setIsTokenOpen] = useState(open || false)
   const [isPreviewStep, setIsPreviewStep] = useState(false)
   const { address, chainType } = useParams<{ address: string; chainType: string }>()
@@ -76,13 +76,13 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
   const { addToast } = useToasts()
   const [gas, setGas] = useState<{ gasLimit?: string; gasPrise?: string; gasCustom?: boolean }>({})
 
-  const [selectedAsset, setselectedAsset] = useState<assertType>()
+  const [selectedAsset, setselectedAsset] = useState<assetType>()
 
   const [isOpen, setIsOpen] = useState(false)
 
   const mpcGroupAccount = useAccount(address)
   const [btnLoading, setBtnLoading] = useState<boolean>(false)
-  const { data: assertList } = useAsserts()
+  const { data: assetList } = useAssets()
   const { balance: NativeBalance } = useNativeBalance(address)
   const { balance: erc20Balance } = useErc20Balance(address, selectedAsset?.contractaddress)
   const readSigner = useWeb3SignerOnly()
@@ -116,11 +116,11 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
   }, [open])
 
   useEffect(() => {
-    if (selectAssert != undefined&&isTokenOpen) {
-      setselectedAsset(selectAssert)
-      setValue('assert', selectAssert)
+    if (selectAsset != undefined&&isTokenOpen) {
+      setselectedAsset(selectAsset)
+      setValue('asset', selectAsset)
     }
-  }, [selectAssert, setValue,isTokenOpen])
+  }, [selectAsset, setValue,isTokenOpen])
 
   const isAmount = useCallback(
     (Amount: string) => {
@@ -165,8 +165,8 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
           gas: 0,
           gasPrice: 0,
           originValue: data.amount,
-          name: data.assert.name,
-          assert: data.assert
+          name: data.asset.name,
+          asset: data.asset
         })
       }
     },
@@ -229,7 +229,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
       }
     }
     run()
-  }, [unsigedtx, library, chainType, gas.gasCustom, selectedAsset?.contractaddress, readSigner])
+  }, [unsigedtx, library, chainType, gas.gasCustom, selectedAsset?.contractaddress, readSigner,selectedAsset])
 
   useEffect(() => {
     const run = async () => {
@@ -380,17 +380,17 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
                             </div>
                           </div>
                           <div className="mb-6">
-                            <label htmlFor="assert" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            <label htmlFor="asset" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                               Asset{' '}
                             </label>
 
                             <Controller
-                              name="assert"
+                              name="asset"
                               control={control}
                               rules={{
-                                validate: (assertValue: assertType) => {
-                                  if (assertValue == undefined) {
-                                    return 'need select assert'
+                                validate: (assetValue: assetType) => {
+                                  if (assetValue == undefined) {
+                                    return 'need select asset'
                                   }
                                 }
                               }}
@@ -413,23 +413,23 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
 
                                       <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
                                         <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                          {assertList.map((Assert, AssertIdx) => (
+                                          {assetList.map((Asset, AssetIdx) => (
                                             <Listbox.Option
-                                              key={AssertIdx}
+                                              key={AssetIdx}
                                               className={({ active }) =>
                                                 `relative cursor-default select-none py-2 pl-10 pr-4 ${
                                                   active ? 'bg-amber-100 text-amber-900' : 'text-gray-900'
                                                 }`
                                               }
-                                              value={Assert}
+                                              value={Asset}
                                             >
                                               {({ selected }) => (
                                                 <div className="flex flex-row  ">
                                                   {/* <span className="block truncate">
-                                                    <img width={16} src={Assert.img} className="m-1"></img>
+                                                    <img width={16} src={Asset.img} className="m-1"></img>
                                                   </span> */}
 
-                                                  <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>{Assert.name}</span>
+                                                  <span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>{Asset.name}</span>
                                                   {selected ? (
                                                     <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
                                                       <CheckIcon className="h-5 w-5" aria-hidden="true" />
@@ -446,7 +446,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
                                 )
                               }}
                             />
-                            {errors.assert && <div className=" text-red-400 ">{errors.assert.message}</div>}
+                            {errors.asset && <div className=" text-red-400 ">{errors.asset.message}</div>}
                           </div>
                           {errors.toAddressRequired && <span>This field is required</span>}
                           <div className="mb-6">
@@ -512,7 +512,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAssert }) => {
                       openGasModel={openGasModel}
                       previous={previous}
                       next={sendSigner}
-                      assert={userTxInput?.assert}
+                      asset={userTxInput?.asset}
                       btnLoading={btnLoading}
                       userTxInputShow={userTxInput}
                     ></Preview>

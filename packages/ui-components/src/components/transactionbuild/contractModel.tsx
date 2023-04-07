@@ -2,7 +2,7 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState, FC, useCallback, useEffect } from 'react'
 import { ProposedTransaction } from '../../hooks/useServices/models'
 import Preview from '../transaction/preview'
-import { TxInput, assertType, Unsigedtx, buidTransactionForTxbuild } from '../../utils/buildMpcTx'
+import { TxInput, assetType, Unsigedtx, buidTransactionForTxbuild } from '../../utils/buildMpcTx'
 import { useParams } from 'react-router-dom'
 import { useWeb3React } from '@web3-react/core'
 import useChainInfo from '../../hooks/useChainInfo'
@@ -27,7 +27,7 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
   const [userTxInputReview, setUsertTxInputReview] = useState<Unsigedtx>()
   const { address, chainType } = useParams<{ address: string; chainType: string }>()
   const { chainId, library } = useWeb3React()
-  const [assert, setAssert] = useState<assertType>()
+  const [asset, setAsset] = useState<assetType>()
   const ChainInfo = useChainInfo()
   const [gas, setGas] = useState<{ gasLimit?: string; gasPrise?: string }>({})
   const [isShow, setIsShow] = useState(false)
@@ -65,7 +65,7 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
         const dataUnsigedtx = buidTransactionForTxbuild(chainType, chainId, txinfo, transaction.raw.data, haveNative)
 
         if (haveNative && ChainInfo && ChainInfo.logoUrl) {
-          setAssert({
+          setAsset({
             name: ChainInfo.nativeCurrency.name,
             img: ChainInfo.logoUrl,
             balance: '',
@@ -84,7 +84,7 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
         const txforestimateGas = {
           from: userTxInputReview.from,
           to: userTxInputReview.to,
-          data: assert?.contractaddress ? userTxInputReview.data : '',
+          data: asset?.contractaddress ? userTxInputReview.data : '',
           value: userTxInputReview.value
         }
         setIsShow(true)
@@ -110,7 +110,7 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
       }
     }
     run()
-  }, [userTxInputReview, library, isOpen, addToast, assert?.contractaddress, Web3Signer])
+  }, [userTxInputReview, library, isOpen, addToast, asset?.contractaddress, Web3Signer])
   useEffect(() => {
     if (isOpen == false) {
       setIsShow(false)
@@ -240,7 +240,7 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
                     openGasModel={openGasModel}
                     previous={previous}
                     next={sendSigner}
-                    assert={assert}
+                    asset={asset}
                     isTxBuild={true}
                   ></Preview>
                   <GasModel isOpen={isgasOpen} closeModal={editGas} gasPrise={gas.gasPrise} gasLimit={gas.gasLimit}></GasModel>

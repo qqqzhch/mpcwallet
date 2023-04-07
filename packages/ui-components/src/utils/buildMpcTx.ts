@@ -3,7 +3,7 @@ import { ethers, BigNumber } from 'ethers'
 import ERC20ABI from '../constants/ABI/ERC20.json'
 import { formatToWei } from './index'
 
-export type assertType = {
+export type assetType = {
   name: string
   img: string
   contractaddress?: string
@@ -18,7 +18,7 @@ export type TxInput = {
   gasPrice: number
   originValue: string
   name: string
-  assert?: assertType
+  asset?: assetType
 }
 export type Unsigedtx = TxInput & {
   chainId: string
@@ -29,27 +29,27 @@ export type Unsigedtx = TxInput & {
 }
 
 export function buidTransactionJson(chainType: string, chainId: number, data: TxInput): Unsigedtx | undefined {
-  const havecontractaddress = data.assert?.contractaddress === '' ? false : true
-  if (data.assert == undefined) {
+  const havecontractaddress = data.asset?.contractaddress === '' ? false : true
+  if (data.asset == undefined) {
     return undefined
   }
   let encodeFunctionData = '0x'
-  if (havecontractaddress && data.assert?.contractaddress !== undefined) {
+  if (havecontractaddress && data.asset?.contractaddress !== undefined) {
     const erc20Contract = new ethers.utils.Interface(ERC20ABI)
     //  erc20Contract.transfer(data.from,data.to,formatToWei(data.originValue,18))
-    encodeFunctionData = erc20Contract.encodeFunctionData('transfer', [data.to, formatToWei(data.originValue, data.assert.decimals)])
-    // encodeFunctionData = erc20Contract.encodeFunctionData('transferFrom', [data.from, data.to, formatToWei(data.originValue, data.assert.decimals)])
+    encodeFunctionData = erc20Contract.encodeFunctionData('transfer', [data.to, formatToWei(data.originValue, data.asset.decimals)])
+    // encodeFunctionData = erc20Contract.encodeFunctionData('transferFrom', [data.from, data.to, formatToWei(data.originValue, data.asset.decimals)])
   }
 
   return {
     from: data.from,
-    to: data.assert?.contractaddress || data.to,
+    to: data.asset?.contractaddress || data.to,
     gas: data.gas,
     gasPrice: data.gasPrice,
     originValue: data.originValue,
     name: data.name,
     chainId: ethers.utils.hexValue(chainId),
-    value: data.assert?.contractaddress == undefined ? ethers.utils.hexValue(BigNumber.from(formatToWei(data.originValue, data.assert.decimals))) : '0x0',
+    value: data.asset?.contractaddress == undefined ? ethers.utils.hexValue(BigNumber.from(formatToWei(data.originValue, data.asset.decimals))) : '0x0',
     data: encodeFunctionData
   }
 }

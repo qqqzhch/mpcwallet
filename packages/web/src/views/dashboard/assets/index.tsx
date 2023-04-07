@@ -4,8 +4,8 @@ import { useState } from 'react'
 // import SendToken from '@monorepo/ui-components/src/components/siderBar/sendToken'
 import SendNft from '@monorepo/ui-components/src/components/siderBar/sendNft'
 
-import AssertList from '@monorepo/ui-components/src/components/asset/assetList'
-import AddAssert from '@monorepo/ui-components/src/components/asset/addAsset'
+import AssetList from '@monorepo/ui-components/src/components/asset/assetList'
+import AddAsset from '@monorepo/ui-components/src/components/asset/addAsset'
 
 function classNames(...classes: Array<string>) {
   return classes.filter(Boolean).join(' ')
@@ -77,7 +77,7 @@ const Asserts = () => {
                   <div className=" w-48 px-2 py-3 text-right sm:p-3 sm:block"></div>
                 </div>
 
-                <AssertList></AssertList>
+                <AssetList></AssetList>
               </div>
             </Tab.Panel>
             <Tab.Panel key={'Nfts'}>
@@ -125,7 +125,7 @@ const Asserts = () => {
           setIsNFTOpen(false)
         }}
       ></SendNft>
-      <AddAssert isOpen={isaddAsertOpen} closeModal={closeModal} openModal={openModal}></AddAssert>
+      <AddAsset isOpen={isaddAsertOpen} closeModal={closeModal} openModal={openModal}></AddAsset>
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import { FC, useCallback, useState } from 'react'
-import useAsserts from '../../hooks/useAssets'
+import useAssets from '../../hooks/useAssets'
 //https://etherscan.io/address/0xb1f8e55c7f64d203c1400b9d8555d050f94adf39#code
 import useAssertListBalance from '../../hooks/useAssetListBalance'
 import { useParams } from 'react-router-dom'
@@ -7,16 +7,16 @@ import useNativeBalance from '../../hooks/useNativeBalance'
 import { formatUnitsErc20 } from '../../utils/index'
 import SendToken from '../siderBar/sendToken'
 
-import { assertType } from '../../utils/buildMpcTx'
+import { assetType } from '../../utils/buildMpcTx'
 import { Tooltip } from 'react-tooltip'
 
 const AssetList: FC = () => {
-  const { data: assertList } = useAsserts()
+  const { data: assertList } = useAssets()
   const { address } = useParams<{ address: string; chainType: string }>()
   const { balance } = useAssertListBalance(address, assertList)
   const { balance: NativeBalance } = useNativeBalance(address)
   const [isTokenOpen, setIsTokenOpen] = useState(false)
-  const [selectedAssert, setSelectedAssert] = useState<assertType>()
+  const [selectedAssert, setSelectedAssert] = useState<assetType>()
 
   const getBalance = useCallback(
     (address: string | undefined) => {
@@ -67,7 +67,7 @@ const AssetList: FC = () => {
         callBack={() => {
           setIsTokenOpen(false)
         }}
-        selectAssert={selectedAssert}
+        selectAsset={selectedAssert}
       ></SendToken>
     </>
   )
