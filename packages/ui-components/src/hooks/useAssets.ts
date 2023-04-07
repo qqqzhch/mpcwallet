@@ -10,7 +10,7 @@ import { rpclist } from '../constants/rpcConfig'
 import { serverStatusIsSuccess } from '../utils/index'
 import { chainTypeName } from '../constants/chainTypeName'
 import { useParams } from 'react-router-dom'
-import { assertType } from '../utils/buildMpcTx'
+import { assetType } from '../utils/buildMpcTx'
 import useChainInfo from './useChainInfo'
 
 type Asset = {
@@ -37,17 +37,17 @@ async function fetcher(mpcAccount: string | null | undefined, chainId: number | 
 export default function useAssets() {
   const { chainId } = useWeb3React()
   const { chainType } = useParams<{ address: string; chainType: string }>()
-  const [asserts, setAsserts] = useState<Array<assertType>>([])
+  const [assets, setAssets] = useState<Array<assetType>>([])
   const { account } = useWeb3React()
   const chaifo = useChainInfo()
 
-  const { data, error, isLoading } = useSWR(chainId ? ['/smw/useAsserts', account, chainId, chainType] : null, () => fetcher(account, chainId, chainType), {
+  const { data, error, isLoading } = useSWR(chainId ? ['/smw/useAssets', account, chainId, chainType] : null, () => fetcher(account, chainId, chainType), {
     refreshInterval: 1000 * 60
   })
 
   useEffect(() => {
     const run = async () => {
-      const list: Array<assertType> = []
+      const list: Array<assetType> = []
       if (chaifo == undefined) {
         return
       }
@@ -67,13 +67,13 @@ export default function useAssets() {
           })
         })
       }
-      setAsserts(list)
+      setAssets(list)
     }
     run()
   }, [data, chaifo])
 
   return {
-    data: asserts,
+    data: assets,
     error,
     isLoading
   }
