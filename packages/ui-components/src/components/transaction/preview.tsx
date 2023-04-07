@@ -1,4 +1,4 @@
-import { FC, useEffect, useState,useCallback } from 'react'
+import { FC, useEffect, useState, useCallback } from 'react'
 import { Dialog } from '@headlessui/react'
 import ChainName from '../chainList/chainName'
 import Avvvatars from 'avvvatars-react'
@@ -18,7 +18,6 @@ import AddressName from '../walletList/addressName'
 
 import { useWeb3SignerOnly } from '../../hooks/useWeb3SignerOnly'
 import { ProtectedMpcButton } from '../../protectedRoutes/protectedMpcButton'
-
 
 type Props = {
   userTxInput: Unsigedtx | undefined
@@ -40,7 +39,6 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, asset, 
   useEffect(() => {
     const run = async () => {
       if (userTxInput != undefined && readSigner !== undefined) {
-        
         const txforestimateGas = {
           from: userTxInput?.from,
           to: userTxInput?.to,
@@ -62,13 +60,12 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, asset, 
     run()
   }, [library, userTxInput, asset, readSigner])
 
-  const checkgasAndnext=useCallback(()=>{
-    if(userTxInput == undefined || userTxInput.gas == 0 || userTxInput.gasPrice == 0){
-      return 
+  const checkgasAndnext = useCallback(() => {
+    if (userTxInput == undefined || userTxInput.gas == 0 || userTxInput.gasPrice == 0) {
+      return
     }
     next()
-
-  },[userTxInput,next])
+  }, [userTxInput, next])
 
   return (
     <>
@@ -179,21 +176,22 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, asset, 
               <ProtectedButton>
                 <SwitchButton className="text-white  bg-black  focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 w-full">
                   <ProtectedMpcButton>
-                  <button
-                    type="button"
-                    onClick={()=>{checkgasAndnext()} }
-                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 "
-                  >
-                    <If condition={btnLoading}>
-                      <Then>
-                        <img className="inline w-4 h-4 mr-3 text-white animate-spin" src={loadingiImg}></img>
-                        Signing
-                      </Then>
-                      <Else>Next</Else>
-                    </If>
-                  </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        checkgasAndnext()
+                      }}
+                      className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800 "
+                    >
+                      <If condition={btnLoading}>
+                        <Then>
+                          <img className="inline w-4 h-4 mr-3 text-white animate-spin" src={loadingiImg}></img>
+                          Signing
+                        </Then>
+                        <Else>Next</Else>
+                      </If>
+                    </button>
                   </ProtectedMpcButton>
-                  
                 </SwitchButton>
               </ProtectedButton>
             </div>
