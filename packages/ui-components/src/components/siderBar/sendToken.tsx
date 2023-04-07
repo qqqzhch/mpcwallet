@@ -109,6 +109,15 @@ const SendToken: FC<props> = ({ open, callBack, selectAsset }) => {
     },
     [callBack, reset]
   )
+
+  useEffect(() => {
+    if (userTxInputReview && chainId) {
+      if (userTxInputReview.chainId.toString() !== ethers.utils.hexValue(chainId)) {
+        closeTokenModal()
+      }
+    }
+  }, [chainId, closeTokenModal, userTxInputReview])
+
   useEffect(() => {
     if (open != undefined) {
       setIsTokenOpen(open)
