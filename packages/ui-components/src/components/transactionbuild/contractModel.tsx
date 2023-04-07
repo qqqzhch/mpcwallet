@@ -6,7 +6,7 @@ import { TxInput, assetType, Unsigedtx, buidTransactionForTxbuild } from '../../
 import { useParams } from 'react-router-dom'
 import { useWeb3React } from '@web3-react/core'
 import useChainInfo from '../../hooks/useChainInfo'
-import { BigNumber } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
 // import { BigNumber, ethers } from 'ethers'
 import { useGetTxMsgHash, useTransactionSigner } from '../../hooks/useSigns'
 import { rpclist } from '../../constants/rpcConfig'
@@ -47,6 +47,14 @@ const ContractModel: FC<Props> = ({ isOpen, closeModal, transaction }) => {
   function openGasModel() {
     setGasIsOpen(true)
   }
+
+  useEffect(() => {
+    if (userTxInputReviewnew && chainId) {
+      if (userTxInputReviewnew.chainId.toString() !== ethers.utils.hexValue(chainId)) {
+        closeModal()
+      }
+    }
+  }, [chainId, userTxInputReviewnew, closeModal])
 
   useEffect(() => {
     if (transaction != undefined) {

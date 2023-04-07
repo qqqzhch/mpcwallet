@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from 'react'
+import { FC, useCallback, useEffect, useState } from 'react'
 import { ContractInterface } from '../../hooks/useServices/interfaceRepository'
 import useServices from '../../hooks/useServices'
 import { ProposedTransaction } from '../../hooks/useServices/models'
@@ -11,6 +11,7 @@ import { useParams } from 'react-router-dom'
 // import useAccount from '../../hooks/useAccount'
 import ContractModel from './contractModel'
 import useChainInfo from '../../hooks/useChainInfo'
+import { useWeb3React } from '@web3-react/core'
 
 const TransactionBuild: FC = () => {
   // const ChainName = useChainName()
@@ -33,6 +34,16 @@ const TransactionBuild: FC = () => {
   const ChainInfo = useChainInfo()
 
   const [isOpen, setIsOpen] = useState(false)
+  const { chainId } = useWeb3React()
+
+  useEffect(() => {
+    setToAddress('')
+    setAddressOrAbi('')
+    setContract(undefined)
+    setSelectedMethodIndex(0)
+    setTransactions([])
+    setValue('')
+  }, [chainId])
 
   function closeModal() {
     setIsOpen(false)
@@ -210,7 +221,7 @@ const TransactionBuild: FC = () => {
           <textarea
             rows={4}
             cols={50}
-            value={contract?.abiString}
+            value={contract ? contract.abiString : ''}
             id="EnterABI"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           />
