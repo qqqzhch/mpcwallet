@@ -1,4 +1,4 @@
-import { FC, useState, useCallback, useEffect } from 'react'
+import React, { FC, useState, useCallback, useEffect } from 'react'
 
 import { ArrowDownIcon, UsersIcon } from '@heroicons/react/20/solid'
 import { cutOut, formatTxApprove } from '../../utils'
@@ -19,7 +19,7 @@ import useTxHashByKeyId from '../../hooks/useTxHashByKeyId'
 import loadingiImg from '../../assets/loading.svg'
 import ScanTxUrl from '../mpcinfo/scanTxUrl'
 import { getChainInfo } from '../../constants/chainInfo'
-import { BigNumber, ethers } from 'ethers'
+import { BigNumber } from 'ethers'
 
 //eslint-disable-next-line  @typescript-eslint/ban-ts-comment
 //@ts-ignore
@@ -27,13 +27,15 @@ import abiDecoder from 'abi-decoder'
 
 // const abiDecoder = require('abi-decoder');
 import ERC20 from '../../constants/ABI/ERC20.json'
-import { RPC_URLS } from '../../constants/networks'
-import { SupportedChainId } from '../../constants/chains'
+
 abiDecoder.addABI(ERC20)
 
 import useMpcAddressDetail from '../../hooks/useMpcAddressDetail'
 import useApprovalListByKeyId from '../../hooks/useApprovalListByKeyId'
 import AddressName from '../walletList/addressName'
+import useContractInfo from '../../hooks/useContractInfo'
+
+import { Unsigedtx } from '../../utils/buildMpcTx'
 
 function checkThreshold(str: string) {
   const list = str.split('/')
@@ -99,6 +101,8 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
   const [txnonce, setTxnonce] = useState<{ nonce: number | undefined; logo: string }>()
 
   const [txSendName, setTxSendName] = useState<string>('')
+  const [itenUnsigedtx, setUnsigedtx] = useState<Unsigedtx>()
+  const contractInfo = useContractInfo(itenUnsigedtx)
 
   useEffect(() => {
     if (ownerAccountInfo) {
@@ -151,6 +155,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
     const info = getChainInfo(num)
     return info
   }, [])
+
   useEffect(() => {
     //const decodedData = abiDecoder.decodeMethod(tx.data);
     const run = async () => {
@@ -162,6 +167,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
         return
       }
       const tx = txList[0]
+      setUnsigedtx(tx)
       const txchainId = BigNumber.from(tx.chainId).toNumber()
       const txChainInfo = getChainInfo(txchainId)
 
@@ -188,18 +194,17 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
       txList.forEach(async (tx, index) => {
         try {
           const decodedData = abiDecoder.decodeMethod(tx.data)
-          if (decodedData === undefined) {
+          if (decodedData === undefined || contractInfo == undefined) {
             // not erc 20
             return
           }
           // read symbol() decimals()
           // 这里需要从目标链上读取数据而不是当前链
-          const rpcurl = RPC_URLS[txchainId as unknown as SupportedChainId]
-          const txprovider = new ethers.providers.JsonRpcProvider(rpcurl[0])
-          const erc20Contract = new ethers.Contract(tx.to, ERC20, txprovider)
-          const result = await Promise.all([erc20Contract.symbol(), erc20Contract.decimals()])
+          // const rpcurl = RPC_URLS[txchainId as unknown as SupportedChainId]
+          // const txprovider = new ethers.providers.JsonRpcProvider(rpcurl[0])
+          // const erc20Contract = new ethers.Contract(tx.to, ERC20, txprovider)
 
-          const [tokensymbol, tokendecimals] = result
+          const [tokensymbol, tokendecimals] = contractInfo
 
           let to = '',
             value = ''
@@ -222,7 +227,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
             return
           }
 
-          const tokenAmount = value == '' ? '' : formatFromWei(value, tokendecimals) + ' ' + tokensymbol
+          const tokenAmount = value == '' ? '' : formatFromWei(value, tokendecimals as number) + ' ' + tokensymbol
           const txListTokenInfo: tokenTxType = {}
           txListTokenInfo[index] = {
             to,
@@ -245,7 +250,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
       })
     }
     run()
-  }, [txApprove, library])
+  }, [txApprove, library, contractInfo])
 
   return (
     <div className="flex flex-col overflow-x-auto  text-base p-2">
@@ -529,4 +534,4 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
   )
 }
 
-export default TxApproveItem
+export default React.memo(TxApproveItem)
