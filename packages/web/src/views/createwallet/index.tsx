@@ -10,6 +10,8 @@ import { useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { ethers } from 'ethers'
 import { MinusIcon } from '@heroicons/react/20/solid'
+import useGetNodesNumber from '@monorepo/ui-components/src/hooks/useGetNodesNumber'
+import { Else, If, Then } from 'react-if'
 
 const CreatWallet: FC = props => {
   const { account } = useWeb3React()
@@ -24,6 +26,8 @@ const CreatWallet: FC = props => {
   const editcreateGroupAdmin = useAppStore(state => state.editcreateGroupAdmin)
   const resetCreateGroupAdmin = useAppStore(state => state.resetCreateGroupAdmin)
   const setcreateGroupKeytype = useAppStore(state => state.setcreateGroupKeytype)
+
+  const nodesNumber = useGetNodesNumber()
 
   const navigate = useNavigate()
 
@@ -136,9 +140,21 @@ const CreatWallet: FC = props => {
             <div className="text-red-400">{adminserror ? adminserror : null}</div>
 
             <div className="relative mb-4 py-8">
-              <span onClick={addcreateGroupAdmin} className="bg-white hover:bg-gray-200 text-black font-semibold text-center py-2 px-4 rounded ">
-                + add new owner
-              </span>
+              <If condition={nodesNumber && createGroup.admins.length < nodesNumber}>
+                <Then>
+                  <span
+                    onClick={addcreateGroupAdmin}
+                    className="bg-white hover:bg-gray-200 text-black font-semibold text-center py-2 px-4 rounded cursor-pointer "
+                  >
+                    + add new owner
+                  </span>
+                </Then>
+                <Else>
+                  <span className="bg-white hover:bg-gray-200 text-black font-semibold text-center py-2 px-4 rounded ">
+                    Maximum number of people has been reached
+                  </span>
+                </Else>
+              </If>
             </div>
             <div className="flex flex-col   lg:flex-row  mb-20">
               <div className="w-2/3">
