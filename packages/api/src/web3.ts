@@ -301,6 +301,13 @@ web3.extend({
       params: 3,
       inputFormatter: [null,null,null],
       outputFormatter: undefined,
+    },
+    {
+      name: "getNodesNumber",
+      call: "smw_getNodesNumber",
+      params: 0,
+      inputFormatter: [],
+      outputFormatter: undefined,
     }
 
     
