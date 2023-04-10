@@ -71,7 +71,7 @@ const Setup: FC = () => {
             </When>
 
             <div className="break-words">Address:{address}</div>
-            <div className="break-words">Nonce:{nonce ? nonce : '...'}</div>
+            <div className="break-words">Nonce:{nonce !== undefined ? nonce : '...'}</div>
           </div>
         </div>
       </div>

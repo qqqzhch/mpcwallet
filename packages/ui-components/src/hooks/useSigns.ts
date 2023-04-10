@@ -288,8 +288,8 @@ export function useGetTxMsgHash(rpc: string | undefined): {
         web3.setProvider(rpc)
         let cbData, msgContext, errmsg
         try {
-          const signerOnly = web3LibOnly.getSigner(mpcAddress)
-          const Nonce = await signerOnly.getTransactionCount()
+          // const signerOnly = web3LibOnly.getSigner(mpcAddress)
+          const Nonce = await web3LibOnly.getTransactionCount(mpcAddress)
           const data = {
             ...r,
             nonce: parseFloat(Nonce.toString()),
