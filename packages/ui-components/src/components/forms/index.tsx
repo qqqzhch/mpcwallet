@@ -89,13 +89,17 @@ const InputeMinus: FC<Props> = ({ index, value }) => {
             ></input>
           </When>
         </div>
-
-        <MinusIcon
-          onClick={() => {
-            onMinusClick(index)
-          }}
-          className="w-8 h-8"
-        ></MinusIcon>
+        <When condition={index !== 0}>
+          <MinusIcon
+            onClick={() => {
+              onMinusClick(index)
+            }}
+            className="w-8 h-8"
+          ></MinusIcon>
+        </When>
+        <When condition={index == 0}>
+          <MinusIcon className="w-8 h-8 invisible"></MinusIcon>
+        </When>
       </div>
     </div>
   )
