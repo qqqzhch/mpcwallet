@@ -6,6 +6,7 @@ import SendNft from '@monorepo/ui-components/src/components/siderBar/sendNft'
 
 import AssetList from '@monorepo/ui-components/src/components/asset/assetList'
 import AddAsset from '@monorepo/ui-components/src/components/asset/addAsset'
+import { ProtectedButton } from '@monorepo/ui-components'
 
 function classNames(...classes: Array<string>) {
   return classes.filter(Boolean).join(' ')
@@ -55,15 +56,17 @@ const Asserts = () => {
               </Tab.List>
             </div>
             <div className=" flex-1 flex flex-row  justify-end ">
-              <button
-                onClick={() => {
-                  openModal()
-                }}
-                type="button"
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-              >
-                add
-              </button>
+              <ProtectedButton>
+                <button
+                  onClick={() => {
+                    openModal()
+                  }}
+                  type="button"
+                  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                >
+                  add
+                </button>
+              </ProtectedButton>
             </div>
           </div>
 

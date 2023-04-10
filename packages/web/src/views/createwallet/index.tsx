@@ -12,7 +12,7 @@ import { ethers } from 'ethers'
 import { MinusIcon } from '@heroicons/react/20/solid'
 import useGetNodesNumber from '@monorepo/ui-components/src/hooks/useGetNodesNumber'
 import { Else, If, Then } from 'react-if'
-
+import { ProtectedButton } from '@monorepo/ui-components'
 const CreatWallet: FC = props => {
   const { account } = useWeb3React()
 
@@ -151,7 +151,7 @@ const CreatWallet: FC = props => {
                 </Then>
                 <Else>
                   <span className="bg-white hover:bg-gray-200 text-black font-semibold text-center py-2 px-4 rounded ">
-                    Maximum number of people has been reached
+                    Maximum number of owner has been reached
                   </span>
                 </Else>
               </If>
@@ -165,28 +165,30 @@ const CreatWallet: FC = props => {
                 <Threshold></Threshold>
               </div>
             </div>
-            <div className="flex   flex-col-reverse   lg:flex-row justify-around space-y-reverse space-y-8  ">
-              <div className=" text-center">
-                <button
-                  onClick={() => {
-                    reset()
-                  }}
-                  className=" py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-                >
-                  Reset
-                </button>
+            <ProtectedButton>
+              <div className="flex   flex-col-reverse   lg:flex-row justify-around space-y-reverse space-y-8  ">
+                <div className=" text-center">
+                  <button
+                    onClick={() => {
+                      reset()
+                    }}
+                    className=" py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                  >
+                    Reset
+                  </button>
+                </div>
+                <div className=" text-center">
+                  <button
+                    onClick={() => {
+                      formvaValidation()
+                    }}
+                    className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                  >
+                    Next
+                  </button>
+                </div>
               </div>
-              <div className=" text-center">
-                <button
-                  onClick={() => {
-                    formvaValidation()
-                  }}
-                  className=" text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                >
-                  Next
-                </button>
-              </div>
-            </div>
+            </ProtectedButton>
           </div>
         </div>
       </div>
