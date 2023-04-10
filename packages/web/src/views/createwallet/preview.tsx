@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import CreateWalletBtn from '@monorepo/ui-components/src/components/forms/CreateWalletBtn'
 import { Else, If, Then } from 'react-if'
 import { useEffect } from 'react'
+import { ProtectedButton } from '@monorepo/ui-components'
 
 const Preview = () => {
   const createGroup = useAppStore(state => state.createGroup)
@@ -53,21 +54,23 @@ const Preview = () => {
               {createGroup.threshold} out of {createGroup.admins.length} owners
             </div>
           </div>
-          <div className="flex  flex-col-reverse   lg:flex-row  justify-around space-y-reverse space-y-8 text-center">
-            <div>
-              <button
-                onClick={() => {
-                  navigate('/creatwallet')
-                }}
-                className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-              >
-                Previous
-              </button>
+          <ProtectedButton className="w-full bg-sky-500 hover:bg-sky-700 px-5 py-2.5 text-sm leading-5 rounded-md font-semibold text-white">
+            <div className="flex   flex-col-reverse   lg:flex-row  justify-around space-y-reverse space-y-8 text-center">
+              <div>
+                <button
+                  onClick={() => {
+                    navigate('/creatwallet')
+                  }}
+                  className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                >
+                  Previous
+                </button>
+              </div>
+              <div>
+                <CreateWalletBtn></CreateWalletBtn>
+              </div>
             </div>
-            <div>
-              <CreateWalletBtn></CreateWalletBtn>
-            </div>
-          </div>
+          </ProtectedButton>
         </div>
       </div>
       <div className="flex-1 bg-gray-50 rounded-md">
