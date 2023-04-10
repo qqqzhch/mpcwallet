@@ -89,6 +89,7 @@ export const FALLBACK_URLS: { [key in SupportedChainId]: string[] } = {
     'https://rpc-mainnet.matic.quiknode.pro'
   ],
   [SupportedChainId.POLYGON_MUMBAI]: [
+    'https://matic-testnet-archive-rpc.bwarelabs.com/',
     // "Safe" URLs
     'https://matic-mumbai.chainstacklabs.com',
     'https://rpc-mumbai.maticvigil.com'

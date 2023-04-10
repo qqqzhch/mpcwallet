@@ -5,7 +5,8 @@ import { RPC_URLS } from '../constants/networks'
 import { useWeb3React } from '@web3-react/core'
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import { FallbackProviderConfig } from '@ethersproject/providers/lib/fallback-provider'
+
+import Fallbackprovider from '../utils/fallback-provider'
 
 export function useWeb3LibOnly(): providers.FallbackProvider | undefined {
   const { chainId } = useWeb3React()
@@ -16,15 +17,12 @@ export function useWeb3LibOnly(): providers.FallbackProvider | undefined {
     if (chainId == undefined || address == undefined) {
       return
     }
-    const providerlist: Array<FallbackProviderConfig> = []
+    const providerlist: Array<providers.JsonRpcProvider> = []
 
     RPC_URLS[chainId as SupportedChainId].forEach(item => {
-      providerlist.push({
-        provider: new providers.JsonRpcProvider(item),
-        stallTimeout: 1000 * 5
-      } as FallbackProviderConfig)
+      providerlist.push(new providers.JsonRpcProvider(item))
     })
-    const fallbackProvider = new providers.FallbackProvider(providerlist, 2)
+    const fallbackProvider = new Fallbackprovider(providerlist, 1)
 
     setProvider(fallbackProvider)
   }, [chainId, address])
