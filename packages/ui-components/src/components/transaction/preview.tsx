@@ -16,7 +16,6 @@ import { ProtectedButton } from '../../protectedRoutes/protectedButton'
 import { SwitchButton } from '../../protectedRoutes/switchButton'
 import AddressName from '../walletList/addressName'
 
-import { useWeb3SignerOnly } from '../../hooks/useWeb3SignerOnly'
 import { ProtectedMpcButton } from '../../protectedRoutes/protectedMpcButton'
 
 type Props = {
@@ -34,11 +33,10 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, asset, 
   const { address } = useParams<{ address: string; chainType: string }>()
   const { chainId, library } = useWeb3React()
   const [gasError, setGasError] = useState<string | undefined>()
-  const readSigner = useWeb3SignerOnly()
 
   useEffect(() => {
     const run = async () => {
-      if (userTxInput != undefined && readSigner !== undefined) {
+      if (userTxInput != undefined && library !== undefined) {
         const txforestimateGas = {
           from: userTxInput?.from,
           to: userTxInput?.to,
@@ -47,7 +45,7 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, asset, 
         }
 
         try {
-          await readSigner.estimateGas(txforestimateGas)
+          await library.estimateGas(txforestimateGas)
 
           setGasError(undefined)
         } catch (error: unknown) {
@@ -58,7 +56,7 @@ const Preview: FC<Props> = ({ userTxInput, openGasModel, previous, next, asset, 
       }
     }
     run()
-  }, [library, userTxInput, asset, readSigner])
+  }, [library, userTxInput, asset])
 
   const checkgasAndnext = useCallback(() => {
     if (userTxInput == undefined || userTxInput.gas == 0 || userTxInput.gasPrice == 0) {

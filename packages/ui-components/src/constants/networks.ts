@@ -53,7 +53,8 @@ export const FALLBACK_URLS: { [key in SupportedChainId]: string[] } = {
     'https://cloudflare-eth.com',
     // "Fallback" URLs
     'https://rpc.ankr.com/eth',
-    'https://eth-mainnet.public.blastapi.io'
+    'https://eth-mainnet.public.blastapi.io',
+    `https://mainnet.infura.io/v3/${INFURA_KEY}`
   ],
   [SupportedChainId.ROPSTEN]: [
     // "Fallback" URLs
@@ -67,7 +68,11 @@ export const FALLBACK_URLS: { [key in SupportedChainId]: string[] } = {
     // "Safe" URLs
     'https://rpc.goerli.mudit.blog/',
     // "Fallback" URLs
-    'https://rpc.ankr.com/eth_goerli'
+    'https://rpc.ankr.com/eth_goerli',
+    'https://eth-goerli.api.onfinality.io/public',
+    'https://eth-goerli.public.blastapi.io',
+    'https://eth-goerli.g.alchemy.com/v2/demo',
+    `https://goerli.infura.io/v3/${INFURA_KEY}`
   ],
   [SupportedChainId.KOVAN]: [
     // "Safe" URLs
@@ -81,14 +86,12 @@ export const FALLBACK_URLS: { [key in SupportedChainId]: string[] } = {
     'https://rpc-mainnet.matic.network',
     'https://matic-mainnet.chainstacklabs.com',
     'https://rpc-mainnet.maticvigil.com',
-    'https://rpc-mainnet.matic.quiknode.pro',
-    'https://matic-mainnet-full-rpc.bwarelabs.com'
+    'https://rpc-mainnet.matic.quiknode.pro'
   ],
   [SupportedChainId.POLYGON_MUMBAI]: [
     // "Safe" URLs
     'https://matic-mumbai.chainstacklabs.com',
-    'https://rpc-mumbai.maticvigil.com',
-    'https://matic-testnet-archive-rpc.bwarelabs.com'
+    'https://rpc-mumbai.maticvigil.com'
   ],
   [SupportedChainId.ARBITRUM_ONE]: [
     // "Safe" URLs
@@ -124,10 +127,20 @@ export const FALLBACK_URLS: { [key in SupportedChainId]: string[] } = {
   ],
   [SupportedChainId.BNB_TEST]: [
     // "Safe" URLs
-    'https://data-seed-prebsc-1-s3.binance.org:8545'
+    `https://data-seed-prebsc-1-s1.binance.org:8545`,
+    `https://data-seed-prebsc-2-s1.binance.org:8545`,
+    `https://data-seed-prebsc-2-s3.binance.org:8545`
   ],
-  [SupportedChainId.AVALANCHE_FUJITEST]: [],
-  [SupportedChainId.FANTOM_TEST]: []
+  [SupportedChainId.AVALANCHE_FUJITEST]: [
+    `https://ava-testnet.public.blastapi.io/ext/bc/C/rpc`,
+    `https://api.avax-test.network/ext/bc/C/rpc`,
+    `https://avalanche-fuji.infura.io/v3/${INFURA_KEY}`
+  ],
+  [SupportedChainId.FANTOM_TEST]: [
+    `https://rpc.testnet.fantom.network`,
+    `https://fantom-testnet.public.blastapi.io`,
+    `https://endpoints.omniatech.io/v1/fantom/testnet/public`
+  ]
 }
 
 /**
@@ -135,10 +148,10 @@ export const FALLBACK_URLS: { [key in SupportedChainId]: string[] } = {
  * These are the URLs used by the interface when there is not another available source of chain data.
  */
 export const RPC_URLS: { [key in SupportedChainId]: string[] } = {
-  [SupportedChainId.MAINNET]: [`https://mainnet.infura.io/v3/${INFURA_KEY}`, ...FALLBACK_URLS[SupportedChainId.MAINNET]],
+  [SupportedChainId.MAINNET]: ['https://eth-rpc.gateway.pokt.network', ...FALLBACK_URLS[SupportedChainId.MAINNET]],
   [SupportedChainId.RINKEBY]: [`https://rinkeby.infura.io/v3/${INFURA_KEY}`, ...FALLBACK_URLS[SupportedChainId.RINKEBY]],
   [SupportedChainId.ROPSTEN]: [`https://ropsten.infura.io/v3/${INFURA_KEY}`, ...FALLBACK_URLS[SupportedChainId.ROPSTEN]],
-  [SupportedChainId.GOERLI]: [`https://goerli.infura.io/v3/${INFURA_KEY}`, ...FALLBACK_URLS[SupportedChainId.GOERLI]],
+  [SupportedChainId.GOERLI]: ['https://rpc.ankr.com/eth_goerli', ...FALLBACK_URLS[SupportedChainId.GOERLI]],
   [SupportedChainId.KOVAN]: [`https://kovan.infura.io/v3/${INFURA_KEY}`, ...FALLBACK_URLS[SupportedChainId.KOVAN]],
   [SupportedChainId.OPTIMISM]: [`https://optimism-mainnet.infura.io/v3/${INFURA_KEY}`, ...FALLBACK_URLS[SupportedChainId.OPTIMISM]],
   [SupportedChainId.OPTIMISM_GOERLI]: [`https://optimism-goerli.infura.io/v3/${INFURA_KEY}`, ...FALLBACK_URLS[SupportedChainId.OPTIMISM_GOERLI]],
@@ -149,7 +162,7 @@ export const RPC_URLS: { [key in SupportedChainId]: string[] } = {
   [SupportedChainId.CELO]: FALLBACK_URLS[SupportedChainId.CELO],
   [SupportedChainId.CELO_ALFAJORES]: FALLBACK_URLS[SupportedChainId.CELO_ALFAJORES],
   [SupportedChainId.BNB]: ['https://bsc-dataseed.binance.org'],
-  [SupportedChainId.BNB_TEST]: ['https://data-seed-prebsc-1-s3.binance.org:8545'],
-  [SupportedChainId.FANTOM_TEST]: ['https://rpc.ankr.com/fantom_testnet'],
-  [SupportedChainId.AVALANCHE_FUJITEST]: [`https://avalanche-fuji.infura.io/v3/${INFURA_KEY}`]
+  [SupportedChainId.BNB_TEST]: ['https://data-seed-prebsc-1-s3.binance.org:8545', ...FALLBACK_URLS[SupportedChainId.BNB_TEST]],
+  [SupportedChainId.FANTOM_TEST]: ['https://rpc.ankr.com/fantom_testnet', ...FALLBACK_URLS[SupportedChainId.FANTOM_TEST]],
+  [SupportedChainId.AVALANCHE_FUJITEST]: [`https://rpc.ankr.com/avalanche_fuji`, ...FALLBACK_URLS[SupportedChainId.AVALANCHE_FUJITEST]]
 }

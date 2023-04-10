@@ -30,7 +30,7 @@ import useNativeBalance from '../../hooks/useNativeBalance'
 import useErc20Balance from '../../hooks/useErc20Balance'
 
 import AddressName from '../walletList/addressName'
-import { useWeb3SignerOnly } from '../../hooks/useWeb3SignerOnly'
+import useGasPrice from '../../hooks/useGasPrice'
 
 // constassetList: Array<assetType> = [
 //   { name: 'eth', img: metamask, decimals: 18 },
@@ -85,7 +85,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAsset }) => {
   const { data: assetList } = useAssets()
   const { balance: NativeBalance } = useNativeBalance(address)
   const { balance: erc20Balance } = useErc20Balance(address, selectedAsset?.contractaddress)
-  const readSigner = useWeb3SignerOnly()
+  const gasPrice = useGasPrice()
 
   const {
     register,
@@ -203,7 +203,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAsset }) => {
 
   useEffect(() => {
     const run = async () => {
-      if (unsigedtx != undefined && readSigner !== undefined) {
+      if (unsigedtx != undefined && library !== undefined && gasPrice !== undefined) {
         const txforestimateGas = {
           from: unsigedtx.from,
           to: unsigedtx.to,
@@ -215,10 +215,10 @@ const SendToken: FC<props> = ({ open, callBack, selectAsset }) => {
 
         if (gas.gasCustom == undefined || (gas.gasCustom == false && selectedAsset !== undefined)) {
           try {
-            const gasEstimate: BigNumber = await readSigner.estimateGas(txforestimateGas)
+            const gasEstimate: BigNumber = await library.estimateGas(txforestimateGas)
             // const gasEstimate_: BigNumber =BigNumber.from(ethers.utils.parseUnits('0.001',"gwei"))
             // console.log(gasEstimate_.toString(),'gasEstimate_')
-            const gasprise: BigNumber = await readSigner.getGasPrice()
+            const gasprise: BigNumber = gasPrice
             const gasEstimateMore = calculateGasMargin(gasEstimate)
 
             setGas({ gasLimit: gasEstimateMore.toString(), gasPrise: gasprise.toString() })
@@ -238,7 +238,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAsset }) => {
       }
     }
     run()
-  }, [unsigedtx, library, chainType, gas.gasCustom, selectedAsset?.contractaddress, readSigner, selectedAsset])
+  }, [unsigedtx, library, chainType, gas.gasCustom, selectedAsset?.contractaddress, selectedAsset, gasPrice])
 
   useEffect(() => {
     const run = async () => {
@@ -256,6 +256,7 @@ const SendToken: FC<props> = ({ open, callBack, selectAsset }) => {
           gas: gas.gasLimit as unknown as number,
           gasPrice: gas.gasPrise as unknown as number
         }
+
         const data = await getUnsigedTransactionHash(txinfo, chainType, chainId)
         if (data.msg == 'success') {
           setMsgHash(data.info)
