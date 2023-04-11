@@ -23,10 +23,11 @@ With security and low fees. Supports evm and non-evm blockchains
 - [x] Add assets
 - [x] Add a note to the address
 - [x] Contract interaction
-- [x] Support from test network ,BSC Test Net、Görli、Polygon Mumbai、FANTOM Test Net、AVALANCHE Fuji
-- [] Support from mian network ,BSC 、Ethereum、Polygon、FANTOM、AVALANCHE 
-- [] dapp connects to the wallet via walletconnect
-- [] btc blockchaintest network 
+- [x] Approval of transactions
+- [x] Support  test network ,BSC Test Net、Görli、Polygon Mumbai、FANTOM Test Net、AVALANCHE Fuji
+- [ ] Support  mian network ,BSC 、Ethereum、Polygon、FANTOM、AVALANCHE 
+- [ ] dapp connects to the wallet via walletconnect
+- [ ] btc blockchaintest network 
 
 ## 🌐 Samples
 
