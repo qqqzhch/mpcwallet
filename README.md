@@ -87,7 +87,7 @@ Run the front end application [`@monorepo-boilerplate/web`](./packages/web) and 
 | `yarn e2e:open`        | open cypress                                                                                                |
 | `yarn e2e:run`     | run cypress                                                                                                                                                              |                                                                            |
 | `yarn build-app`        | Build of front app([`@monorepo-boilerplate/web`](./packages/web)) and generate a directory with all assets in the following path: `packages/web/build`                                                |
-|
+
 
 ### yarn
 ```
