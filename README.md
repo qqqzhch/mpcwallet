@@ -16,12 +16,12 @@ and [cypress](https://www.cypress.io/).
 
 ## 💥 Features
 
-- ⚡️ Vite 2.0 - (React 18)
-- 📖 tailwindcss
-- 📦 Yarn Workspaces
-- ✨ Host Multiple CRA Apps, Vite apps, Component Libraries in one monorepo
-- 🔥 Hot Reload all Apps, Components & Storybooks
-- 👨‍🔬 Test all workspaces with Eslint & Jest using one command
+- Create a Vault
+- Send transaction
+- Add assets
+- Add a note to the address
+- Contract interaction
+- Support from test network ,BSC Test Net、Görli、Polygon Mumbai、FANTOM Test Net、AVALANCHE Fuji
 
 ## 🌐 Samples
 
