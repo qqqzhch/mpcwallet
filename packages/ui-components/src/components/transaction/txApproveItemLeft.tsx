@@ -1,4 +1,4 @@
-import { FC, useState, useCallback, useMemo } from 'react'
+import { FC, useCallback, useMemo } from 'react'
 
 import { When, If, Then, Else } from 'react-if'
 import Avvvatars from 'avvvatars-react'
@@ -17,19 +17,20 @@ import { gasFee, formatUnits } from '../../utils/index'
 type Props = {
   txList: Unsigedtx[]
   item: TxtxSignHistory | TxApprove
+  erc20to?: string
 }
-type tokenTxType = {
-  [key: number]: {
-    to: string
-    tokenAmount: string
-  }
-}
+// type tokenTxType = {
+//   [key: number]: {
+//     to: string
+//     tokenAmount: string
+//   }
+// }
 
-const TxApproveItemLeft: FC<Props> = ({ txList, item }) => {
+const TxApproveItemLeft: FC<Props> = ({ txList, item, erc20to }) => {
   const { data: txhashInfo } = useTxHashByKeyId(item?.Key_id)
-  const [txtokenTxInfo] = useState<tokenTxType>({})
+  // const [txtokenTxInfo] = useState<tokenTxType>({})
   //const [txtokenTxInfo, settxtokenTxInfo] = useState<tokenTxType>({})
-  const [txAmount] = useState<string>('')
+  // const [txAmount] = useState<string>('')
   // const [txAmount, setTxAmount] = useState<string>('')
   const chainIdNum = useMemo(() => {
     return BigNumber.from(txList[0].chainId).toNumber()
@@ -46,7 +47,7 @@ const TxApproveItemLeft: FC<Props> = ({ txList, item }) => {
       {txList.map((tx, index) => {
         return (
           <div key={index}>
-            <div className="flex flex-row border-b  border-gray-200 border-solid p-4">
+            <div className="flex  flex-col sm:flex-row border-b  border-gray-200 border-solid p-4">
               <div className="flex-1">
                 <If condition={tx.data == '0x'}>
                   <Then>
@@ -68,30 +69,30 @@ const TxApproveItemLeft: FC<Props> = ({ txList, item }) => {
                     <div className=" flex items-center p-1 ">
                       <span className=" p-2 break-all ">{tx.to}</span>
                     </div>
-                    <When condition={txtokenTxInfo !== undefined && txtokenTxInfo[index] !== undefined}>
+                    <When condition={erc20to !== undefined}>
                       <div>
-                        <When condition={txtokenTxInfo && txtokenTxInfo[index] && txtokenTxInfo[index].to != ''}>
+                        <When condition={erc20to !== undefined}>
                           <div className="flex items-center flex-wrap">
-                            <span className=" w-20">To:</span>
+                            <span className="">To:</span>
+                            <span className=" p-1">
+                              <Avvvatars value={erc20to == undefined ? '' : erc20to} style="shape" size={40} />
+                            </span>
                             <div className=" flex flex-col">
                               <span className=" break-words    break-all ">
-                                <AddressName address={txtokenTxInfo[index] && txtokenTxInfo[index].to}></AddressName>
+                                <AddressName address={erc20to && erc20to}></AddressName>
                               </span>
-                              <span className=" break-words    break-all  ">{txtokenTxInfo[index] && txtokenTxInfo[index].to}</span>
-                              {/* <span className=" ">
-                                            <Avvvatars value={txtokenTxInfo[index] && txtokenTxInfo[index].to} style="shape" size={20} />
-                                          </span> */}
+                              <span className=" break-words    break-all  ">{erc20to}</span>
                             </div>
                           </div>
                         </When>
-                        <When condition={(txtokenTxInfo && txtokenTxInfo[index] && txtokenTxInfo[index].tokenAmount != '') || txAmount !== ''}>
+                        {/* <When condition={(txtokenTxInfo && txtokenTxInfo[index] && txtokenTxInfo[index].tokenAmount != '') || txAmount !== ''}>
                           <div className=" flex items-center flex-wrap">
                             <span className=" w-20">Amount:</span>
                             <span className=" break-words    break-all ">
                               {txtokenTxInfo[index] && txtokenTxInfo[index].tokenAmount} {txAmount}
                             </span>
                           </div>
-                        </When>
+                        </When> */}
                       </div>
                     </When>
                   </Else>

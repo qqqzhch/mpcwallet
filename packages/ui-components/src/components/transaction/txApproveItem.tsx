@@ -67,21 +67,33 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
       return
     }
     const tx = txList[0]
+    let erc20to
+    let transferName = ''
     if (tx.data === '0x') {
-      return 'send'
+      transferName = 'send'
     }
     try {
       const decodedData = abiDecoder.decodeMethod(tx.data)
-      if (decodedData == undefined) {
-        return
+      if (decodedData !== undefined) {
+        const name = decodedData.name as string
+        if (['transfer', 'transferFrom'].includes(name)) {
+          transferName = 'send'
+        }
+        switch (decodedData.name) {
+          case 'transferFrom':
+            erc20to = decodedData.params[1].value
+            break
+          case 'transfer':
+            erc20to = decodedData.params[0].value
+            break
+        }
       }
-      const name = decodedData.name as string
-      if (['transfer', 'transferFrom'].includes(name)) {
-        return 'send'
-      }
-      return name
     } catch (error) {
-      return 'use contracts'
+      transferName = 'use contracts'
+    }
+    return {
+      erc20to,
+      transferName
     }
   }, [txApprove])
 
@@ -106,7 +118,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
       return
     }
 
-    setTxSendName(decodeTXname)
+    setTxSendName(decodeTXname.transferName)
   }, [txApprove, library, decodeTXname])
 
   return (
@@ -152,7 +164,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
                   <If condition={item.Status == 0}>
                     <Then>
                       <When condition={issignHIstory === false}>Needs your confirmation</When>
-                      <When condition={issignHIstory === true}>Needs other confirmation</When>
+                      <When condition={issignHIstory === true}>Needs confirmation</When>
 
                       <ArrowDownIcon className=" w-6 h-6 flex-shrink-0 ml-4 inline-block"></ArrowDownIcon>
                     </Then>
@@ -162,7 +174,7 @@ const TxApproveItem: FC<Props> = ({ txApprove, issignHIstory = false }) => {
               </div>
               <When condition={actives[item.Key_id]}>
                 <div className="w-full  flex flex-col sm:flex-row p-4   bg-gray-50 ">
-                  <TxApproveItemLeft txList={txList} item={item}></TxApproveItemLeft>
+                  <TxApproveItemLeft txList={txList} item={item} erc20to={decodeTXname?.erc20to}></TxApproveItemLeft>
                   <TxApproveItemRight item={item} issignHIstory={issignHIstory}></TxApproveItemRight>
                 </div>
               </When>

@@ -147,8 +147,8 @@ const TxApproveItemRight: FC<Props> = ({ item, issignHIstory }) => {
             <div className="h-full w-1 bg-gray-200 pointer-events-none"></div>
           </div>
           <div className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-500 inline-flex items-center justify-center text-white relative z-10">
-            <When condition={txStatus.data.code == '0'}>~</When>
-            <When condition={txStatus.data.code == '1'}>✓</When>
+            <When condition={txStatus.data.code != '5'}>~</When>
+            <When condition={txStatus.data.code == '5'}>✓</When>
           </div>
           <div className="flex-grow pl-4">
             <h2 className="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">Executed </h2>
@@ -186,7 +186,7 @@ const TxApproveItemRight: FC<Props> = ({ item, issignHIstory }) => {
           </Else>
         </If>
       </When>
-      <When condition={showBtn == false && txStatus && txStatus.data.code !== undefined && ['5', '6', '7', '3'].includes(txStatus.data.code) == false}>
+      <When condition={showBtn == false && txStatus && txStatus.data.code !== undefined && ['5', '6', '7', '3', '2'].includes(txStatus.data.code) == false}>
         <div className="flex items-center justify-center   bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
           <div className="w-full py-2.5 px-5 text-sm font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">
             In process...
