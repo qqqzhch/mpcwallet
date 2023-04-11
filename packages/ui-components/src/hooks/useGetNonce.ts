@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom'
 export default function useGetNonce(): number | undefined {
   // const { address: mpcaddress, chainType } = useParams<{ address: string; chainType: string }>()
   // const { chainId } = useWeb3React()
-  const [nonce, setNonce] = useState<number>(0)
+  const [nonce, setNonce] = useState<number>()
   const web3LibOnly = useWeb3LibOnly()
   const { address } = useParams<{ address: string; chainType: string }>()
 
