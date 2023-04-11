@@ -90,6 +90,7 @@ Run the front end application [`@monorepo-boilerplate/web`](./packages/web) and 
 
 
 ### yarn
+If you encounter errors with Yarn, try
 ```
 yarn policies set-version 1.19.0
 ```
