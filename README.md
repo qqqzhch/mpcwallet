@@ -1,4 +1,4 @@
-<h1 align="center">Multichain - VaultUI</h1>
+<h1 align="center">VaultUI</h1>
 
 <p align="center">
   <a href="http://commitizen.github.io/cz-cli/">
@@ -9,19 +9,24 @@
   </a>
 </p>
 
-## Getting started
+## About
 
-This is a monorepo repository using [yarn workspaces](https://classic.yarnpkg.com/lang/en/docs/workspaces/), [Commitzen](http://commitizen.github.io/cz-cli/) and [Conventional Commits](https://conventionalcommits.org) to maintain and manage component versions and for documentation, we use [tailwindcss](https://tailwindcss.com/)
-and [cypress](https://www.cypress.io/).
+VaultUI is a web client for the Multichain MPC network, multi-signature wallet.
+
+With security and low fees. Supports evm and non-evm blockchains
+
 
 ## 💥 Features
 
-- Create a Vault
-- Send transaction
-- Add assets
-- Add a note to the address
-- Contract interaction
-- Support from test network ,BSC Test Net、Görli、Polygon Mumbai、FANTOM Test Net、AVALANCHE Fuji
+- [x] Create a Vault
+- [x] Send transaction,native currency and erc20
+- [x] Add assets
+- [x] Add a note to the address
+- [x] Contract interaction
+- [x] Support from test network ,BSC Test Net、Görli、Polygon Mumbai、FANTOM Test Net、AVALANCHE Fuji
+- [] Support from mian network ,BSC 、Ethereum、Polygon、FANTOM、AVALANCHE 
+- [] dapp connects to the wallet via walletconnect
+- [] btc blockchaintest network 
 
 ## 🌐 Samples
 
