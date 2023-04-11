@@ -29,7 +29,7 @@ const ChainList: FC<Props> = ({ children }) => {
   const { chainId, library } = useWeb3React()
   const [chianImg, setchianImg] = useState<string>('')
 
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
   function closeModal() {
     setIsOpen(false)
   }
@@ -162,10 +162,7 @@ const ChainList: FC<Props> = ({ children }) => {
                       <Tab.Panels className="mt-2">
                         <Tab.Panel
                           key={'test'}
-                          className={classNames(
-                            'rounded-xl bg-white p-3',
-                            'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
-                          )}
+                          className={classNames('rounded-xl bg-white p-3', 'ring-white ring-opacity-60 ring-offset-2  focus:outline-none focus:ring-2')}
                         >
                           <div className=" bg-white p-2 flex flex-col space-y-4">
                             {chains?.map(({ item, chainId }) => {
