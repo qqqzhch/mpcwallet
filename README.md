@@ -1,4 +1,4 @@
-<h1 align="center">Multichain - SMPC UI</h1>
+<h1 align="center">Multichain - VaultUI</h1>
 
 <p align="center">
   <a href="http://commitizen.github.io/cz-cli/">
@@ -11,38 +11,24 @@
 
 ## Getting started
 
-This is a monorepo repository using [yarn workspaces](https://classic.yarnpkg.com/lang/en/docs/workspaces/), [Commitzen](http://commitizen.github.io/cz-cli/) and [Conventional Commits](https://conventionalcommits.org) to maintain and manage component versions and for documentation, we use [Storybook](https://storybook.js.org/).
+This is a monorepo repository using [yarn workspaces](https://classic.yarnpkg.com/lang/en/docs/workspaces/), [Commitzen](http://commitizen.github.io/cz-cli/) and [Conventional Commits](https://conventionalcommits.org) to maintain and manage component versions and for documentation, we use [tailwindcss](https://tailwindcss.com/)
+and [cypress](https://www.cypress.io/).
 
 ## 💥 Features
 
 - ⚡️ Vite 2.0 - (React 18)
-- 📖 Storybook 6
 - 📖 tailwindcss
 - 📦 Yarn Workspaces
-- ✨ Host Multiple CRA Apps, Vite apps, Component Libraries & Storybooks in one monorepo
+- ✨ Host Multiple CRA Apps, Vite apps, Component Libraries in one monorepo
 - 🔥 Hot Reload all Apps, Components & Storybooks
 - 👨‍🔬 Test all workspaces with Eslint & Jest using one command
 
 ## 🌐 Samples
 
-#### Spotifood
-Code: https://mpcwallet-design-tokens.vercel.app
+#### demo
+ https://vault-ui-web.vercel.app/
 
-#### Find movies
-Code: https://mpcwallet-design-tokens.vercel.app
 
-## 🌐 Links
-
-Storybook live demo:
-- ➡️ https://monorepo-boilerplate-storybook.vercel.app/?path=/docs/
-
-![Storybook](docs/images/ui-components.png)
-
-Vite App live demo:
-- ➡️ https://monorepo-boilerplate-web.vercel.app/
-
-Backend server:
-- ➡️ https://monorepo-boilerplate-server.vercel.app/api/
 
 ## ⚠️ Requirements
 
@@ -73,27 +59,23 @@ Run the front end application [`@monorepo-boilerplate/web`](./packages/web) and 
   yarn start
 ```
 
-Storybook [`@monorepo-boilerplate/ui-components`](./packages/ui-components) :
-
-```bash
-  yarn storybook
-```
 
 ## 🗂 Monorepo structure
 
 | Package                                               | Description                                                                            |
-| ----------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| [`@monorepo-boilerplate/design-tokens`](./packages/design-tokens) | Design tokens (colors, typography, attributes...)                                      |
+| ----------------------------------------------------- | -------------------------------------------------------------------------------------- 
 | [`@common/**`](./packages/commons)                    | Common functions, images, lints (eslint, stylelint, prettier) and other generics setup |
 | [`@monorepo-boilerplate/ui-components`](./packages/ui-components) | React library components with [stories](https://storybook.js.org/)                     |
 | [`@monorepo-boilerplate/web`](./packages/web)                    | Front end application create with vite app                                     |
+| [`@monorepo-boilerplate/server`](./packages/server)                    | mock server data                                       |
+| [`@monorepo-boilerplate/api`](./packages/api)                    | web3 rpc extend  for mpc server                                       |
 
 ## 🚨 Code standard
 
 - [JavaScript Standard Style](https://standardjs.com/) - Javascript styleguide
 - [Prettier](https://prettier.io/) - Code formatter
 - [ESLint](https://eslint.org/) - Lint to quickly find problems
-- [Stylelint](https://stylelint.io/) - A mighty, modern linter that helps you avoid errors and enforce conventions in your styles
+
 
 ## ⌨️ Commands
 
@@ -102,11 +84,10 @@ Storybook [`@monorepo-boilerplate/ui-components`](./packages/ui-components) :
 | `yarn`                  | Install all dependencies                                                                                                                                                                  |
 | `yarn start`            | Run frontend/backend server                                                                                                                                                                          |
 | `yarn test:ci`          | Run all tests                                                                                                                                                                             |
-| `yarn storybook`        | Run storybook doc components                                                                                                                                                              |
-| `yarn watch:tokens`     | Hot reload design-tokens package                                                                                                                                                               |
-| `yarn watch:components` | Hot reload ui-components package                                                                                                                                                               |
+| `yarn e2e:open`        | open cypress                                                                                                |
+| `yarn e2e:run`     | run cypress                                                                                                                                                              |                                                                            |
 | `yarn build-app`        | Build of front app([`@monorepo-boilerplate/web`](./packages/web)) and generate a directory with all assets in the following path: `packages/web/build`                                                |
-| `yarn build-storybook`  | Build of storybook with components([`@monorepo-boilerplate/ui-components`](./packages/ui-components)) and generate a directory with all assets in the following path: `packages/ui-components/storybook-static` |
+|
 
 ### yarn
 ```
