@@ -3,7 +3,9 @@ import { devtools, persist } from 'zustand/middleware'
 import { immer } from "zustand/middleware/immer";
 import React, { createContext, FC, useContext } from "react";
 import { L1ChainInfo,L2ChainInfo } from '../constants/chainInfo';
-import { get } from 'immer/dist/internal';
+import { SupportedChainId } from '../constants/chains';
+//SupportedChainId
+
 
 
 
@@ -12,7 +14,9 @@ interface AppState {
   increase: (by: number) => void
   fromChain:L1ChainInfo|L2ChainInfo|null
   toChain:L1ChainInfo|L2ChainInfo|null
-  setFromOrTOChain:(data:L1ChainInfo|L2ChainInfo,dataType:boolean )=>void
+  fromChainID:SupportedChainId|null
+  toChainID:SupportedChainId|null
+  setFromOrTOChain:(data:L1ChainInfo|L2ChainInfo,dataType:boolean,chainID:SupportedChainId )=>void
   getFromChain:()=>L1ChainInfo|L2ChainInfo|null
   getToChain:()=>L1ChainInfo|L2ChainInfo|null
 }
@@ -20,7 +24,9 @@ interface AppState {
 const intialState = {
   counter: 5,
   fromChain:null,
-  toChain:null
+  toChain:null,
+  fromChainID:null,
+  toChainID:null
 };
 
 
@@ -32,14 +38,16 @@ const createMyStore = (state: typeof intialState = intialState) => {
         set((state) => {
           state.counter++;
         }),
-      setFromOrTOChain:(data:L1ChainInfo|L2ChainInfo,dataType:boolean)=>{
+      setFromOrTOChain:(data:L1ChainInfo|L2ChainInfo,dataType:boolean,chainID:SupportedChainId)=>{
         if(dataType){
-         set((state)=>{
-          state.fromChain=data
-         })
-        }else{
           set((state)=>{
+            state.fromChain=data
+            state.fromChainID=chainID
+          })
+        }else{
+         set((state)=>{
             state.toChain=data
+            state.toChainID=chainID
            })
         }
       },

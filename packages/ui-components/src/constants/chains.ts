@@ -19,6 +19,7 @@ export enum SupportedChainId {
 
   CELO = 42220,
   CELO_ALFAJORES = 44787,
+  AVALANCHE_FUJITEST = 43113
 }
 
 export const CHAIN_IDS_TO_NAMES = {
@@ -35,6 +36,7 @@ export const CHAIN_IDS_TO_NAMES = {
   [SupportedChainId.ARBITRUM_RINKEBY]: 'arbitrum_rinkeby',
   [SupportedChainId.OPTIMISM]: 'optimism',
   [SupportedChainId.OPTIMISM_GOERLI]: 'optimism_goerli',
+  [SupportedChainId.AVALANCHE_FUJITEST]: 'avalanche_fujitest'
 }
 
 /**
@@ -66,13 +68,14 @@ export const UNSUPPORTED_V2POOL_CHAIN_IDS = [
 ]
 
 export const TESTNET_CHAIN_IDS = [
-  SupportedChainId.ROPSTEN,
-  SupportedChainId.RINKEBY,
+  // SupportedChainId.ROPSTEN,
+  // SupportedChainId.RINKEBY,
   SupportedChainId.GOERLI,
-  SupportedChainId.KOVAN,
-  SupportedChainId.POLYGON_MUMBAI,
-  SupportedChainId.ARBITRUM_RINKEBY,
-  SupportedChainId.OPTIMISM_GOERLI,
+  // SupportedChainId.KOVAN,
+  // SupportedChainId.POLYGON_MUMBAI,
+  // SupportedChainId.ARBITRUM_RINKEBY,
+  // SupportedChainId.OPTIMISM_GOERLI,
+  SupportedChainId.AVALANCHE_FUJITEST
 ] as const
 
 export type SupportedTestnetChainId = typeof TESTNET_CHAIN_IDS[number]

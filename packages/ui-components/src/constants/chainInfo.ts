@@ -11,6 +11,7 @@ import polygonMaticLogo from '../assets/icon/polygon-matic-logo.svg'
 
 import { SupportedChainId, SupportedL1ChainId, SupportedL2ChainId } from './chains'
 import { ARBITRUM_LIST, CELO_LIST, OPTIMISM_LIST } from './lists'
+import avaxLogo from '../assets/icon/avax_logo.svg'
 
 // export const AVERAGE_L1_BLOCK_TIME = ms`12s`
 
@@ -219,6 +220,18 @@ const CHAIN_INFO: ChainInfoMap = {
     nativeCurrency: { name: 'Celo', symbol: 'CELO', decimals: 18 },
     defaultListUrl: CELO_LIST,
   },
+  [SupportedChainId.AVALANCHE_FUJITEST]: {
+    networkType: NetworkType.L1,
+    // blockWaitMsBeforeWarning: ms`10m`,
+    bridge: '',
+    docs: '',
+    explorer: 'https://testnet.snowtrace.io/',
+    infoLink: '',
+    label: 'Avalanche testnet',
+    logoUrl: avaxLogo,
+    nativeCurrency: { name: 'AVAX', symbol: 'AVAX', decimals: 18 }
+    // defaultListUrl: PLASMA_BNB_LIST
+  }
 }
 
 export function getChainInfo(chainId: SupportedL1ChainId): L1ChainInfo
