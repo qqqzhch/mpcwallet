@@ -1,6 +1,6 @@
 import { Header, Footer, Web3Provider } from '@monorepo/ui-components'
 import { Outlet } from "react-router-dom";
-
+import 'flowbite';
 
 function App() {
 

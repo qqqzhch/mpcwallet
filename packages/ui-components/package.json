@@ -39,6 +39,7 @@
     "autoprefixer": "^10.4.13",
     "ethers": "5.7.2",
     "eventemitter3": "^5.0.0",
+    "flowbite": "^1.6.6",
     "immer": "^9.0.19",
     "js-sha3": "^0.8.0",
     "ms.macro": "^2.0.0",

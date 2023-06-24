@@ -16,9 +16,9 @@ export const Header:FC = () => {
     <header className="text-gray-600 body-font">
       <div className="container mx-auto flex flex-wrap py-2 flex-row  justify-around  items-center ">
         <a className="hidden sm:flex title-font font-medium items-center text-gray-900 pl-4 ">
-          <img src={logo} className="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full " />
+          {/* <img src={logo} className="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full " /> */}
 
-          <span className="ml-3 text-xl hidden lg:block">Multichain</span>
+          <span className="ml-3 text-xl hidden lg:block">Gateway</span>
         </a>
         <div className="flex  sm:hidden pl-2">
           <FontAwesomeIcon icon={icon({ name: 'bars', style: 'solid' })} />
