@@ -13,7 +13,7 @@ export  const Footer = () => {
             
               {/* <img src={logo} className="w-10 h-10 text-white p-2 bg-indigo-500 rounded-full"/> */}
             
-            <span className="ml-3 text-xl">Gateway</span>
+            <span className="ml-3 text-xl">Bridge</span>
           </a>
           <p className="text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:border-l-2 sm:border-gray-200 sm:py-2 sm:mt-0 mt-4">
            

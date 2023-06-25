@@ -9,7 +9,7 @@ const Home = () => {
         <div className="flex flex-col text-left w-full mb-20  mt-20 lg:mt-20">
           
           <p className=" mx-6 lg:mx-28 leading-relaxed text-base text-gray-900">
-          <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-center ">usdc Gateway </h1>
+          <h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-center ">usdc bridge </h1>
           </p>
         </div>
         <div className="flex       lg:mx-28 mb-60 ">
