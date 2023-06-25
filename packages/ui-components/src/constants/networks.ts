@@ -88,6 +88,10 @@ export const FALLBACK_URLS: { [key in SupportedChainId]: string[] } = {
     // "Safe" URLs
     `https://alfajores-forno.celo-testnet.org`,
   ],
+  [SupportedChainId.AVALANCHE_FUJITEST]: [
+    `https://ava-testnet.public.blastapi.io/ext/bc/C/rpc`,
+    `https://api.avax-test.network/ext/bc/C/rpc`,
+  ],
 }
 
 /**
@@ -135,4 +139,5 @@ export const RPC_URLS: { [key in SupportedChainId]: string[] } = {
   ],
   [SupportedChainId.CELO]: FALLBACK_URLS[SupportedChainId.CELO],
   [SupportedChainId.CELO_ALFAJORES]: FALLBACK_URLS[SupportedChainId.CELO_ALFAJORES],
+  [SupportedChainId.AVALANCHE_FUJITEST]: [`https://rpc.ankr.com/avalanche_fuji`, ...FALLBACK_URLS[SupportedChainId.AVALANCHE_FUJITEST]]
 }

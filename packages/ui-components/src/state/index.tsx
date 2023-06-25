@@ -110,7 +110,7 @@ const MyStoreContext = createContext<ReturnType<typeof createMyStore> | null>(
 
 export const AppStoreProvider:FC<{children:React.ReactNode}> = ({children}) => {
 
-  const store = createMyStore({counter:0});
+  const store = createMyStore(intialState);
   
   return (<MyStoreContext.Provider value={store}>{children}</MyStoreContext.Provider>)
 };
