@@ -15,7 +15,7 @@ export default function useErc20Approve() {
 
   
     const [state, doFetch]=useAsyncFn(async() => {
-      console.log('****')
+      console.log('useApprove')
         if (account && contractAddress && library != undefined) {
           const signer = library.getSigner()
           const contract = new Contract(contractAddress, erc20ABI, signer)

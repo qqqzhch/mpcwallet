@@ -8,7 +8,7 @@ import useRelayerAddress from './useRelayer'
 import useUSDCAddress from './useUsdc'
 
 
-export default function useErcCheckAllowance(inputAmount:BigNumber) {
+export default function useErcCheckAllowance(inputAmount:string) {
     const { library,account } = useWeb3React()
     const checkAddress = useRelayerAddress();
     const contractAddress =useUSDCAddress()
@@ -16,12 +16,12 @@ export default function useErcCheckAllowance(inputAmount:BigNumber) {
   
     useEffect(() => {
       const run = async () => {
-        console.log('--')
+        console.log('--useCheckAllowance')
         if (account && contractAddress && library != undefined) {
           const contract = new Contract(contractAddress, erc20ABI, library)
         //   const result: BigNumber = await contract.balanceOf(mpcAddress)
           const allowance: BigNumber = await contract.allowance(account,checkAddress)
-          if(allowance.gte(inputAmount)){
+          if(allowance.gte(BigNumber.from(inputAmount))){
             setAllowance(false )
           }else{
             setAllowance(true)

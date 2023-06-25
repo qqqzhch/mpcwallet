@@ -1,4 +1,4 @@
-import React,{useCallback, useState} from 'react'
+import React,{useCallback, useEffect, useMemo, useState} from 'react'
 import SelectChainModal from '../selectChainModal'
 import { ArrowDownIcon } from '@heroicons/react/24/solid'
 import { useAppStore } from '../../state'
@@ -7,11 +7,12 @@ import useErc20Balance from '../../hooks/useErc20Balance'
 import { useWeb3React } from '@web3-react/core'
 import { formatUnitsErc20, validateAmount } from '../../utils'
 import useErcCheckAllowance from '../../hooks/useCheckAllowance'
-import { BigNumber } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
 import { Else, If, Then,When } from 'react-if'
 import useErc20Approve from '../../hooks/useApprove'
 import useSwitchingNetwork from '../../hooks/useSwitchingNetwork'
-
+import { useToasts } from 'react-toast-notifications'
+import PreviewModal from '../preview'
 
 
 
@@ -22,26 +23,59 @@ const Swap = () => {
   const [isToOpen, setIsToOpen] = useState(false)
   const { account,chainId } = useWeb3React()
   const [inputAmount,setInputAmount]=useState("0")
+  const [inputIsgtebalance,setInputIsgtebalance]=useState(false)
+  const [isPreviewOpen, setPreviewOpen] = useState(false)
 
   const fromChainInfo= useAppStore((state)=>state.fromChain) 
   const toChainInfo = useAppStore((state)=>state.toChain)
   const fromChainID = useAppStore((state)=>state.fromChainID)
   const toChainID = useAppStore((state)=>state.toChainID)
+  const setInput = useAppStore((state)=>state.setInput)
+
   const USDCAddress = useUSDCAddress()
   const usdcBalance=  useErc20Balance(account,USDCAddress)
-  const num =parseFloat(inputAmount)*1000000;
+  const inputAmountBigNum = useMemo(()=>{
+    try {
+      return   ethers.utils.parseUnits(inputAmount,6).toString();
+     
+    } catch (error) {
+     console.log(error)      
+    }
+  return  '0'
+
+  },[inputAmount])
+
   const ApproveUSDT = useErc20Approve()
   console.log('ApproveUSDT.state.loading',ApproveUSDT.state.loading)
-  const {allowance}= useErcCheckAllowance(BigNumber.from(num.toString()))
+  const {allowance}= useErcCheckAllowance(inputAmountBigNum)
   const switchingNetwork = useSwitchingNetwork()  
+ 
+  const { addToast } = useToasts()
 
   const inputAmountChange= useCallback((e)=>{
     const value = e.currentTarget.value
     
     if(validateAmount(value)==undefined){
+      
       setInputAmount(value)
+      setInput(ethers.utils.parseUnits(value,6).toString())
     }
   },[])
+  useEffect(()=>{
+  if(usdcBalance.balance!=undefined){
+    const inputAmount= BigNumber.from(inputAmountBigNum);
+    const usdcBalanceamount= BigNumber.from(usdcBalance.balance);
+    if(inputAmount.gt(usdcBalanceamount)){
+      // addToast("The value entered is greater than the balance", { appearance: 'error' })
+      setInputIsgtebalance(true)
+      console.log('The value entered is greater than the balance')
+    }else{
+      setInputIsgtebalance(false)
+    }
+  }
+    
+
+  },[inputAmountBigNum,usdcBalance,addToast])
 
   
 
@@ -94,7 +128,16 @@ const Swap = () => {
           </label>
         </div>
         <div className=' relative z-0 w-full mb-6 group flex mt-10'>
-        <If condition={allowance}>
+        <When condition={inputIsgtebalance}>
+        <div className="p-4 mb-4 w-full text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+        The value entered is greater than the balance
+            </div>
+        </When>
+        </div>
+        <div className=' relative z-0 w-full mb-6 group flex mt-10'>
+        
+
+        <If condition={allowance&&fromChainID==chainId&&fromChainID!==toChainID}>
          <Then>
           
           <button
@@ -112,6 +155,7 @@ const Swap = () => {
           <If condition={fromChainID==chainId&&fromChainID!==toChainID}>
             <Then>
             <button
+            onClick={()=>{setPreviewOpen(true)}}
           
           className="text-white flex-1 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
@@ -149,6 +193,7 @@ const Swap = () => {
       </div>
         <SelectChainModal isOpen={ isFromOpen} closeModal={()=>{setIsFromOpen (false)}}  dataType={true}   ></SelectChainModal>
         <SelectChainModal isOpen={ isToOpen} closeModal={()=>{setIsToOpen(false)}} dataType={false} ></SelectChainModal>
+        <PreviewModal isOpen={isPreviewOpen} closeModal={()=>{setPreviewOpen(false)}}></PreviewModal>
     </div>
   )
 }

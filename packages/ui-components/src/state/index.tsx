@@ -16,9 +16,19 @@ interface AppState {
   toChain:L1ChainInfo|L2ChainInfo|null
   fromChainID:SupportedChainId|null
   toChainID:SupportedChainId|null
+  input:string
+  output:string
+  fee:string
   setFromOrTOChain:(data:L1ChainInfo|L2ChainInfo,dataType:boolean,chainID:SupportedChainId )=>void
   getFromChain:()=>L1ChainInfo|L2ChainInfo|null
   getToChain:()=>L1ChainInfo|L2ChainInfo|null
+  setInput:(amount:string)=>void
+  setOutPut:(amount:string)=>void
+  setFee:(amount:string)=>void
+  getInPut:()=>string
+  getOutPut:()=>string
+  getFee:()=>string
+
 }
 
 const intialState = {
@@ -26,7 +36,10 @@ const intialState = {
   fromChain:null,
   toChain:null,
   fromChainID:null,
-  toChainID:null
+  toChainID:null,
+  input:"",
+  output:"",
+  fee:""
 };
 
 
@@ -59,6 +72,30 @@ const createMyStore = (state: typeof intialState = intialState) => {
         const data = get().toChain        
         return data
       },
+      setInput:(amount:string)=>{
+        set((state)=>{
+          state.input=amount
+        })
+      },
+      setOutPut:(amount:string)=>{
+        set((state)=>{
+          state.output=amount
+        })
+      },
+      setFee:(amount:string)=>{
+        set((state)=>{
+          state.fee=amount
+        })
+      },
+      getInPut() {
+        return get().input
+      },
+      getOutPut() {
+        return get().output
+      },
+      getFee() {
+        return get().fee
+      }
     }), { name: 'app-storage' })))
   );
 };

@@ -12,6 +12,7 @@ export default function useErc20Balance(mpcAddress: string | undefined|null, con
   
     useEffect(() => {
       const run = async () => {
+        console.log('useErc20Balance')
         if (mpcAddress && contractAddress && library != undefined) {
           const contract = new Contract(contractAddress, erc20ABI, library)
           const result: BigNumber = await contract.balanceOf(mpcAddress)
