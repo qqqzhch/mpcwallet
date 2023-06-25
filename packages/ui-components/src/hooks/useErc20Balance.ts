@@ -17,11 +17,16 @@ export default function useErc20Balance(mpcAddress: string | undefined|null, con
           const contract = new Contract(contractAddress, erc20ABI, library)
           const result: BigNumber = await contract.balanceOf(mpcAddress)
           setBalance(result.toString())
-          library.on('block', () => {
-            run()
-          })
+          
         }
       }
+      if(library){
+        library.on('block', () => {
+          run()
+        })
+      }
+      
+      
       run()
   
       return () => {

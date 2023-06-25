@@ -27,11 +27,15 @@ export default function useErcCheckAllowance(inputAmount:string) {
             setAllowance(true)
           }
           
-          library.on('block', () => {
-            run()
-          })
+          
         }
       }
+      if(library){
+        library.on('block', () => {
+          run()
+        })
+      }
+      
       run()
   
       return () => {

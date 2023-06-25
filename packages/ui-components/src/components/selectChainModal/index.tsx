@@ -23,6 +23,7 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
     if(fromChainID==null&&toChainID==null&&dataType){
       const networkGOERLI =getChainInfo(SupportedChainId.GOERLI)
       const networkFUJITEST =getChainInfo(SupportedChainId.AVALANCHE_FUJITEST)
+      
       setFromOrTOChain(networkFUJITEST,false,SupportedChainId.AVALANCHE_FUJITEST)
       setFromOrTOChain(networkGOERLI,true,SupportedChainId.GOERLI)
 
