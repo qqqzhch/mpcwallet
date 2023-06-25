@@ -74,7 +74,7 @@ const WalletModal: FC<componentprops> = ({ isOpen, closeModal }) => {
   // }
   const walletsToDisplay = [
     { id: 1, title: 'MetaMask', imgSrc: '', fn: connectMetaMask },
-    { id: 3, title: 'WalletConnect', imgSrc: '', fn: connectWalletConnect }
+    // { id: 3, title: 'WalletConnect', imgSrc: '', fn: connectWalletConnect }
   ]
   // connect on load
   useEffect(() => {

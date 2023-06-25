@@ -1,8 +1,8 @@
-import React, { useMemo } from 'react';
+import React, { useMemo ,useEffect} from 'react';
 import { Dialog,Transition  } from '@headlessui/react'
 import { Fragment, FC  } from 'react'
 import { Else, If, Then } from 'react-if';
-import { TESTNET_CHAIN_IDS } from '../../constants/chains';
+import { SupportedChainId, TESTNET_CHAIN_IDS } from '../../constants/chains';
 import { getChainInfo } from '../../constants/chainInfo';
 import { useAppStore } from '../../state';
 
@@ -16,6 +16,19 @@ interface componentprops {
 
 const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
   const setFromOrTOChain = useAppStore((state)=>state.setFromOrTOChain)
+  const fromChainID = useAppStore((state)=>state.fromChainID)
+  const toChainID = useAppStore((state)=>state.toChainID)
+
+  useEffect(()=>{
+    if(fromChainID==null&&toChainID==null&&dataType){
+      const networkGOERLI =getChainInfo(SupportedChainId.GOERLI)
+      const networkFUJITEST =getChainInfo(SupportedChainId.AVALANCHE_FUJITEST)
+      setFromOrTOChain(networkFUJITEST,false,SupportedChainId.AVALANCHE_FUJITEST)
+      setFromOrTOChain(networkGOERLI,true,SupportedChainId.GOERLI)
+
+    }
+
+  },[fromChainID,toChainID,dataType,setFromOrTOChain])
 
   return (
       <Transition appear show={isOpen} as={Fragment}>
