@@ -13,6 +13,8 @@ import useErc20Approve from '../../hooks/useApprove'
 import useSwitchingNetwork from '../../hooks/useSwitchingNetwork'
 import { useToasts } from 'react-toast-notifications'
 import PreviewModal from '../preview'
+import SwichNetwork from '../swichNetwork'
+
 
 
 
@@ -113,6 +115,9 @@ const Swap = () => {
             input
           </label>
         </div>
+        
+          <SwichNetwork></SwichNetwork>
+        
         <div onClick={()=>{setIsToOpen(true)}} className=" inline-flex  items-center  z-0 w-full   mb-6 group  pb-1  cursor-pointer">
         <span className='peer-focus:font-medium  text-lg text-gray-500    min-w-[40%]' >to {toChainInfo?.label}  </span>  
        
