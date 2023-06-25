@@ -37,9 +37,9 @@ const intialState = {
   toChain:null,
   fromChainID:null,
   toChainID:null,
-  input:"",
-  output:"",
-  fee:""
+  input:"0",
+  output:"0",
+  fee:"0"
 };
 
 
