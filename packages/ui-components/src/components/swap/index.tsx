@@ -8,8 +8,9 @@ import { useWeb3React } from '@web3-react/core'
 import { formatUnitsErc20, validateAmount } from '../../utils'
 import useErcCheckAllowance from '../../hooks/useCheckAllowance'
 import { BigNumber } from 'ethers'
-import { Else, If, Then } from 'react-if'
+import { Else, If, Then,When } from 'react-if'
 import useErc20Approve from '../../hooks/useApprove'
+import useSwitchingNetwork from '../../hooks/useSwitchingNetwork'
 
 
 
@@ -32,7 +33,7 @@ const Swap = () => {
   const ApproveUSDT = useErc20Approve()
   console.log('ApproveUSDT.state.loading',ApproveUSDT.state.loading)
   const {allowance}= useErcCheckAllowance(BigNumber.from(num.toString()))
-  
+  const switchingNetwork = useSwitchingNetwork()  
 
   const inputAmountChange= useCallback((e)=>{
     const value = e.currentTarget.value
@@ -119,13 +120,23 @@ const Swap = () => {
 
             </Then>
             <Else>
+
+            <When condition={fromChainID!==toChainID}>
             <button
-          
+          onClick={switchingNetwork.doSwitch}
           className="text-white flex-1 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-        >
-          {fromChainID!==toChainID?"need switch network":"The source and target network cannot be the same network "}
-         
+        > Switch to {fromChainInfo?.label}
         </button>
+
+            </When>
+            <When condition={fromChainID==toChainID}>
+            <div className="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+                  The source and target network cannot be the same network 
+            </div>
+
+            </When>
+        
+      
 
             </Else>
 

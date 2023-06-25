@@ -10,7 +10,7 @@ const RPC_URLS = {
 
 // MetaMask
 export const Injected = new InjectedConnector({
-  supportedChainIds: ALL_SUPPORTED_CHAIN_IDS,
+  // supportedChainIds: [],
   
 });
 
