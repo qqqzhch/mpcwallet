@@ -7,6 +7,7 @@ import useRelayerAddress from './useRelayer'
 import useUSDCAddress from './useUsdc'
 import { Circle_Chainid } from '../constants/relayer';
 import { useAppStore } from '../state';
+import { useToasts } from 'react-toast-notifications'
 
 export default function useRelayCall() {
     const { library,account,chainId } = useWeb3React()
@@ -15,8 +16,10 @@ export default function useRelayCall() {
     const fromChainID = useAppStore((state)=>state.fromChainID)
     const inputAmount = useAppStore((state)=>state.input)
     const toChainID = useAppStore((state)=>state.toChainID)
+    const addToHistory = useAppStore((state)=>state.addToHistory)
   
-  
+    const { addToast } = useToasts()
+
     const burnToken=useUSDCAddress();
     const RelayerFee =  useAppStore((state)=>state.fee)
 
@@ -34,13 +37,23 @@ export default function useRelayCall() {
             value:RelayerFee
           })
           console.log(result)
+          addToHistory({
+            fromChainID:fromChainID, 
+            toChainID:toChainID, 
+            input:inputAmount, 
+            fee:RelayerFee,
+            txhash:result.hash,
+            creattime:Date.now()
+          })
+          addToast('Transactions have been sent', { appearance: 'success',autoDismissTimeout:1000*10 })
+
           const txinfo = await result.wait([1])
           console.log(txinfo)
           return result
         }
       
     
-    }, [account, library, contractAddress,chainId,fromChainID,burnToken,RelayerFee,toChainID])
+    }, [account, library, contractAddress,chainId,fromChainID,burnToken,RelayerFee,toChainID,addToHistory,addToast])
   
     return {
         state,
