@@ -1,5 +1,6 @@
 import { ethers, BigNumber } from 'ethers'
 import numbro from 'numbro'
+import { getChainInfo } from '../constants/chainInfo'
 
 function numFormat(value: string | number, mantissa?: number) {
     const string = numbro(value).format({ thousandSeparated: true, mantissa: mantissa || 6, trimMantissa: true })
@@ -13,7 +14,28 @@ function numFormat(value: string | number, mantissa?: number) {
     const str2 = str.substr(str.length - end)
     return (str = str1 + '…' + str2)
   }
-
+  export function formatUnits(chainId: number | undefined, value: string | number | undefined, isfee?: boolean, isforshort = true) {
+    const chainInfo = getChainInfo(chainId)
+  
+    if (chainInfo && value !== undefined) {
+      const num = ethers.utils.formatUnits(value.toString(), chainInfo?.nativeCurrency.decimals)
+      if (isfee) {
+        return numFormat(num, 14) + ' ' + chainInfo?.nativeCurrency.symbol.toUpperCase()
+      }
+      const result = parseFloat(num)
+      if (isforshort == false) {
+        return num
+      }
+  
+      if (result < 0.000001 && result > 0) {
+        return '<0.000001' + chainInfo?.nativeCurrency.symbol.toUpperCase()
+      } else {
+        return numFormat(num) + ' ' + chainInfo?.nativeCurrency.symbol.toUpperCase()
+      }
+    } else {
+      return '...'
+    }
+  }
   export function formatUnitsErc20(value: string | number | undefined, symbol: string, decimals: number) {
     if (value !== undefined && decimals) {
       const num = ethers.utils.formatUnits(value.toString(), decimals)
@@ -40,4 +62,6 @@ function numFormat(value: string | number, mantissa?: number) {
       return 'The value must be greater than 0'
     }
   }
+
+  
   
