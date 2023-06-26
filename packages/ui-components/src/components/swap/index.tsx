@@ -5,7 +5,7 @@ import { useAppStore } from '../../state'
 import useUSDCAddress from '../../hooks/useUsdc'
 import useErc20Balance from '../../hooks/useErc20Balance'
 import { useWeb3React } from '@web3-react/core'
-import { formatUnitsErc20, validateAmount } from '../../utils'
+import { formatUnitsErc20, validateAmount,formatUnits } from '../../utils'
 import useErcCheckAllowance from '../../hooks/useCheckAllowance'
 import { BigNumber, ethers } from 'ethers'
 import { Else, If, Then,When } from 'react-if'
@@ -14,10 +14,8 @@ import useSwitchingNetwork from '../../hooks/useSwitchingNetwork'
 import { useToasts } from 'react-toast-notifications'
 import PreviewModal from '../preview'
 import SwichNetwork from '../swichNetwork'
-
-
-
-
+import useRelayerFee from '../../hooks/useRelayerFee'
+import useRelayCall from '../../hooks/useRelayCall'
 
 
 
@@ -38,6 +36,9 @@ const Swap = () => {
 
   const USDCAddress = useUSDCAddress()
   const usdcBalance=  useErc20Balance(account,USDCAddress)
+  const RelayerFee = useRelayerFee()
+  const RelayCall=useRelayCall()
+
   const inputAmountBigNum = useMemo(()=>{
     try {
       return   ethers.utils.parseUnits(inputAmount,6).toString();
@@ -48,6 +49,7 @@ const Swap = () => {
   return  '0'
 
   },[inputAmount])
+
 
   const ApproveUSDT = useErc20Approve()
   console.log('ApproveUSDT.state.loading',ApproveUSDT.state.loading)
@@ -80,6 +82,20 @@ const Swap = () => {
     
 
   },[inputAmountBigNum,usdcBalance,addToast])
+
+  const ValidateAmount = useCallback(()=>{
+    const  num =BigNumber.from(inputAmountBigNum)
+    if(usdcBalance.balance==undefined){
+      return false
+    }
+    if(num.gt(0)&&num.lte(usdcBalance.balance)){
+      setPreviewOpen(true)
+      return true
+    }else{
+      return false
+    }
+
+  },[inputAmountBigNum,usdcBalance])
   
   
 
@@ -89,7 +105,7 @@ const Swap = () => {
     <div className=" text-left">
       <div>
         <div onClick={()=>{setIsFromOpen(true)}} className=" inline-flex  items-center  z-0 w-full   mb-6 group  pb-1  cursor-pointer ">
-        <span className='peer-focus:font-medium  text-lg text-gray-500    min-w-[40%]' >from {fromChainInfo?.label}  </span>  
+        <span className='peer-focus:font-medium  text-lg text-gray-500    min-w-[40%]' >From {fromChainInfo?.label}  </span>  
        
           <ArrowDownIcon  className="h-4 w-4 text-blue-500  "></ArrowDownIcon>
           
@@ -119,7 +135,7 @@ const Swap = () => {
           <SwichNetwork></SwichNetwork>
         
         <div onClick={()=>{setIsToOpen(true)}} className=" inline-flex  items-center  z-0 w-full   mb-6 group  pb-1  cursor-pointer">
-        <span className='peer-focus:font-medium  text-lg text-gray-500    min-w-[40%]' >to {toChainInfo?.label}  </span>  
+        <span className='peer-focus:font-medium  text-lg text-gray-500    min-w-[40%]' >To {toChainInfo?.label}  </span>  
        
           <ArrowDownIcon  className="h-4 w-4 text-blue-500  "></ArrowDownIcon>
           
@@ -127,13 +143,13 @@ const Swap = () => {
         <div className="relative z-0 w-full mb-6 group">
           
           <label className="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-          You will receive:xxx usdc
+          You will receive:{inputAmount} USDC
           </label>
         </div>
         <div className="relative z-0 w-full mb-6 group">
           
           <label className="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-          fee:xxx {fromChainInfo?.nativeCurrency.name}
+          Fee:{fromChainID!==null&&formatUnits(fromChainID,RelayerFee,true) } 
           </label>
         </div>
         <div className=' relative z-0 w-full mb-6 group flex mt-10'>
@@ -164,7 +180,7 @@ const Swap = () => {
           <If condition={fromChainID==chainId&&fromChainID!==toChainID}>
             <Then>
             <button
-            onClick={()=>{setPreviewOpen(true)}}
+            onClick={()=>{ValidateAmount()}}
           
           className="text-white flex-1 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
