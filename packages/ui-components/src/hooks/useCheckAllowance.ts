@@ -32,6 +32,7 @@ export default function useErcCheckAllowance(inputAmount:string) {
       }
       if(library){
         library.on('block', () => {
+          console.log('block run 2')
           run()
         })
       }
@@ -40,7 +41,7 @@ export default function useErcCheckAllowance(inputAmount:string) {
   
       return () => {
         if (library) {
-          library.off('block')
+          library.off('block',run)
         }
       }
     }, [account, library, contractAddress,inputAmount,checkAddress])

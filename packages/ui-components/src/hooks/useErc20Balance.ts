@@ -27,6 +27,7 @@ export default function useErc20Balance(mpcAddress: string | undefined|null, con
       }
       if(library){
         library.on('block', () => {
+          console.log('block run 1')
           run()
         })
       }
@@ -36,7 +37,7 @@ export default function useErc20Balance(mpcAddress: string | undefined|null, con
   
       return () => {
         if (library) {
-          library.off('block')
+          library.off('block',run)
         }
       }
     }, [mpcAddress, library, contractAddress,chainId,fromChainID])

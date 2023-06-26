@@ -7,7 +7,15 @@ import { SupportedChainId } from '../constants/chains';
 //SupportedChainId
 
 
-
+export  interface txItem {
+  fromChainID:SupportedChainId
+  toChainID:SupportedChainId
+  input:string
+  fee:string
+  txhash:string
+  status?:string|undefined,
+  creattime:number
+}
 
 interface AppState {
   counter: number
@@ -19,6 +27,7 @@ interface AppState {
   input:string
   output:string
   fee:string
+  history:Array<txItem>
   setFromOrTOChain:(data:L1ChainInfo|L2ChainInfo,dataType:boolean,chainID:SupportedChainId )=>void
   getFromChain:()=>L1ChainInfo|L2ChainInfo|null
   getToChain:()=>L1ChainInfo|L2ChainInfo|null
@@ -28,6 +37,8 @@ interface AppState {
   getInPut:()=>string
   getOutPut:()=>string
   getFee:()=>string
+  addToHistory:(tx:txItem)=>void
+  getHistory:()=>Array<txItem>
 
 }
 
@@ -39,7 +50,8 @@ const intialState = {
   toChainID:null,
   input:"0",
   output:"0",
-  fee:"0"
+  fee:"0",
+  history:[]
 };
 
 
@@ -95,6 +107,21 @@ const createMyStore = (state: typeof intialState = intialState) => {
       },
       getFee() {
         return get().fee
+      },
+      addToHistory:(tx:txItem)=>{
+       const history = get().history;
+       const data = history.find((item:txItem)=>{
+        return item.txhash==tx.txhash
+       })
+       if(data==undefined||data==null){
+        set((state)=>{
+          state.history.push(tx);
+        })
+       }
+
+      },
+      getHistory:()=>{
+        return get().history
       }
     }), { name: 'app-storage' })))
   );

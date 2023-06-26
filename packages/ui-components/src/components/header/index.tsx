@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import Connectwallet from '../connectwallet'
 import ChainList from '../chainList/index'
+import Noticeinfo from '../noticeinfo'
+
 
 
 
@@ -31,9 +33,7 @@ export const Header:FC = () => {
             </button>
           </div> */}
           <div className="pr-4 pl-4   hover:text-gray-900 border-r border-gray-400 last:border-r-0 hidden md:block">
-            <div className="py-2">
-              <FontAwesomeIcon icon={icon({ name: 'bell', style: 'solid' })} />
-            </div>
+            <Noticeinfo></Noticeinfo>
           </div>
           <div  className="pr-2 pl-2 flex flex-row   hover:text-gray-900 border-r border-gray-400 last:border-r-0  items-center justify-center">
             <Connectwallet></Connectwallet>

@@ -37,6 +37,7 @@
     "@web3-react/walletconnect-connector": "^6.2.13",
     "@web3-react/walletlink-connector": "^6.2.14",
     "autoprefixer": "^10.4.13",
+    "dayjs": "^1.11.8",
     "ethers": "5.7.2",
     "eventemitter3": "^5.0.0",
     "flowbite": "^1.6.6",
