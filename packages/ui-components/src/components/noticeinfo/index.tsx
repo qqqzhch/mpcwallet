@@ -1,16 +1,20 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useMemo, useState } from 'react'
+import { Fragment, useCallback, useMemo, useState } from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { useAppStore } from '../../state'
 import Txinfo from './txinfo'
+import { useWeb3React } from '@web3-react/core'
+import { When } from 'react-if'
 
 
 
 export default function Noticeinfo() {
   const [isOpen, setIsOpen] = useState(false)
-  const list = useAppStore((state=>state.getHistory()))
+  const {account } = useWeb3React()
+
+  const list = useAppStore((state=>state.getHistory(account)))
   const listOrder=useMemo(()=>{
          return list.sort((a,b)=>{
           return b.creattime - a.creattime
@@ -22,15 +26,21 @@ export default function Noticeinfo() {
     setIsOpen(false)
   }
 
-  function openModal() {
-    setIsOpen(true)
-  }
+ const openModal = useCallback(function () {
+   if(account!==null&&account!==undefined){
+      setIsOpen(true)
+   } 
+},[account]) 
 
   return (
     <>
+      
        <div onClick={openModal} className="relative py-2   cursor-pointer mr-4">
               <FontAwesomeIcon icon={icon({ name: 'bell', style: 'solid' })} />
+              <When condition={account}>
               <span className="absolute  rounded-full bg-red-400 py-0 px-1.5 text-xs text-white">{list.length}</span>
+              </When>
+             
         </div>
 
       <Transition appear show={isOpen} as={Fragment}>
@@ -77,6 +87,9 @@ export default function Noticeinfo() {
                             
                     
                         </dl>
+                        <When condition={listOrder.length==0}>
+                        No data available
+                        </When>
                     </p>
                   </div>
 

@@ -8,6 +8,7 @@ import { useWeb3React } from '@web3-react/core'
 import { When } from 'react-if';
 // import {getChainInfo} from '../../constants/chainInfo'
 import AccountInfo from '../accountInfo/index'
+import EventBus from '../../EventEmitter/index'
 
 const Connectwallet:FC = () => {
 const [isOpen, setIsOpen] = useState(false)
@@ -38,6 +39,15 @@ const {chainId, account } = useWeb3React()
        
      }
   }, [chainId])
+  useEffect(()=>{
+    EventBus.on('connectwallet',()=>{
+      setIsOpen(true)
+    })
+    return ()=>{
+      EventBus.off('connectwallet')
+    }
+
+  },[setIsOpen])
 
   
     return (

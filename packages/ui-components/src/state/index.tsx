@@ -14,7 +14,8 @@ export  interface txItem {
   fee:string
   txhash:string
   status?:string|undefined,
-  creattime:number
+  creattime:number,
+  user:string
 }
 
 interface AppState {
@@ -38,7 +39,7 @@ interface AppState {
   getOutPut:()=>string
   getFee:()=>string
   addToHistory:(tx:txItem)=>void
-  getHistory:()=>Array<txItem>
+  getHistory:(account:string|undefined|null)=>Array<txItem>
 
 }
 
@@ -120,8 +121,8 @@ const createMyStore = (state: typeof intialState = intialState) => {
        }
 
       },
-      getHistory:()=>{
-        return  get().history;
+      getHistory:(account:string|undefined|null)=>{
+        return  get().history.filter((item)=>{return item.user==account});
       }
     }), { name: 'app-storage' })))
   );

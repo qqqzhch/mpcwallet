@@ -15,7 +15,7 @@ import { useToasts } from 'react-toast-notifications'
 import PreviewModal from '../preview'
 import SwichNetwork from '../swichNetwork'
 import useRelayerFee from '../../hooks/useRelayerFee'
-import useRelayCall from '../../hooks/useRelayCall'
+import EventBus from '../../EventEmitter/index'
 
 
 
@@ -37,7 +37,7 @@ const Swap = () => {
   const USDCAddress = useUSDCAddress()
   const usdcBalance=  useErc20Balance(account,USDCAddress)
   const RelayerFee = useRelayerFee()
-  const RelayCall=useRelayCall()
+
 
   const inputAmountBigNum = useMemo(()=>{
     try {
@@ -96,6 +96,10 @@ const Swap = () => {
     }
 
   },[inputAmountBigNum,usdcBalance])
+
+  const connectWallet = useCallback(() => {
+    EventBus.emit('connectwallet')
+  }, [])
   
   
 
@@ -161,7 +165,7 @@ const Swap = () => {
         </div>
         <div className=' relative z-0 w-full mb-6 group flex mt-10'>
         
-
+        <When condition={account!==undefined&&account!==null}>
         <If condition={allowance&&fromChainID==chainId&&fromChainID!==toChainID}>
          <Then>
           
@@ -214,6 +218,19 @@ const Swap = () => {
 
          </Else>
         </If>
+        </When>
+        <When condition={account==undefined||account==null}>
+        <button
+         
+        onClick={connectWallet}
+        className="text-white flex-1 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
+        Connect wallet
+        </button>
+        </When>
+        
+
+
         </div>
       </div>
         <SelectChainModal isOpen={ isFromOpen} closeModal={()=>{setIsFromOpen (false)}}  dataType={true}   ></SelectChainModal>
