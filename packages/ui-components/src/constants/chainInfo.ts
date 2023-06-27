@@ -156,18 +156,18 @@ const CHAIN_INFO: ChainInfoMap = {
     // color: darkTheme.chain_42,
     // backgroundColor: darkTheme.chain_42161_background,
   },
-  [SupportedChainId.ARBITRUM_RINKEBY]: {
+  [SupportedChainId.ARBITRUM_Goerli]: {
     networkType: NetworkType.L2,
     // blockWaitMsBeforeWarning: ms`10m`,
     bridge: 'https://bridge.arbitrum.io/',
     docs: 'https://offchainlabs.com/',
-    explorer: 'https://rinkeby-explorer.arbitrum.io/',
+    explorer: 'https://goerli.arbiscan.io/',
     infoLink: 'https://info.uniswap.org/#/arbitrum/',
-    label: 'Arbitrum Rinkeby',
+    label: 'Arbitrum Goerli',
     logoUrl: arbitrumLogoUrl,
     defaultListUrl: ARBITRUM_LIST,
     helpCenterUrl: 'https://help.uniswap.org/en/collections/3137787-uniswap-on-arbitrum',
-    nativeCurrency: { name: 'Rinkeby Arbitrum Ether', symbol: 'rinkArbETH', decimals: 18 },
+    nativeCurrency: { name: 'Goerli Arbitrum Ether', symbol: 'goerliArbETH', decimals: 18 },
     // color: darkTheme.chain_421611,
   },
   [SupportedChainId.POLYGON]: {

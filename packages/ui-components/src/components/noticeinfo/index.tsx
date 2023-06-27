@@ -1,5 +1,5 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
@@ -9,8 +9,14 @@ import Txinfo from './txinfo'
 
 
 export default function Noticeinfo() {
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
   const list = useAppStore((state=>state.getHistory()))
+  const listOrder=useMemo(()=>{
+         return list.sort((a,b)=>{
+          return b.creattime - a.creattime
+        })
+  },[list])
+
 
   function closeModal() {
     setIsOpen(false)
@@ -63,7 +69,7 @@ export default function Noticeinfo() {
                     <p className="text-sm text-gray-500">
                       
                         <dl className="max-w-md text-gray-900 divide-y  max-h-96 overflow-y-scroll divide-gray-200 dark:text-white dark:divide-gray-700">
-                            {list.map((item,key)=>{
+                            {listOrder.map((item,key)=>{
                                 return (
                                     <Txinfo key={key}  Item={item}></Txinfo>
                                 )

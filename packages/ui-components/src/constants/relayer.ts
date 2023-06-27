@@ -14,7 +14,7 @@ export const Relayer_IDS_TO_ADDR = {
     [SupportedChainId.CELO]: '',
     [SupportedChainId.CELO_ALFAJORES]: '',
     [SupportedChainId.ARBITRUM_ONE]: '',
-    [SupportedChainId.ARBITRUM_RINKEBY]: '',
+    [SupportedChainId.ARBITRUM_Goerli]: '0xC1a66ff524ca631e8a887Da7Ee44e615Ef6313Dc',
     [SupportedChainId.OPTIMISM]: '',
     [SupportedChainId.OPTIMISM_GOERLI]: '',
   }
@@ -32,7 +32,9 @@ export const Relayer_IDS_TO_ADDR = {
     [SupportedChainId.CELO]: '',
     [SupportedChainId.CELO_ALFAJORES]: '',
     [SupportedChainId.ARBITRUM_ONE]: '',
-    [SupportedChainId.ARBITRUM_RINKEBY]: '',
+    [SupportedChainId.ARBITRUM_Goerli]: 3,
     [SupportedChainId.OPTIMISM]: '',
     [SupportedChainId.OPTIMISM_GOERLI]: '',
   }
+
+  export const BaseUrl="http://3.89.186.206:12000/cctp/"

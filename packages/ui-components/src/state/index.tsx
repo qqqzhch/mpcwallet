@@ -121,7 +121,7 @@ const createMyStore = (state: typeof intialState = intialState) => {
 
       },
       getHistory:()=>{
-        return get().history
+        return  get().history;
       }
     }), { name: 'app-storage' })))
   );
