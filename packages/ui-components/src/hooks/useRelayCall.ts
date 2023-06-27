@@ -43,7 +43,8 @@ export default function useRelayCall() {
             input:inputAmount, 
             fee:RelayerFee,
             txhash:result.hash,
-            creattime:Date.now()
+            creattime:Date.now(),
+            user:account
           })
           addToast('Transactions have been sent', { appearance: 'success',autoDismissTimeout:1000*10 })
 
@@ -53,7 +54,7 @@ export default function useRelayCall() {
         }
       
     
-    }, [account, library, contractAddress,chainId,fromChainID,burnToken,RelayerFee,toChainID,addToHistory,addToast])
+    }, [account, library, contractAddress,chainId,fromChainID,burnToken,RelayerFee,toChainID,addToHistory,addToast,inputAmount])
   
     return {
         state,

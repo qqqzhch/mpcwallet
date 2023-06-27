@@ -1,30 +1,46 @@
 import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
+import { Fragment, useCallback, useMemo, useState } from 'react'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { useAppStore } from '../../state'
 import Txinfo from './txinfo'
+import { useWeb3React } from '@web3-react/core'
+import { When } from 'react-if'
 
 
 
 export default function Noticeinfo() {
-  const [isOpen, setIsOpen] = useState(true)
-  const list = useAppStore((state=>state.getHistory()))
+  const [isOpen, setIsOpen] = useState(false)
+  const {account } = useWeb3React()
+
+  const list = useAppStore((state=>state.getHistory(account)))
+  const listOrder=useMemo(()=>{
+         return list.sort((a,b)=>{
+          return b.creattime - a.creattime
+        })
+  },[list])
+
 
   function closeModal() {
     setIsOpen(false)
   }
 
-  function openModal() {
-    setIsOpen(true)
-  }
+ const openModal = useCallback(function () {
+   if(account!==null&&account!==undefined){
+      setIsOpen(true)
+   } 
+},[account]) 
 
   return (
     <>
+      
        <div onClick={openModal} className="relative py-2   cursor-pointer mr-4">
               <FontAwesomeIcon icon={icon({ name: 'bell', style: 'solid' })} />
+              <When condition={account}>
               <span className="absolute  rounded-full bg-red-400 py-0 px-1.5 text-xs text-white">{list.length}</span>
+              </When>
+             
         </div>
 
       <Transition appear show={isOpen} as={Fragment}>
@@ -63,7 +79,7 @@ export default function Noticeinfo() {
                     <p className="text-sm text-gray-500">
                       
                         <dl className="max-w-md text-gray-900 divide-y  max-h-96 overflow-y-scroll divide-gray-200 dark:text-white dark:divide-gray-700">
-                            {list.map((item,key)=>{
+                            {listOrder.map((item,key)=>{
                                 return (
                                     <Txinfo key={key}  Item={item}></Txinfo>
                                 )
@@ -71,6 +87,9 @@ export default function Noticeinfo() {
                             
                     
                         </dl>
+                        <When condition={listOrder.length==0}>
+                        No data available
+                        </When>
                     </p>
                   </div>
 

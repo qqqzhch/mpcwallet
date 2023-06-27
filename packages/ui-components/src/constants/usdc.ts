@@ -14,7 +14,7 @@ export const USDC_IDS_TO_ADDR = {
     [SupportedChainId.CELO]: '',
     [SupportedChainId.CELO_ALFAJORES]: '',
     [SupportedChainId.ARBITRUM_ONE]: '',
-    [SupportedChainId.ARBITRUM_RINKEBY]: '',
+    [SupportedChainId.ARBITRUM_Goerli]: '0xfd064A18f3BF249cf1f87FC203E90D8f650f2d63',
     [SupportedChainId.OPTIMISM]: '',
     [SupportedChainId.OPTIMISM_GOERLI]: '',
   }

@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useCallback } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import { useAppStore } from '../../state'
@@ -21,6 +21,11 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
     const output = useAppStore((state)=>state.output)
     const fee = useAppStore((state)=>state.fee)
     const RelayCall =useRelayCall()
+
+    const SubmitFN = useCallback(async ()=>{
+     await RelayCall.doFetch()
+     closeModal()
+    },[RelayCall,closeModal])
 
 
 
@@ -100,7 +105,7 @@ const PreviewModal: FC<componentprops> = ({ isOpen, closeModal }) => {
                       <button
                       type="button"
                       className="inline-flex flex-1 justify-center rounded-md border border-transparent bg-blue-700 px-4 py-2 text-sm font-medium  text-white hover:bg-blue-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                     onClick={RelayCall.doFetch}
+                     onClick={SubmitFN}
                     >
                      Submit
                     </button>

@@ -9,7 +9,7 @@ export enum SupportedChainId {
   KOVAN = 42,
 
   ARBITRUM_ONE = 42161,
-  ARBITRUM_RINKEBY = 421611,
+  ARBITRUM_Goerli = 421613,
 
   OPTIMISM = 10,
   OPTIMISM_GOERLI = 420,
@@ -33,7 +33,7 @@ export const CHAIN_IDS_TO_NAMES = {
   [SupportedChainId.CELO]: 'celo',
   [SupportedChainId.CELO_ALFAJORES]: 'celo_alfajores',
   [SupportedChainId.ARBITRUM_ONE]: 'arbitrum',
-  [SupportedChainId.ARBITRUM_RINKEBY]: 'arbitrum_rinkeby',
+  [SupportedChainId.ARBITRUM_Goerli]: 'arbitrum_goerli',
   [SupportedChainId.OPTIMISM]: 'optimism',
   [SupportedChainId.OPTIMISM_GOERLI]: 'optimism_goerli',
   [SupportedChainId.AVALANCHE_FUJITEST]: 'avalanche_fujitest'
@@ -73,7 +73,7 @@ export const TESTNET_CHAIN_IDS = [
   SupportedChainId.GOERLI,
   // SupportedChainId.KOVAN,
   // SupportedChainId.POLYGON_MUMBAI,
-  // SupportedChainId.ARBITRUM_RINKEBY,
+  SupportedChainId.ARBITRUM_Goerli,
   // SupportedChainId.OPTIMISM_GOERLI,
   SupportedChainId.AVALANCHE_FUJITEST
 ] as const
@@ -103,7 +103,7 @@ export type SupportedL1ChainId = typeof L1_CHAIN_IDS[number]
  */
 export const L2_CHAIN_IDS = [
   SupportedChainId.ARBITRUM_ONE,
-  SupportedChainId.ARBITRUM_RINKEBY,
+  SupportedChainId.ARBITRUM_Goerli,
   SupportedChainId.OPTIMISM,
   SupportedChainId.OPTIMISM_GOERLI,
 ] as const
