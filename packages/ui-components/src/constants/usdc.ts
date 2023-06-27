@@ -13,7 +13,7 @@ export const USDC_IDS_TO_ADDR = {
     [SupportedChainId.POLYGON_MUMBAI]: '',
     [SupportedChainId.CELO]: '',
     [SupportedChainId.CELO_ALFAJORES]: '',
-    [SupportedChainId.ARBITRUM_ONE]: 'USDC:0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
+    [SupportedChainId.ARBITRUM_ONE]: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
     [SupportedChainId.ARBITRUM_Goerli]: '0xfd064A18f3BF249cf1f87FC203E90D8f650f2d63',
     [SupportedChainId.OPTIMISM]: '',
     [SupportedChainId.OPTIMISM_GOERLI]: '',

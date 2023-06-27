@@ -21,11 +21,12 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
 
   useEffect(()=>{
     if(fromChainID==null&&toChainID==null&&dataType){
-      const networkGOERLI =getChainInfo(SupportedChainId.GOERLI)
-      const networkFUJITEST =getChainInfo(SupportedChainId.AVALANCHE_FUJITEST)
+
+      const networkGOERLI =getChainInfo(USECHAIN_IDS[0])
+      const networkFUJITEST =getChainInfo(USECHAIN_IDS[1])
       
-      setFromOrTOChain(networkFUJITEST,false,SupportedChainId.AVALANCHE_FUJITEST)
-      setFromOrTOChain(networkGOERLI,true,SupportedChainId.GOERLI)
+      setFromOrTOChain(networkFUJITEST,false,USECHAIN_IDS[0])
+      setFromOrTOChain(networkGOERLI,true,USECHAIN_IDS[1])
 
     }
 
