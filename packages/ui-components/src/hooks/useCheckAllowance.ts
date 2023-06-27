@@ -1,5 +1,5 @@
 import { useWeb3React } from '@web3-react/core'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { BigNumber, Contract } from 'ethers'
 
 
@@ -13,23 +13,23 @@ export default function useErcCheckAllowance(inputAmount:string) {
     const checkAddress = useRelayerAddress();
     const contractAddress =useUSDCAddress()
     const [allowance, setAllowance] = useState<boolean>(false)
-  
-    useEffect(() => {
-      const run = async () => {
-        console.log('--useCheckAllowance')
-        if (account && contractAddress && library != undefined) {
-          const contract = new Contract(contractAddress, erc20ABI, library)
-        //   const result: BigNumber = await contract.balanceOf(mpcAddress)
-          const allowance: BigNumber = await contract.allowance(account,checkAddress)
-          if(allowance.gte(BigNumber.from(inputAmount))){
-            setAllowance(false )
-          }else{
-            setAllowance(true)
-          }
-          
-          
+    const run = useCallback(async()=>{
+      console.log('--useCheckAllowance')
+      if (account && contractAddress && library != undefined) {
+        const contract = new Contract(contractAddress, erc20ABI, library)
+      //   const result: BigNumber = await contract.balanceOf(mpcAddress)
+        const allowance: BigNumber = await contract.allowance(account,checkAddress)
+        if(allowance.gte(BigNumber.from(inputAmount))){
+          setAllowance(false )
+        }else{
+          setAllowance(true)
         }
+        
+        
       }
+    },[account, library, contractAddress,inputAmount,checkAddress])
+  
+    useEffect(() => { 
       if(library){
         library.on('block', () => {
           console.log('block run 2')
@@ -44,7 +44,7 @@ export default function useErcCheckAllowance(inputAmount:string) {
           library.off('block',run)
         }
       }
-    }, [account, library, contractAddress,inputAmount,checkAddress])
+    }, [library, run])
   
     return {
         allowance

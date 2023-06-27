@@ -1,5 +1,5 @@
 import { useWeb3React } from '@web3-react/core'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { BigNumber, Contract } from 'ethers'
 import { useAppStore } from '../state';
 
@@ -11,20 +11,21 @@ export default function useErc20Balance(mpcAddress: string | undefined|null, con
     //   const mpcinfo = useAppStore(state => state.getWalletAccount(account, mpcAddress))
   
     const [balance, setBalance] = useState<string>()
-  
-    useEffect(() => {
-      const run = async () => {
-        console.log('useErc20Balance')
-        if (mpcAddress && contractAddress && library != undefined&&chainId==fromChainID) {
-          const contract = new Contract(contractAddress, erc20ABI, library)
-          const result: BigNumber = await contract.balanceOf(mpcAddress)
-          setBalance(result.toString())
-          
-        }else{
-          setBalance('0')
-          
-        }
+    const run = useCallback(async ()=>{
+      console.log('useErc20Balance')
+      if (mpcAddress && contractAddress && library != undefined&&chainId==fromChainID) {
+        const contract = new Contract(contractAddress, erc20ABI, library)
+        const result: BigNumber = await contract.balanceOf(mpcAddress)
+        setBalance(result.toString())
+        
+      }else{
+        setBalance('0')
+        
       }
+    },[mpcAddress, library, contractAddress,chainId,fromChainID])
+
+    useEffect(() => {
+      
       if(library){
         library.on('block', () => {
           console.log('block run 1')
@@ -40,7 +41,7 @@ export default function useErc20Balance(mpcAddress: string | undefined|null, con
           library.off('block',run)
         }
       }
-    }, [mpcAddress, library, contractAddress,chainId,fromChainID])
+    }, [library,run])
   
     return {
       balance
