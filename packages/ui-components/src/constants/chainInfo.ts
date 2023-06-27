@@ -231,6 +231,18 @@ const CHAIN_INFO: ChainInfoMap = {
     logoUrl: avaxLogo,
     nativeCurrency: { name: 'AVAX', symbol: 'AVAX', decimals: 18 }
     // defaultListUrl: PLASMA_BNB_LIST
+  },
+  [SupportedChainId.AVALANCHE_C_HAIN]: {
+    networkType: NetworkType.L1,
+    // blockWaitMsBeforeWarning: ms`10m`,
+    bridge: '',
+    docs: '',
+    explorer: 'https://snowtrace.io/',
+    infoLink: '',
+    label: 'Avalanche',
+    logoUrl: avaxLogo,
+    nativeCurrency: { name: 'AVAX', symbol: 'AVAX', decimals: 18 }
+    // defaultListUrl: PLASMA_BNB_LIST
   }
 }
 

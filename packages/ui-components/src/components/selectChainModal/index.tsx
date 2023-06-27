@@ -2,7 +2,7 @@ import React, { useMemo ,useEffect} from 'react';
 import { Dialog,Transition  } from '@headlessui/react'
 import { Fragment, FC  } from 'react'
 import { Else, If, Then } from 'react-if';
-import { SupportedChainId, TESTNET_CHAIN_IDS } from '../../constants/chains';
+import { SupportedChainId, TESTNET_CHAIN_IDS,USECHAIN_IDS } from '../../constants/chains';
 import { getChainInfo } from '../../constants/chainInfo';
 import { useAppStore } from '../../state';
 
@@ -74,7 +74,7 @@ const SelectChainModal: FC<componentprops> = ({isOpen,closeModal,dataType}) => {
                 <div className="mt-2">
                  
 <ul className="max-w-md divide-y divide-gray-200 dark:divide-gray-700">
-  {TESTNET_CHAIN_IDS.map((chainId,index)=>{
+  {USECHAIN_IDS.map((chainId,index)=>{
     const network =getChainInfo(chainId)
 
     return (<li key={index} onClick={()=>{setFromOrTOChain(network,dataType,chainId);closeModal() }}  className="pb-3 pt-2 sm:pb-4 cursor-pointer">
